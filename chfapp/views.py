@@ -3,7 +3,7 @@
     # Date: 2/9/2016
     # Purpose: All views for the project are created in this page
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .forms import UserLoginForm, ContactForm, NewUserAccountForm, NewAdminForm
 from .forms import NewEventForm, NewActivityForm, NewSceneForm, NewSceneOptionForm
 from .models import Activity as act
@@ -69,6 +69,7 @@ def activityDashboard(request):
 	title = "Dashboard"
 
 	activities = act.objects.all()
+	# activityID = act.objects.get(filter)
 
 	context = {
 		'title': title,
@@ -77,11 +78,12 @@ def activityDashboard(request):
 	return render(request,"activityDashboard.html", context)
 
 #View for activity start page
-def activityStart(request):
+def activityStart(request, id):
 	title = "Start Activity"
 
-	activity = act.objects.get(activityID=1)
-	scenes = scn.objects.filter(activityID_id = 1)
+	# activity = act.objects.get(activityID=request.urlparams[0])
+	activity = get_object_or_404(act, activityID=id) #id here is the activityID
+	scenes = scn.objects.all()
 
 	context = {
 		'title': title,
@@ -90,7 +92,22 @@ def activityStart(request):
 	}
 	return render(request,"activityStart.html", context)
 
+#View for activity start page
+def activityPage(request, id, id):
+	title = "Activity"
 
+	# activity = act.objects.get(activityID=request.urlparams[0])
+	activity = get_object_or_404(act, activityID=id)
+	scene = get_object_or_404(scn, sceneID=id)
+	sceneOptions = scnopt.objects.all()
+
+	context = {
+		'title': title,
+		'activity': activity,
+		'scene': scenes,
+		'sceneOptions': sceneOptions,
+	}
+	return render(request,"activityPage.html", context)
 
 
 #This is going to show up at the bottom when they sign up as a user

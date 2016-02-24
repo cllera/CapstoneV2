@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
-from chfapp.views import home
+from chfapp.views import home, userLogin, newUserLogin, activityDashboard, activityStart, activity
 
 #where URLS are created; none have been created for userdashboard yet
 urlpatterns = [
@@ -28,7 +28,8 @@ urlpatterns = [
     url(r'^contact/$', 'chfapp.views.contact', name='contact'),
     url(r'^newUserLogin/$', 'chfapp.views.newUserLogin', name='newUserLogin'),
     url(r'^activityDashboard/$', 'chfapp.views.activityDashboard', name='activityDashboard'),
-    url(r'^activityStart/$', 'chfapp.views.activityStart',name='activityStart'),
+    url(r'^activityStart/(\d)/$', 'chfapp.views.activityStart',name='activityStart'),
+    url(r'^activityPage/(\d)/$', 'chfapp.views.activityPage',name='activityPage'),
     #url() for when admin form is created/added to newUserLogin
     #url() for when event, activity is created/added
 
