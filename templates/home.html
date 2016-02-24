@@ -8,86 +8,81 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>CHF App Template (User Side)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
-    <link rel='stylesheet' href='{% static "css/base.css" %}' /> <!--imports stylesheet as created in static_cdn/css-->
-    <!--<img src='{ % static "img/beach.jpg" %}' />-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="News Times Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <!-- Custom Theme files -->
+    <link rel="stylesheet" href='{% static "css/bootstrap.css" %}' type="text/css" media="all"/>
 
-    <title>CHF App (Splash Page)</title>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-
-
-    <!-- Bootstrap core CSS -->
-    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-<!--     <link href="jumbotron.css" rel="stylesheet"> -->
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <link href='{% static "css/style.css" %}' rel="stylesheet" type="text/css" media="all" />
+    <!-- js -->
+    <script src='{% static "js/jquery-1.11.1.min.js" %}'></script>
+    <!-- //js -->
+    <link href='//fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
   </head>
 
   
   <body>
 
-  	<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="banner">
+    <div class="banner-info">
       <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <nav class="navbar navbar-default">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">InterActivity</a>
+            </button>
+            <div class="logo">
+              <a class="navbar-brand" href="home.html">Interactivity</a>
+            </div>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse nav-wil" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav cl-effect-18" id="cl-effect-18">
+              <li class="act"><a href="index.html" class="effect1 active">Home</a></li>
+              <li><a href="/userLogin/">User Login</a></li>
+              <li><a href="">Admin Login</a></li>
+              <li><a href="">Quickstart</a></li>
+            </ul>
+          </div><!-- /.navbar-collapse -->  
+        </nav>
+        <div class="banner-info-slider">
+          <h1>Select Login Type</h1>
+          <div class="more">
+            <p>Some witty tagline here about history</p>
+          </div>
+        </div>
+      </div> <!--end of container-->
+    </div> <!--end of banner info-->
+  </div> <!--end of banner-->
+
+  <div class="footer">
+      <div class="container">
+        <div class="footer-bottom">
+          <div class="footer-bottom-left">
+            <p>Interactivity</p>
+          </div>
+          <div class="footer-bottom-right">
+            <ul>
+              <li>About</li>
+              <li>Contact</li>
+            </ul>
+          </div>
+          <div class="clearfix"> </div>
         </div>
       </div>
-    </nav>
-
-    <div class="container">
-      <div class="row">
-        <div class="col-md-3">
-        </div>
-        <div class="col-md-6">
-          <h2>InterActivity</h2>
-          <button><a href="/userLogin/">Login as User</a></button> <!--normal user-->
-          <button><a href="">Login as Admin</a></button> <!--admin/superuser-->
-          <button><a href="">Login without authentication</a></button> <!--casual user-->
-        </div>
-        <div class="col-md-3">
-        </div>
-      </div>
-
-<!--I added this part because of a tutorial. We can play around with it later to see if we need it.-->
-<!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    </div>
+  <!-- //footer -->
+  <!-- for bootstrap working -->
+    <script src='{% static "js/bootstrap.js" %}'></script>
+<!-- //for bootstrap working -->
 
   </body>
 </html>
