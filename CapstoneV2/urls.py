@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
-from chfapp.views import home, userLogin, newUserLogin, activityDashboard, activityStart, activity
+from chfapp.views import home, userLogin, newUserLogin, activityDashboard, activityStart, activityPage
 
 #where URLS are created; none have been created for userdashboard yet
 urlpatterns = [

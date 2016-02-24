@@ -93,7 +93,7 @@ def activityStart(request, id):
 	return render(request,"activityStart.html", context)
 
 #View for activity start page
-def activityPage(request, id, id):
+def activityPage(request, id):
 	title = "Activity"
 
 	# activity = act.objects.get(activityID=request.urlparams[0])
