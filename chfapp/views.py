@@ -93,12 +93,12 @@ def activityStart(request, id):
 	return render(request,"activityStart.html", context)
 
 #View for activity start page
-def activityPage(request, id):
+def activityPage(request, a, b):
 	title = "Activity"
 
 	# activity = act.objects.get(activityID=request.urlparams[0])
-	activity = get_object_or_404(act, activityID=id)
-	scene = get_object_or_404(scn, sceneID=id)
+	activity = get_object_or_404(act, a=id)
+	scene = get_object_or_404(scn, b=id)
 	sceneOptions = scnopt.objects.all()
 
 	context = {
