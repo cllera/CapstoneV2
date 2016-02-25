@@ -93,21 +93,20 @@ def activityStart(request, id):
 	return render(request,"activityStart.html", context)
 
 #View for activity start page
-def activityPage(request, a, b):
+def activityPage(request, id):
 	title = "Activity"
 
 	# activity = act.objects.get(activityID=request.urlparams[0])
-	activity = get_object_or_404(act, a=id)
-	scene = get_object_or_404(scn, b=id)
+	scene = get_object_or_404(scn, sceneID=id)
 	sceneOptions = scnopt.objects.all()
 
 	context = {
 		'title': title,
-		'activity': activity,
-		'scene': scenes,
+		'scene': scene,
 		'sceneOptions': sceneOptions,
 	}
 	return render(request,"activityPage.html", context)
+
 
 
 #This is going to show up at the bottom when they sign up as a user

@@ -16,6 +16,7 @@
       {% for s in scenes %}
       <div>
         <li>{{s.instructionText}}</li>
+        <button><a href="/activityPage/{{s.sceneID}}">Continue</a></button>
       </div>
       {%endfor%}
     </ul>
