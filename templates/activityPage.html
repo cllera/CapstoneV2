@@ -11,12 +11,11 @@
   <body>
 
     <div class="container">
-      <h1>{{activity.activityName}}</h1>
-      <p>{{activity.description}}</p>
+      <h1>SceneID: {{scene.sceneID}}</h1>
       <ul>
-      {% for s in scenes %}
+      {% for so in sceneOptions %}
       <div>
-        <li>{{s.instructionText}}</li>
+        <li>{{so.sceneText}}</li>
       </div>
       {%endfor%}
     </ul>

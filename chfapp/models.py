@@ -104,11 +104,11 @@ class Scene(models.Model):
 		return self.instructionText, self.sceneType
 
 class SceneOptions(models.Model):
-	sceneOptionID = models.IntegerField()
+	soID = models.IntegerField(primary_key=True)
 	sceneID = models.ForeignKey(Scene)
 	sceneText = models.CharField(max_length=500)
 	class Meta: 
-		unique_together=(('sceneOptionID', 'sceneID'),)
+		unique_together=(('soID', 'sceneID'),)
 
 	def __str__(self):
 		return self.sceneText
