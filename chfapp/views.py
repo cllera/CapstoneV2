@@ -90,6 +90,9 @@ def activityStart(request, id):
 	nextScene = nxtscn.objects.get(sceneID_id = intro.sceneID)
 	activitySceneCount = scenes.count() #returns 7 items, which it should
 
+	#FIRST PROBLEM: In urls.py we reference the activityID (activityDashboard) but nextSceneNumber in same place (activityStart)
+		#Need to figure out how to add two parameters to the url and passing in those values.
+		#Currently (2/27/2016) the activityPage page doesn't work because there's no activity #2.
 	#New problem, how to get page to reload with new information each time?
 	#New problem, how to get page to go back to mission screen afterwards?
 
@@ -115,26 +118,48 @@ def activityPage(request, id):
 	title = "Activity"
 
 	activity = get_object_or_404(act, activityID=id) #id here is the activityID
-	scene = scn.objects.all().filter(activityID_id=id)
+	scene = scn.objects.all().filter(activityID_id=id).order_by('sceneType')
+
+	# for a in scn.objects.all().filter(activityID_id=id).order_by('sceneType'): 
+	# 	print (a.sceneType)
+	# else: 
+	# 	"I didn't get here."
+
+	#order by scenetype
 	activitySceneCount = scene.count()
 	print(activitySceneCount)
 
 	#Add for loop to go through rows in Scene where ActivityID = id
-	for a in activitySceneCount:
+	for x in scn.objects.all().filter(activityID_id=id).order_by('sceneType'):
 	#add nested if statement to figure out if the scenetype is 0 or 1
-		if scene.sceneType == None:
+
+		if x.sceneType == None:
 			sceneInfo = scn.objects.get(activityID_id=id, sceneType=None)
 			sceneOpt = scnopt.objects.get(sceneID_id = sceneInfo.sceneID)
 			nextScene = nxtscn.objects.get(sceneID_id = sceneInfo.sceneID)
-		elif scene.sceneType == 0:
-			#-load in sceneinformation 
-			sceneInfo = scn.objects.get(activityID_id=id, sceneType=0)
-			sceneOpt = scnopt.objects.get(sceneID_id = sceneInfo.sceneID)
-			nextScene = nxtscn.objects.get(sceneID_id = sceneInfo.sceneID)
-		elif scene.sceneType == 1:
+
+			print("LOOK HERE for None!***********************************")
+			print(sceneInfo.sceneID)
+			print(sceneOpt.sceneText)
+			print(nextScene.nextSceneNumber)
+			print(activitySceneCount)
+
+		elif x.sceneType == 0:
+
+			sceneInfo = x.sceneType
+			sceneOpt = scnopt.objects.all().filter(sceneID_id = x.sceneID)
+			nextScene = nxtscn.objects.all().filter(sceneID_id = x.sceneID)
+
+			print("LOOK HERE for 0!***********************************")
+			print(activitySceneCount)
+
+		elif x.sceneType == 1:
 			sceneInfo = scn.objects.get(activityID_id=id, sceneType=1)
-			sceneOpt = scnopt.objects.get(sceneID_id = sceneInfo.sceneID)
+			sceneOpt = scnopt.objects.all().filter(sceneID_id = sceneInfo.sceneID)
 			#won't need nextscene here because the link will send them to the mission page.
+
+			print("LOOK HERE for 1!***********************************")
+			print(activitySceneCount)
 		else:
 			print("There should be no other option in this if statement")
 	else: 
