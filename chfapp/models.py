@@ -117,6 +117,7 @@ class NextScene(models.Model):
 	nextSceneID = models.IntegerField(primary_key=True)
 	sceneOptionID = models.ForeignKey(SceneOptions,related_name='sceneOptionNS')
 	sceneID = models.ForeignKey(SceneOptions,related_name='sceneNS')
+	nextSceneNumber = models.IntegerField()
 	weight = models.DecimalField(max_digits = 3, decimal_places=2)
 	class Meta:
 		unique_together=(('sceneOptionID', 'sceneID'))

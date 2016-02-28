@@ -13,12 +13,10 @@
       <h1>{{activity.activityName}}</h1>
       <p>{{activity.description}}</p>
       <ul>
-      {% for s in scenes %}
       <div>
-        <li>{{s.instructionText}}</li>
-        <button><a href="/activityPage/{{s.sceneID}}">Continue</a></button>
+        <li>{{intro.instructionText}}</li>
+        <button><a href="/activityStart/{{nextScene.nextSceneNumber}}"> {{sceneOpt.sceneText}} </a></button>
       </div>
-      {%endfor%}
     </ul>
     </div>
 
