@@ -13,6 +13,7 @@ from .models import NextScene as nxtscn
 from django.core.mail import send_mail
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
+from django.db.models import Count
 
 
 
@@ -83,12 +84,29 @@ def activityStart(request, id):
 
 	# activity = act.objects.get(activityID=request.urlparams[0])
 	activity = get_object_or_404(act, activityID=id) #id here is the activityID
-	scenes = scn.objects.all()
+	scenes = scn.objects.all().filter(activityID_id=id)
+	intro = scn.objects.get(activityID_id=id, sceneType=None)
+	sceneOpt = scnopt.objects.get(sceneID_id = intro.sceneID)
+	nextScene = nxtscn.objects.get(sceneID_id = intro.sceneID)
+	activitySceneCount = scenes.count() #returns 7 items, which it should
+
+	#New problem, how to get page to reload with new information each time?
+	#New problem, how to get page to go back to mission screen afterwards?
+
+	print("LOOK HERE!***********************************")
+	print(intro.sceneID)
+	print(sceneOpt.sceneText)
+	print(nextScene.nextSceneNumber)
+	print(activitySceneCount)
 
 	context = {
 		'title': title,
 		'activity': activity,
 		'scenes': scenes,
+		'intro': intro,
+		'sceneOpt': sceneOpt,
+		'nextScene': nextScene,
+		'activitySceneCount': activitySceneCount,
 	}
 	return render(request,"activityStart.html", context)
 
@@ -96,16 +114,47 @@ def activityStart(request, id):
 def activityPage(request, id):
 	title = "Activity"
 
-	# activity = act.objects.get(activityID=request.urlparams[0])
-	scene = get_object_or_404(scn, sceneID=id)
-	sceneOptions = scnopt.objects.all()
+	activity = get_object_or_404(act, activityID=id) #id here is the activityID
+	scene = scn.objects.all().filter(activityID_id=id)
+	activitySceneCount = scene.count()
+	print(activitySceneCount)
+
+	#Add for loop to go through rows in Scene where ActivityID = id
+	for a in activitySceneCount:
+	#add nested if statement to figure out if the scenetype is 0 or 1
+		if scene.sceneType == None:
+			sceneInfo = scn.objects.get(activityID_id=id, sceneType=None)
+			sceneOpt = scnopt.objects.get(sceneID_id = sceneInfo.sceneID)
+			nextScene = nxtscn.objects.get(sceneID_id = sceneInfo.sceneID)
+		elif scene.sceneType == 0:
+			#-load in sceneinformation 
+			sceneInfo = scn.objects.get(activityID_id=id, sceneType=0)
+			sceneOpt = scnopt.objects.get(sceneID_id = sceneInfo.sceneID)
+			nextScene = nxtscn.objects.get(sceneID_id = sceneInfo.sceneID)
+		elif scene.sceneType == 1:
+			sceneInfo = scn.objects.get(activityID_id=id, sceneType=1)
+			sceneOpt = scnopt.objects.get(sceneID_id = sceneInfo.sceneID)
+			#won't need nextscene here because the link will send them to the mission page.
+		else:
+			print("There should be no other option in this if statement")
+	else: 
+		print("There should be no other option for this for loop")
+
 
 	context = {
 		'title': title,
 		'scene': scene,
-		'sceneOptions': sceneOptions,
+		'activitySceneCount': activitySceneCount,
+		'sceneInfo': sceneInfo,
+		'sceneOpt': sceneOpt,
+		'nextScene': nextScene,
 	}
 	return render(request,"activityPage.html", context)
+
+
+
+
+
 
 
 
