@@ -986,3 +986,29 @@ figcaption.mask span {
 .copyright p:first-child {
     margin-bottom: 15px;
 }
+
+/*============================================================
+    Modal
+============================================================*/
+.modal-footer{
+    text-align: left;    
+}
+
+.form-inline .form-group {
+    margin-bottom: 11px;
+}
+
+.form-inline .control-label {
+    width: 110px;
+    text-align:right;
+    margin-right: 10px;
+}
+
+.modal-backdrop {
+  z-index: -1;
+}
+
+
+/*============================================================
+    End Modal
+============================================================*/

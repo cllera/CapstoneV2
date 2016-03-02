@@ -50,7 +50,7 @@
 
                     <!-- /responsive nav button -->
                         <div class="logo">
-                            <a class="navbar-brand" href="home.html"><span>CHF</span> Colonial Heritage Foundation</a>
+                            <a class="navbar-brand" href=""><span>CHF</span> Colonial Heritage Foundation</a>
                         </div>
 
                     </div>
@@ -58,8 +58,8 @@
                     <!-- main nav -->
                     <nav class="collapse navigation navbar-collapse navbar-right" role="navigation">
                         <ul id="nav" class="nav navbar-nav">
-                            <li class="current"><a href="test.html">Home</a></li>
-                            <li><a href="login.html">Login</a></li>
+                            <li class="current"><a href="">Home</a></li>
+                            <li><a data-toggle="modal" href="#login">Login</a></li>
                             <li><a href="quickstart.html">Quick Start</a></li>
                         </ul>
                     </nav>
@@ -130,7 +130,138 @@
         End #home Slider
         ========================== -->
 
-    <!-- main jQuery -->
+          <!--
+        Login Modal
+        ==================================== -->
+        <div class="container">
+        <!-- Modal Become a member -->
+        <form action="#" method="post" id="newmember" >
+        <div class="modal fade" id="becomeamember" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Become a member</h4>
+              </div>
+              <div class="modal-body form-inline">
+                <div class="form-group has-feedback">
+                    <label class="control-label" for="firstnamelabel">* First name</label>
+                    <input type="text" class="form-control" id="firstnameinput" aria-describedby="firstnameinput" required="">
+                    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                </div>
+                
+                <div class="form-group has-feedback">
+                    <label class="control-label" for="lastnamelabel">* Last name</label>
+                    <input type="text" class="form-control" id="lastnameinput" aria-describedby="lastnameinput" required="">
+                    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                </div>
+                
+                <div class="form-group has-feedback">
+                    <label class="control-label" for="emaillabel">* Email address</label>
+                    <input type="email" class="form-control" id="emailinput" aria-describedby="emailinput" required="">
+                    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                </div>
+                
+                <div class="form-group has-feedback">
+                    <label class="control-label" for="passwordlabel">* Password</label>
+                    <input type="password" class="form-control" id="passwordinput" aria-describedby="passwordinput" required="">
+                    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                </div>
+                
+                <div class="form-group has-feedback">
+                    <label class="control-label" for="re-enterpasswordlabel">* Re-enter password</label>
+                    <input type="password" class="form-control" id="re-enterpasswordinput" aria-describedby="re-enterpasswordinput" required="">
+                    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                </div>
+                
+                <div class="form-group has-feedback">
+                    <label class="control-label" for="postcodelabel">Postcode</label>
+                    <input type="text" class="form-control" id="postcodeinput" aria-describedby="postcodeinput">
+                    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                </div>
+                
+                 <div class="form-group">
+                    <label class="control-label" for="postcodelabel">How did you hear about us?</label>
+                    <select class="form-control">
+                        <option>- Please select -</option>
+                        <option>Search engine</option>
+                        <option>Web Advertisement</option>
+                        <option>Magazine Advertisement</option>
+                        <option>Friend/Colleague</option>
+                        <option>Email newsletter</option>
+                        <option>Fax</option>
+                        <option>Conference/Tradeshow</option>
+                        <option>Social Media</option>
+                        <option>Other</option>
+                    </select>
+                </div><br/>
+                
+                 <div class="form-group">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Sign up</button>
+                 </div>
+                
+              </div><!-- end modal-Body -->
+              
+            </div>
+          </div>
+        </div><!-- end become a member modal -->
+        </form> <!-- end Form -->
+        
+        <!-- Modal Login -->
+        <form id="logingform" action="/" method="post">
+        <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Login</h4>
+              </div>
+              
+              <div class="modal-body">
+                <div class="form-group has-feedback">
+                  <label class="control-label">Email Address</label>
+                  <input type="email" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Email">
+                  <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                </div>
+                
+                <div class="form-group has-feedback">
+                  <label class="control-label">Password</label>
+                  <input type="password" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Password">
+                  <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                </div>
+                
+                <button type="button" class="btn btn-primary">Login</button>
+                <input type="checkbox" value="rememberme" id="rememberme">Remember me <br/><br/>
+                
+                <a href="#">Forgot your password?</a>
+                
+              </div>
+              
+              <div class="modal-footer">
+              <h4 class="modal-title" id="myModalLabel">Register</h4>
+                If you are not an existing member of this site you can <a data-toggle="modal" data-target="#becomeamember" data-dismiss="modal"> register here</a>
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>-->
+              </div>
+              
+            </div>
+          </div>
+        </div><!-- end become a member modal -->
+        </form> <!-- end login form -->
+        </div>
+
+
+
+
+
+        <!--
+        End Login Modal
+        ==================================== -->
+
+
+
+
+        <!-- main jQuery -->
         <script src='{% static "js/jquery-1.11.1.min.js" %}'></script>
         <!-- Bootstrap -->
         <script src='{% static "js/bootstrap.min.js" %}'></script>
@@ -142,6 +273,8 @@
         <script src='{% static "js/wow.min.js" %}'></script>
         <!-- theme custom scripts -->
         <script src='{% static "js/main.js" %}'></script>
+
+        <!-- <script src='{% static "js/bootstrap.js" %}'></script> -->
 
  </body>
 </html>
