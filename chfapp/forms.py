@@ -45,6 +45,27 @@ class NewUserAccountForm(forms.ModelForm):
 		userName = self.cleaned_data.get('userName')
 		return userName
 
+
+class scenePassForm(forms.Form):
+	sceneID = forms.IntegerField()
+	choice = forms.ChoiceField()
+	integerSelected = forms.IntegerField()
+
+	def clean_sceneID(self):
+		self.cleaned_data.get('sceneID')
+		return sceneID
+
+	def clean_choice(self):
+		self.cleaned_data.get('choice')
+		return choice
+
+	def clean_integerSelected(self):
+		self.cleaned_data.get('integerSelected')
+		return integerSelected
+
+
+# Not using these yet
+
 class NewAdminForm(forms.ModelForm):
 	class Meta:
 		model = Admin

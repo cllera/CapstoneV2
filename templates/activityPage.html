@@ -11,13 +11,20 @@
   <body>
 
     <div class="container">
-      <h1>SceneID: {{scene.sceneID}}</h1>
+      <h1>{{activity.activityName}}</h1>
+      <p>{{activity.description}}</p>
       <ul>
-      {% for so in sceneOptions %}
       <div>
-        <li>{{so.sceneText}}</li>
+        <li>{{sceneInfo.instructionText}}</li>
+        <li>{{nextScene.nextSceneNumber}}</li>
+        <li> Add in dropdown here</li>
+        <button type='button'> <a href="/activityPage/{{activity.activityID}}/{{nextScene.nextSceneNumber}}/"> {{sceneOpt.sceneText}} </a></button>
+<!--         <input type=button onClick="location.href='/activityPage/{{activity.activityID}}/{{nextScene.nextSceneNumber}}/" value='{{sceneOpt.sceneText}}'> -->
+<!--       <form method ='POST' action=''>
+        {%csrf_token%}
+        {{form.as_p}}
+      </form> -->
       </div>
-      {%endfor%}
     </ul>
     </div>
 

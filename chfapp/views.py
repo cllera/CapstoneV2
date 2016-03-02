@@ -5,7 +5,7 @@
 
 from django.shortcuts import render, get_object_or_404
 from .forms import UserLoginForm, ContactForm, NewUserAccountForm, NewAdminForm
-from .forms import NewEventForm, NewActivityForm, NewSceneForm, NewSceneOptionForm
+from .forms import NewEventForm, NewActivityForm, NewSceneForm, NewSceneOptionForm, scenePassForm
 from .models import Activity as act
 from .models import Scene as scn
 from .models import SceneOptions as scnopt
@@ -14,6 +14,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import Count
+from array import array
 
 
 
@@ -88,11 +89,8 @@ def activityStart(request, id):
 	intro = scn.objects.get(activityID_id=id, sceneType=None)
 	sceneOpt = scnopt.objects.get(sceneID_id = intro.sceneID)
 	nextScene = nxtscn.objects.get(sceneID_id = intro.sceneID)
-	activitySceneCount = scenes.count() #returns 7 items, which it should
-
-	#FIRST PROBLEM: In urls.py we reference the activityID (activityDashboard) but nextSceneNumber in same place (activityStart)
-		#Need to figure out how to add two parameters to the url and passing in those values.
-		#Currently (2/27/2016) the activityPage page doesn't work because there's no activity #2.
+	activitySceneCount = scenes.count() 
+	#returns 7 items, which it should
 	#New problem, how to get page to reload with new information each time?
 	#New problem, how to get page to go back to mission screen afterwards?
 
@@ -114,35 +112,52 @@ def activityStart(request, id):
 	return render(request,"activityStart.html", context)
 
 #View for activity start page
-def activityPage(request, id):
+def activityPage(request, id, *sc):
 	title = "Activity"
-
+	#**STart of changes**(Timestamp, not content below)
 	activity = get_object_or_404(act, activityID=id) #id here is the activityID
-	scene = scn.objects.all().filter(activityID_id=id).order_by('sceneType')
+	scene = scn.objects.all().filter(activityID_id=id).order_by('sceneID')
+	scnType = scn.objects.all().filter(activityID_id=id).order_by('sceneType')
+	# activitySceneCount = scene.count()
+	# indexList = list(range(1,(activitySceneCount+1)))
+	sceneList = scene.values_list('sceneID', flat=True).distinct()
+	print (sceneList)
 
-	# for a in scn.objects.all().filter(activityID_id=id).order_by('sceneType'): 
-	# 	print (a.sceneType)
-	# else: 
-	# 	"I didn't get here."
+	
 
-	#order by scenetype
-	activitySceneCount = scene.count()
-	print(activitySceneCount)
+	#if this scene matches the index, (and sceneType = something) then test to see if we got here.
+	for x in scn.objects.all().filter(activityID_id=id).order_by('sceneID'):
+		print (x.sceneID)
+		print (sceneList[0])
+		if x.sceneID == sceneList[0]:
+			sceneInfo = scn.objects.get(activityID_id=id, sceneType=None)
+			sceneOpt = scnopt.objects.get(sceneID_id = sceneInfo.sceneID)
+			nextScene = nxtscn.objects.get(sceneID_id = sceneInfo.sceneID)
+		else:
+			"End of if statement in new for loop"
+	else:
+		"end of new for loop"
 
-	#Add for loop to go through rows in Scene where ActivityID = id
+	#For loop to go through rows in Scene where ActivityID = id
 	for x in scn.objects.all().filter(activityID_id=id).order_by('sceneType'):
-	#add nested if statement to figure out if the scenetype is 0 or 1
-
+		print ("entering for loop")
+		# if sceneIteration == indexList.index(sceneIteration):
+			#nest ALL the if statements below into that if. Add break at bottom again later and take out the moron statement
+			#Nested if statement to figure out if the scenetype is None, 0, or 1
 		if x.sceneType == None:
 			sceneInfo = scn.objects.get(activityID_id=id, sceneType=None)
 			sceneOpt = scnopt.objects.get(sceneID_id = sceneInfo.sceneID)
 			nextScene = nxtscn.objects.get(sceneID_id = sceneInfo.sceneID)
 
 			print("LOOK HERE for None!***********************************")
-			print(sceneInfo.sceneID)
-			print(sceneOpt.sceneText)
-			print(nextScene.nextSceneNumber)
-			print(activitySceneCount)
+			# print(nextScene.nextSceneNumber)
+
+			#if statement to check if this is where we want to stop, then add one to iteration
+			# if sceneIteration == indexList.index(sceneIteration):
+			# 	break
+			# print("SceneIterations after Null")
+			# print(sceneIteration)
+			break
 
 		elif x.sceneType == 0:
 
@@ -151,30 +166,77 @@ def activityPage(request, id):
 			nextScene = nxtscn.objects.all().filter(sceneID_id = x.sceneID)
 
 			print("LOOK HERE for 0!***********************************")
-			print(activitySceneCount)
+			break
 
 		elif x.sceneType == 1:
 			sceneInfo = scn.objects.get(activityID_id=id, sceneType=1)
-			sceneOpt = scnopt.objects.all().filter(sceneID_id = sceneInfo.sceneID)
+			# sceneOpt = scnopt.objects.all().filter(sceneID_id = sceneInfo.sceneID)
 			#won't need nextscene here because the link will send them to the mission page.
 
 			print("LOOK HERE for 1!***********************************")
-			print(activitySceneCount)
+			# print(activitySceneCount)
 		else:
 			print("There should be no other option in this if statement")
-	else: 
-		print("There should be no other option for this for loop")
+
+	else:
+		print("else statement in the for loop")
 
 
 	context = {
 		'title': title,
 		'scene': scene,
-		'activitySceneCount': activitySceneCount,
+		'activity': activity,
 		'sceneInfo': sceneInfo,
 		'sceneOpt': sceneOpt,
 		'nextScene': nextScene,
 	}
 	return render(request,"activityPage.html", context)
+
+
+# def activityPage(request, id, *sc): #test form
+# 	title = "SceneForm Test"
+
+# 	activity = get_object_or_404(act, activityID=id) #id here is the activityID
+# 	scene = scn.objects.all().filter(activityID_id=id).order_by('sceneID')
+# 	# sceneList = list(scn.objects.all().filter(activityID_id=id).order_by('sceneID'))
+# 	sceneList = scene.values_list('sceneID', flat=True).distinct()
+# 	print (sceneList)
+	
+# 	#show information from first initial scene if this is the first time it's loaded.
+# 	initialSceneNum = sceneList[0]
+# 	print ("initial scene number here!!!!!!!!!!")
+# 	print (initialSceneNum)
+
+# 	form = scenePassForm(request.POST or None)
+
+# 	if form.is_valid():
+# 		form_sceneID = form.cleaned_data.get("sceneID")
+# 		form_choice = form.cleaned_data.get("choice")
+# 		form_integerSelected = form.cleaned_data.get("integerSelected")		
+
+# 		print ("form_sceneID HERE!!!!!!!!!!!!")
+# 		print (form_sceneID)
+# 		print ("form_choice HERE!!!!!!!!!!!!!!")
+# 		print (form_choice)
+
+# 		# if form_choice == None:
+# 		# 	sceneNum = sceneList[0]
+# 		# 	sceneInfo = scn.objects.get(activityID_id=id, sceneID=sceneNum)
+# 		# 	sceneOpt = scnopt.objects.get(sceneID_id = sceneInfo.sceneID)
+# 		# 	nextScene = nxtscn.objects.get(sceneID_id = sceneInfo.sceneID)
+# 		# else:
+# 		# 	"Got to the form_choice if statement, but didn't work"	
+
+# 	context = {
+# 		'title': title,
+# 		'activity': activity,
+# 		'form': form,
+# 		'scene': scene,
+# 		# 'sceneInfo': sceneInfo,
+# 		# 'sceneOpt': sceneOpt,
+# 		# 'nextScene': nextScene,
+# 	}
+# 	return render(request,"activityPage.html")
 
 
 
