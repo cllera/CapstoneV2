@@ -64,6 +64,8 @@ class scenePassForm(forms.Form):
 		return integerSelected
 
 
+
+
 # Not using these yet
 
 class NewAdminForm(forms.ModelForm):

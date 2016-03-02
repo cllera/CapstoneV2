@@ -114,81 +114,41 @@ def activityStart(request, id):
 #View for activity start page
 def activityPage(request, id, *sc):
 	title = "Activity"
-	#**STart of changes**(Timestamp, not content below)
+
 	activity = get_object_or_404(act, activityID=id) #id here is the activityID
+
+	#QuerySet and List of scenes associated with activity
 	scene = scn.objects.all().filter(activityID_id=id).order_by('sceneID')
-	scnType = scn.objects.all().filter(activityID_id=id).order_by('sceneType')
-	# activitySceneCount = scene.count()
-	# indexList = list(range(1,(activitySceneCount+1)))
 	sceneList = scene.values_list('sceneID', flat=True).distinct()
+	#QuerySet and List of sceneTypes associated with activity
+	scnType = scn.objects.all().filter(activityID_id=id).order_by('sceneType')
+	scnTypeList = scene.values_list('sceneType', flat=True).distinct()
+	#QuerySet and List of sceneOptions associated with scenes
+	scnOptions = scnopt.objects.all().filter(sceneID_id__in=sceneList)
+	scnOptionsList = scnOptions.values_list('soID', flat=True).distinct()
+	#QuerySet and List of nextScenes associated with scene and sceneOptions
+	nxtScene = nxtscn.objects.all().filter(sceneID_id__in=sceneList)
+	nxtSceneList = nxtScene.values_list('nextSceneNumber', flat=True)
+
+	#Debugs.
 	print (sceneList)
+	print (scnTypeList)
+	print (scnOptionsList)
+	print (nxtSceneList)
 
-	
-
-	#if this scene matches the index, (and sceneType = something) then test to see if we got here.
-	for x in scn.objects.all().filter(activityID_id=id).order_by('sceneID'):
-		print (x.sceneID)
-		print (sceneList[0])
-		if x.sceneID == sceneList[0]:
-			sceneInfo = scn.objects.get(activityID_id=id, sceneType=None)
-			sceneOpt = scnopt.objects.get(sceneID_id = sceneInfo.sceneID)
-			nextScene = nxtscn.objects.get(sceneID_id = sceneInfo.sceneID)
-		else:
-			"End of if statement in new for loop"
-	else:
-		"end of new for loop"
-
-	#For loop to go through rows in Scene where ActivityID = id
-	for x in scn.objects.all().filter(activityID_id=id).order_by('sceneType'):
-		print ("entering for loop")
-		# if sceneIteration == indexList.index(sceneIteration):
-			#nest ALL the if statements below into that if. Add break at bottom again later and take out the moron statement
-			#Nested if statement to figure out if the scenetype is None, 0, or 1
-		if x.sceneType == None:
-			sceneInfo = scn.objects.get(activityID_id=id, sceneType=None)
-			sceneOpt = scnopt.objects.get(sceneID_id = sceneInfo.sceneID)
-			nextScene = nxtscn.objects.get(sceneID_id = sceneInfo.sceneID)
-
-			print("LOOK HERE for None!***********************************")
-			# print(nextScene.nextSceneNumber)
-
-			#if statement to check if this is where we want to stop, then add one to iteration
-			# if sceneIteration == indexList.index(sceneIteration):
-			# 	break
-			# print("SceneIterations after Null")
-			# print(sceneIteration)
-			break
-
-		elif x.sceneType == 0:
-
-			sceneInfo = x.sceneType
-			sceneOpt = scnopt.objects.all().filter(sceneID_id = x.sceneID)
-			nextScene = nxtscn.objects.all().filter(sceneID_id = x.sceneID)
-
-			print("LOOK HERE for 0!***********************************")
-			break
-
-		elif x.sceneType == 1:
-			sceneInfo = scn.objects.get(activityID_id=id, sceneType=1)
-			# sceneOpt = scnopt.objects.all().filter(sceneID_id = sceneInfo.sceneID)
-			#won't need nextscene here because the link will send them to the mission page.
-
-			print("LOOK HERE for 1!***********************************")
-			# print(activitySceneCount)
-		else:
-			print("There should be no other option in this if statement")
-
-	else:
-		print("else statement in the for loop")
-
+	# print ("FOR LOOP BELOW")
+	# for n in nxtScene:
+	# 	print (n.nextSceneNumber)
+	# else:
+	# 	print("For Failed")
 
 	context = {
 		'title': title,
 		'scene': scene,
 		'activity': activity,
-		'sceneInfo': sceneInfo,
-		'sceneOpt': sceneOpt,
-		'nextScene': nextScene,
+		'scnType': scnType,
+		'scnOptions': scnOptions,
+		'nxtScene': nxtScene,
 	}
 	return render(request,"activityPage.html", context)
 
