@@ -79,39 +79,7 @@ def activityDashboard(request):
 	}
 	return render(request,"activityDashboard.html", context)
 
-#View for activity start page
-def activityStart(request, id):
-	title = "Start Activity"
-
-	# activity = act.objects.get(activityID=request.urlparams[0])
-	activity = get_object_or_404(act, activityID=id) #id here is the activityID
-	scenes = scn.objects.all().filter(activityID_id=id)
-	intro = scn.objects.get(activityID_id=id, sceneType=None)
-	sceneOpt = scnopt.objects.get(sceneID_id = intro.sceneID)
-	nextScene = nxtscn.objects.get(sceneID_id = intro.sceneID)
-	activitySceneCount = scenes.count() 
-	#returns 7 items, which it should
-	#New problem, how to get page to reload with new information each time?
-	#New problem, how to get page to go back to mission screen afterwards?
-
-	print("LOOK HERE!***********************************")
-	print(intro.sceneID)
-	print(sceneOpt.sceneText)
-	print(nextScene.nextSceneNumber)
-	print(activitySceneCount)
-
-	context = {
-		'title': title,
-		'activity': activity,
-		'scenes': scenes,
-		'intro': intro,
-		'sceneOpt': sceneOpt,
-		'nextScene': nextScene,
-		'activitySceneCount': activitySceneCount,
-	}
-	return render(request,"activityStart.html", context)
-
-#View for activity start page
+#View for activity pages
 def activityPage(request, id, *sc):
 	title = "Activity"
 
@@ -136,68 +104,34 @@ def activityPage(request, id, *sc):
 	print (scnOptionsList)
 	print (nxtSceneList)
 
-	# print ("FOR LOOP BELOW")
-	# for n in nxtScene:
-	# 	print (n.nextSceneNumber)
-	# else:
-	# 	print("For Failed")
 
 	context = {
 		'title': title,
 		'scene': scene,
 		'activity': activity,
+		'sceneList': sceneList,
 		'scnType': scnType,
 		'scnOptions': scnOptions,
 		'nxtScene': nxtScene,
 	}
 	return render(request,"activityPage.html", context)
 
+#Adding new events -- Will be used by admin
+def newEventForm(request):
+	form = NewEventForm(request.POST or None)
 
-# def activityPage(request, id, *sc): #test form
-# 	title = "SceneForm Test"
+	if form.is_valid():
+		instance = form.save(commit=False)
+		instance.save()
+		context = {
+			"saved Event information"
+		}
+		return HttpResponseRedirect("") #add event url here when created.
 
-# 	activity = get_object_or_404(act, activityID=id) #id here is the activityID
-# 	scene = scn.objects.all().filter(activityID_id=id).order_by('sceneID')
-# 	# sceneList = list(scn.objects.all().filter(activityID_id=id).order_by('sceneID'))
-# 	sceneList = scene.values_list('sceneID', flat=True).distinct()
-# 	print (sceneList)
-	
-# 	#show information from first initial scene if this is the first time it's loaded.
-# 	initialSceneNum = sceneList[0]
-# 	print ("initial scene number here!!!!!!!!!!")
-# 	print (initialSceneNum)
-
-# 	form = scenePassForm(request.POST or None)
-
-# 	if form.is_valid():
-# 		form_sceneID = form.cleaned_data.get("sceneID")
-# 		form_choice = form.cleaned_data.get("choice")
-# 		form_integerSelected = form.cleaned_data.get("integerSelected")		
-
-# 		print ("form_sceneID HERE!!!!!!!!!!!!")
-# 		print (form_sceneID)
-# 		print ("form_choice HERE!!!!!!!!!!!!!!")
-# 		print (form_choice)
-
-# 		# if form_choice == None:
-# 		# 	sceneNum = sceneList[0]
-# 		# 	sceneInfo = scn.objects.get(activityID_id=id, sceneID=sceneNum)
-# 		# 	sceneOpt = scnopt.objects.get(sceneID_id = sceneInfo.sceneID)
-# 		# 	nextScene = nxtscn.objects.get(sceneID_id = sceneInfo.sceneID)
-# 		# else:
-# 		# 	"Got to the form_choice if statement, but didn't work"	
-
-# 	context = {
-# 		'title': title,
-# 		'activity': activity,
-# 		'form': form,
-# 		'scene': scene,
-# 		# 'sceneInfo': sceneInfo,
-# 		# 'sceneOpt': sceneOpt,
-# 		# 'nextScene': nextScene,
-# 	}
-# 	return render(request,"activityPage.html")
-
+	context = {
+		"form": form,
+	}
+	return render(request,"",context)
 
 
 
@@ -223,24 +157,6 @@ def newAdminLogin(request):
 		"form": form,
 	}
 	return render(request,"",context) #figure out how to add to userloginAccountform
-
-#Adding new events -- Will be used by admin; right now just need to create for table.
-#*******************Haven't tested this as of (2/13/16)********************
-def newEventForm(request):
-	form = NewEventForm(request.POST or None)
-
-	if form.is_valid():
-		instance = form.save(commit=False)
-		instance.save()
-		context = {
-			"saved Event information"
-		}
-		return HttpResponseRedirect("") #add event url here when created.
-
-	context = {
-		"form": form,
-	}
-	return render(request,"",context)
 
 #Adding new activity -- Will be used by admin; right now just need to create for table.
 #*******************Haven't tested this as of (2/13/16)********************

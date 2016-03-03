@@ -1,42 +1,53 @@
-<!--for the mid-activity/mission pages-->
+<!--
+Title: activityPage.html 
+Purpose: Loading in scene, scene option, and next scene data relevant to the activity chosen
+Predecessor: activityDashboard.html
+-->
 
 {% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!--<img src='{ % static "img/beach.jpg" %}' />-->
-    <title>CHF App (User Side)</title>
+    <title>{{activity.activityName}}</title>
     <link href='{% static "css/activityList.css" %}' rel="stylesheet" type="text/css" media="all" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src = "{% static 'js/refreshPage.js' %}"></script>
   </head>
 
   <body>
-
+    <!--Activity information-->
     <h1>{{activity.activityName}}</h1>
     <h2>{{activity.description}}</h2>
 
     <div>
-      {% for s in scene %}
-        <div id="{{s.sceneID}}">
+      {% for s in scene %} <!--looping through scene info-->
+        <div id="{{s.sceneID}}" class="sceneDiv">
           <p>{{s.instructionText}}</p>
           <ul id="ul_inline">
-          {% for o in scnOptions %}
+          {% for o in scnOptions %} <!--looping through scene options related to scene-->
             {% if s.sceneID == o.sceneID_id %}
               <li>{{o.sceneText}}
             {% endif %}
-            {% for n in nxtScene %}
+            {% for n in nxtScene %} <!--looping through next scene designation related to scene option-->
               {% if s.sceneID == n.sceneID_id and o.soID == n.sceneOptionID_id %}
                 <button id = "{{n.nextSceneNumber}}">Submit</button></li>
               {% endif %}
-            {% endfor %}
-          {% endfor %}
+            {% endfor %} <!--end nxtScene loop-->
+          {% endfor %} <!--end scnOptions loop-->
           </ul>
         </div>
-      {% endfor %}
+      {% endfor %} <!--end scene loop-->
     </div>
 
-<!-- Div with Footer --> 
+    <div>
+      <input type="button" onClick="history.go(0)" VALUE="Restart Mission">
+      
+      <!--may need to update activityDashboard url to include event-->
+      <input type="button" onClick="location.href='/activityDashboard/';" VALUE="Exit to Activity Page">
+    </div>
+
+    <!-- Div with Footer --> 
     <div class="container">
       <!-- Example row of columns -->
       <hr>
