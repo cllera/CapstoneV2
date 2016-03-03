@@ -172,8 +172,8 @@ width: 11px;
   display: block;
 }
 
-/*.navbar-brand{
-  font-size: 2.5em;
+.navbar-brand{
+  font-size: 20px;
     color: #fff !important;
     text-decoration: none;
     text-transform: uppercase;
@@ -189,7 +189,7 @@ width: 11px;
   -o-border-radius: 100%;
   -ms-border-radius: 100%;
     border: 2px solid #fff;
-}*/
+}
 
 .navigation .navbar-nav > li > a {
   color: #fff;
