@@ -48,7 +48,7 @@ def userLogin(request):
 		"form": form,
 	}
 
-	return render(request,"userLogin.html", context)
+	return render(request,"home.html", context)
 
 def newUserLogin(request):
 	form = NewUserAccountForm(request.POST or None)
