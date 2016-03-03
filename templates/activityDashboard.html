@@ -32,7 +32,8 @@
       <div>
         <p><h3>{{a.activityName}}</h3></p>
         <p>{{a.description}}</p>
-        <button><a href="/activityPage/{{a.activityID}}/">Begin</a></button>
+<!--         <button><a href="/activityPage/{{a.activityID}}/">Begin</a></button> -->
+        <input type="button" onClick="location.href='/activityPage/{{a.activityID}}/';" VALUE="Begin">
       </div>
       {%endfor%}
       <hr>
