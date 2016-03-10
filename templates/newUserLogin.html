@@ -1,17 +1,11 @@
 {% load staticfiles %}
-<h1>
-  {{title}}
-</h1>
-
-<body>
-
-<form method='POST' action="" class="form">
-  {% csrf_token %}
-  {{form.as_p}}
 
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+<form method="POST" action="/newUserLogin/" id="createAccForm">
+	{% csrf_token %}
+	{{form.as_p}}
+	<button type="submit" class="btn btn-primary">Submit</button>
 </form>
+<script src='{% static "js/userLogin.js" %}'></script>
 
-
-</body>
+</html>

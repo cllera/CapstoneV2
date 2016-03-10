@@ -5,7 +5,7 @@ License: Creative Commons Attribution 3.0 Unported
 License URL: http://creativecommons.org/licenses/by/3.0/
 --*/
 html, body{
-    font-size: 100%;
+  font-size: 100%;
 	background:	#fff;
 	font-family: 'Oswald', sans-serif;
 }
@@ -208,6 +208,17 @@ body a:hover{
 	border: 2px solid #FFFFFF;
 }
 /*------------------ Slider Part ends Here----------*/
+
+.19{
+  background:url(../images/19.jpg) no-repeat 0px 0px;
+  background-size:cover;
+  -webkit-background-size:cover;
+  -moz-background-size:cover;
+  -o-background-size:cover;
+  height:300px;
+  width: 400px;
+}
+
 .banner{
 	background:url(../images/banner.jpg) no-repeat 0px 0px;
 	background-size:cover;

@@ -1,6 +1,7 @@
 <!--Initial Login Page
     Created by: CJ
-    Date: 2/9/2016
+    Modified by: Trevor 
+    Date: 3/1/2016
     Purpose: Splash page to give users ability to login depending on role.
 -->
 
@@ -12,77 +13,293 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="keywords" content="News Times Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
-    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+
     <!-- Custom Theme files -->
     <link rel="stylesheet" href='{% static "css/bootstrap.css" %}' type="text/css" media="all"/>
 
-    <link href='{% static "css/style.css" %}' rel="stylesheet" type="text/css" media="all" />
-    <!-- js -->
-    <script src='{% static "js/jquery-1.11.1.min.js" %}'></script>
-    <!-- //js -->
     <link href='//fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
+   <!-- Fontawesome -->
+    <link rel="stylesheet" href='{% static "css/font-awesome.min.css"%}'> 
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href='{% static "css/bootstrap.min.css" %}'>
+    <!-- Fancybox -->
+    <link rel="stylesheet" href='{% static "css/jquery.fancybox.css" %}'>
+    <!-- owl carousel -->
+    <link rel="stylesheet" href='{% static "css/owl.carousel.css" %}'>
+    <!-- Animate -->
+    <link rel="stylesheet" href='{% static "css/animate.css" %}'>
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href='{% static "css/main.css" %}'>
+    <!-- Main Responsive -->
+    <link rel="stylesheet" href='{% static "css/responsive.css" %}'>
   </head>
 
-  
-  <body>
 
-  <div class="banner">
-    <div class="banner-info">
-      <div class="container">
-        <nav class="navbar navbar-default">
-          <!-- Brand and toggle get grouped for better mobile display -->
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            </button>
-            <div class="logo">
-              <a class="navbar-brand" href="home.html">Interactivity</a>
+ <body>
+        <header id="navigation" class="navbar-fixed-top">
+            <div class="container">
+
+                <div class="navbar-header">
+                    <!-- responsive nav button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                    <!-- /responsive nav button -->
+                        <div class="logo">
+                            <a class="navbar-brand"><span>CHF</span> Colonial Heritage Foundation</a>
+                        </div>
+
+                    </div>
+
+                    <!-- main nav -->
+                    <nav class="collapse navigation navbar-collapse navbar-right" role="navigation">
+                        <ul id="nav" class="nav navbar-nav">
+                            <li class="current"><a href="">Home</a></li>
+                            <li><a data-toggle="modal" href="#login">Login</a></li>
+                            <li><a href="quickstart.html">Quick Start</a></li>
+                        </ul>
+                    </nav>
+                    <!-- /main nav -->
+                </div>
+
+            </div>
+        </header>
+        <!--
+        End Fixed Navigation
+        ==================================== -->
+  
+ 
+         <!--
+        Home Slider
+        ==================================== -->
+        <section id="home">     
+            <div id="home-carousel" class="carousel slide" data-interval="false">
+                <ol class="carousel-indicators">
+                    <li data-target="#home-carousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#home-carousel" data-slide-to="1"></li>
+                    <li data-target="#home-carousel" data-slide-to="2"></li>
+                </ol>
+                <!--/.carousel-indicators-->
+
+                <div class="carousel-inner">
+
+                    <div class="item active"  style="background-image: url('{% static "images/slider/bg1.jpg" %}')" >
+                        <div class="carousel-caption">
+                            <div class="animated bounceInRight">
+                                <h2>Learn History Interactively!</h2>
+                                <p>Play through histroy with interactive missions brought to you by Colonial Heritage Foundation!<br> Get started now by clicking quickstart or play custom made missions through login.</p>
+                            </div>
+                        </div>
+                    </div>              
+
+                    <div class="item" style="background-image: url('{% static "images/slider/bg2.jpg" %}')">                
+                        <div class="carousel-caption">
+                            <div class="animated bounceInDown">
+                                <h2>History at its finest</h2>
+                                <p>Play through spy missions as you try ot take on the British during the revolutionary war.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item" style="background-image: url('{% static "images/slider/bg3.jpg" %}')">                 
+                         <div class="carousel-caption">
+                            <div class="animated bounceInUp">
+                                <h2>Success is up to you!</h2>
+                                <p>Made your own decisions as you seek to help win the revolutionary war for the patriots.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/.carousel-inner-->
+                <nav id="nav-arrows" class="nav-arrows hidden-xs hidden-sm visible-md visible-lg">
+                    <a class="sl-prev hidden-xs" href="#home-carousel" data-slide="prev">
+                        <i class="fa fa-angle-left fa-3x"></i>
+                    </a>
+                    <a class="sl-next" href="#home-carousel" data-slide="next">
+                        <i class="fa fa-angle-right fa-3x"></i>
+                    </a>
+                </nav>
+
+            </div>
+        </section>
+        <!--
+        End #home Slider
+        ========================== -->
+
+          <!--
+        Login Modal
+        ==================================== -->
+        <div class="container">
+        <!-- Modal Become a member -->
+<!--         <form action="#" method="POST" id="createAccForm"> -->
+        <div class="modal fade" id="becomeamember" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Become a member</h4>
+              </div>
+              <div class="modal-body form-inline">
+                <div class="form-group has-feedback" id="">
+<!--                     {% csrf_token %}
+                    {{form.userName}}
+                    {{form.password}}
+                    {{form.firstName}}
+                    {{form.lastName}}
+                    {{form.email}} -->
+                </div>
+                <div class="form-group has-feedback">
+                    <label class="control-label" for="firstnamelabel">* First name</label>
+                    <input type="text" class="form-control" id="firstnameinput" aria-describedby="firstnameinput" required="">
+                    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                </div>
+                
+                <div class="form-group has-feedback">
+                    <label class="control-label" for="lastnamelabel">* Last name</label>
+                    <input type="text" class="form-control" id="lastnameinput" aria-describedby="lastnameinput" required="">
+                    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                </div>
+                
+                <div class="form-group has-feedback">
+                    <label class="control-label" for="emaillabel">* Email address</label>
+                    <input type="email" class="form-control" id="emailinput" aria-describedby="emailinput" required="">
+                    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                </div>
+                
+                <div class="form-group has-feedback">
+                    <label class="control-label" for="passwordlabel">* Password</label>
+                    <input type="password" class="form-control" id="passwordinput" aria-describedby="passwordinput" required="">
+                    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                </div>
+                
+                <div class="form-group has-feedback">
+                    <label class="control-label" for="re-enterpasswordlabel">* Re-enter password</label>
+                    <input type="password" class="form-control" id="re-enterpasswordinput" aria-describedby="re-enterpasswordinput" required="">
+                    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                </div>
+                
+                <div class="form-group has-feedback">
+                    <label class="control-label" for="postcodelabel">Postcode</label>
+                    <input type="text" class="form-control" id="postcodeinput" aria-describedby="postcodeinput">
+                    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                </div>
+                
+                 <div class="form-group">
+                    <label class="control-label" for="postcodelabel">How did you hear about us?</label>
+                    <select class="form-control">
+                        <option>- Please select -</option>
+                        <option>Search engine</option>
+                        <option>Web Advertisement</option>
+                        <option>Magazine Advertisement</option>
+                        <option>Friend/Colleague</option>
+                        <option>Email newsletter</option>
+                        <option>Fax</option>
+                        <option>Conference/Tradeshow</option>
+                        <option>Social Media</option>
+                        <option>Other</option>
+                    </select>
+                </div><br/>
+                
+                 <div class="form-group">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Sign up</button>
+                 </div>
+                
+              </div><!-- end modal-Body -->
+              
             </div>
           </div>
+        </div><!-- end become a member modal -->
+<!--         </form>  --><!-- end Form -->
+        
+        <!-- Modal Login -->
+<!--         <form id="userLogin" action="/activityDashboard/" method="POST"> -->
 
-          <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="collapse navbar-collapse nav-wil" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav cl-effect-18" id="cl-effect-18">
-              <li class="act"><a href="index.html" class="effect1 active">Home</a></li>
-              <li><a href="/userLogin/">User Login</a></li>
-              <li><a href="">Admin Login</a></li>
-              <li><a href="">Quickstart</a></li>
-            </ul>
-          </div><!-- /.navbar-collapse -->  
-        </nav>
-        <div class="banner-info-slider">
-          <h1>Select Login Type</h1>
-          <div class="more">
-            <p>Some witty tagline here about history</p>
-          </div>
-        </div>
-      </div> <!--end of container-->
-    </div> <!--end of banner info-->
-  </div> <!--end of banner-->
+<div id="LOGIN" class="container">
+    <div class="row">
+    <form method="POST" action="" class="form" id="userLogin">
+        <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel-login" aria-hidden="true">
 
-  <div class="footer">
-      <div class="container">
-        <div class="footer-bottom">
-          <div class="footer-bottom-left">
-            <p>Interactivity</p>
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel-login">Login</h4>
+              </div>
+              <div class="modal-body">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="form-group{{field.errors|yesno:' has-error,'}}">
+                      <label class="col-sm-3 control-label">
+                        {{ field.label }}
+                      </label>
+                      <div class="col-sm-9">
+                        {{ field }}
+                        <div class="field-error-text">
+                        {% for error in field.errors %}
+                          {{ error }}
+                        {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                <p> Testing to see if this works. </p>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                
+                <button type="button" class="btn btn-primary">Login</button>
+
+                <input type="checkbox" value="rememberme" id="rememberme">Remember me <br/><br/>
+                
+                <a href="#">Forgot your password?</a>
+                
+              </div>
+              
+              <div class="modal-footer">
+              <h4 class="modal-title" id="myModalLabel">Register</h4>
+                If you are not an existing member of this site you can <a data-toggle="modal" data-target="#becomeamember" data-dismiss="modal"> register here</a>
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>-->
+              </div>
+              
+            </div>
           </div>
-          <div class="footer-bottom-right">
-            <ul>
-              <li>About</li>
-              <li>Contact</li>
-            </ul>
-          </div>
-          <div class="clearfix"> </div>
-        </div>
-      </div>
+        </div><!-- end become a member modal -->
+    </form>
+</div>
     </div>
-  <!-- //footer -->
-  <!-- for bootstrap working -->
-    <script src='{% static "js/bootstrap.js" %}'></script>
-<!-- //for bootstrap working -->
 
-  </body>
+<!--         </form>  --><!-- end login form -->
+        </div>
+
+
+
+
+
+        <!--
+        End Login Modal
+        ==================================== -->
+
+
+
+
+        <!-- main jQuery -->
+        <script src='{% static "js/jquery-1.11.1.min.js" %}'></script>
+        <!-- Bootstrap -->
+        <script src='{% static "js/bootstrap.min.js" %}'></script>
+        <!-- jquery.nav -->
+        <script src='{% static "js/jquery.nav.js" %}'></script>
+        <!-- owl carousel -->
+        <script src='{% static "js/owl.carousel.min.js" %}'></script>
+        <!-- WOW script -->
+        <script src='{% static "js/wow.min.js" %}'></script>
+        <!-- theme custom scripts -->
+        <script src='{% static "js/main.js" %}'></script>
+        <script src='{% static "js/userLogin.js" %}'></script>
+
+        <!-- <script src='{% static "js/bootstrap.js" %}'></script> -->
+
+ </body>
 </html>

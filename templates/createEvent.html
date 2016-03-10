@@ -1,0 +1,33 @@
+
+{% extends 'base.html' %}
+{% block content%}
+	<div class="container">
+		<div class="col-sm-3">
+		</div>
+		<div class="col-sm-9">
+			<h1>{{formtitle}}</h1>
+		<br><br>
+			<p>{{instruction}}</p>
+		<br>
+			<form method="POST" action="" id='EventCreationForm'>
+				{%csrf_token%}
+				{{form.as_p}}
+				<br>
+				<input type="submit" value="Submit">
+				
+				<!-- {% for field in form %}
+					<div class="form-group{{field.errors|yesno:' has-error,'}}">
+					  <label class="col-sm-2 control-label">
+					    {{ field.label }}
+					  </label>
+					  <div class="col-sm-7">
+					    {{ field }}
+					  </div>
+					</div>
+				{% endfor %} -->
+			</form>
+		</div>
+	</div>
+
+{% endblock %}
+
