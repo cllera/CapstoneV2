@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+
+    <div class="container">
+      <h1>Welcome, {{user}}.</h1>
+      <br>
+      <p>Below is a list of events belonging to you.</p>
+      <br>
+      <hr>
+      <!--<p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>-->
+    </div>
+
+
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="col-sm-1">
+      </div>
+      <div class="col-sm-8">
+      {% for e in events %}
+        <h3>{{e.eventName}}</h3>
+        {% for a in activities%}
+        <table>
+          <tr>
+            <th>Activity Name</th>
+            <th>Description</th>
+            <th></th>
+          </tr>
+          <tr>
+            <td>{{a.activityName}}</td>
+            <td>{{a.description}}</td>
+<!--             <td><input type="button" onClick="location.href='/activityPage/{{a.activityID}}/';" VALUE="Begin"></td> -->
+            <td><p>Button here</p></td>
+          </tr>
+        </table>
+        {% endfor %}
+        <br>
+      {%endfor%}
+    </div>
+    </div>
+{% endblock %}

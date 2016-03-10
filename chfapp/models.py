@@ -10,12 +10,12 @@ class UserForm(models.Model):
 	#inherits from Model class
 	username = models.CharField(max_length=10,default='',blank=False)
 	password = models.CharField(max_length=10,default='',blank=False)
-	joincode = models.CharField(max_length=10,default='',blank=False, null=False)
+	# joincode = models.CharField(max_length=10,default='',blank=False, null=False)
 	#timestamp = models.DateTimeField(auto_now_add=True, auto_now=False) for things that are only added once
 	#updated = models.DateTimeField(auto_now_add=False, auto_now=True) for updating timestamps frequently
 
 	def __str__(self): #python3 uses __str__
-		return self.email
+		return self.username
 
 #not sure what to do with this for now.
 class AdminForm(models.Model):
@@ -42,7 +42,7 @@ class Users(models.Model):
 	email = models.EmailField(max_length=40)
 
 	def __str__(self):
-		return self.userName, self.firstName, lastName, email
+		return self.userName, self.password, self.firstName, self.lastName, self.email
 
 #Admin Table
 class Admin(models.Model):

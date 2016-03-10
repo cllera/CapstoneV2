@@ -7,8 +7,8 @@ body {
     background-color: rgba(15,116,143,0.8);
     font-family: 'Open Sans', sans-serif;
     line-height: 1;
-	font-size: 13px;
-    color: #a8a8a8;
+	  font-size: 14px;
+    color: #e3e3e3;
 }
 
 ol, ul {
@@ -64,7 +64,8 @@ h4, h5, h6 {
 }
 
 body > section {
-    padding: 100px 0;
+    padding: 0px 0;
+    height:60px 0;
 }
 
 .section-title {
@@ -164,7 +165,8 @@ width: 11px;
 }
 
 .navbar-brand {
-  height: inherit;
+/*  height: inherit;*/
+  height: 40px 0;
   padding: 30px 0;
 }
 
@@ -256,13 +258,9 @@ width: 11px;
   overflow: hidden;
 }
 
-#home2 {
-  padding: 200px;
-  overflow: hidden;
-}
-
 #home-carousel .carousel-inner .item {
-  background-size:cover;
+  height: 80px;
+  width:contain;
   background-repeat: no-repeat;
 }
 
@@ -288,7 +286,7 @@ width: 11px;
 #home-carousel .carousel-inner h2 {
   color: #ffffff;
   font-size: 30px;
-  line-height: 50px;
+  line-height: 25px;
   margin-bottom: 20px;
   text-shadow: none;
   text-transform: uppercase;
@@ -302,36 +300,10 @@ width: 11px;
   text-shadow:none;
 }
 
-#home-carousel2 .carousel-inner .item {
-/*  background-size:cover;*/  
-  width: 100%;
-  height: 220%;
-  background-repeat: no-repeat;
-}
-
-#home-carousel2 .slider-content {
-  height: 100%;
-}
-
-#home-carousel2 .carousel-inner h2 {
-  color: #ffffff;
-  font-size: 30px;
-  line-height: 50px;
-  margin-bottom: 20px;
-  text-shadow: none;
-  text-transform: uppercase;
-}
-
-#home-carousel2 .slider-content {
-  height: 100%;
-}
-
-#home-carousel2 .carousel-inner p {
-  color: #FFFFFF;
-  line-height: 28px;
-  font-size: 13px;
-  margin-top: 0;
-  text-shadow:none;
+#containerwithpadding,
+.container {
+  top:300;
+  left:100;
 }
 
 #nav-arrows > a {
