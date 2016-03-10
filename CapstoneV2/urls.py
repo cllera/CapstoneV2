@@ -32,8 +32,6 @@ urlpatterns = [
     url(r'^activityPage/(\d+)/(\d+)/$', 'chfapp.views.activityPage',name='activityPage2'),
     url(r'^createEvent/$', 'chfapp.views.newEventForm', name='createEvent'),
     url(r'^adminDashboard/$', 'chfapp.views.adminDashboard', name='adminDashboard')
-    #url() for when admin form is created/added to newUserLogin
-    #url() for when event, activity is created/added
 
 ] + static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
 
