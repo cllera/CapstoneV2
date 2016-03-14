@@ -1,6 +1,5 @@
+//Function used to refresh scenes in the activity as user goes through it.
 $(function() {
-	//jQuery methods will go here
-	//initially hide everything but first scene
 
 	//puts all scene divs into an array for sorting by id
 	var divArr = $('.sceneDiv').toArray();
@@ -28,6 +27,7 @@ $(function() {
 		};
 	});
 });
+
 
 
 

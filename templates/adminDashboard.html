@@ -1,41 +1,74 @@
 {% extends 'base.html' %}
 {% block content %}
-    <!-- Main jumbotron for a primary marketing message or call to action -->
+  
+    {% load staticfiles %}
+    <link rel="stylesheet" href='{% static "css/adminDashboard.css" %}'>
 
     <div class="container">
-      <h1>Welcome, {{user}}.</h1>
-      <br>
-      <p>Below is a list of events belonging to you.</p>
-      <br>
-      <hr>
-      <!--<p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>-->
-    </div>
-
-
-    <div class="container">
-      <!-- Example row of columns -->
-      <div class="col-sm-1">
-      </div>
-      <div class="col-sm-8">
-      {% for e in events %}
-        <h3>{{e.eventName}}</h3>
-        {% for a in activities%}
-        <table>
-          <tr>
-            <th>Activity Name</th>
-            <th>Description</th>
-            <th></th>
-          </tr>
-          <tr>
-            <td>{{a.activityName}}</td>
-            <td>{{a.description}}</td>
-<!--             <td><input type="button" onClick="location.href='/activityPage/{{a.activityID}}/';" VALUE="Begin"></td> -->
-            <td><p>Button here</p></td>
-          </tr>
-        </table>
-        {% endfor %}
+        <h1>Welcome, {{user}}.</h1>
+        <p>Below is a list of events belonging to you.</p>
         <br>
-      {%endfor%}
+      </div>
     </div>
-    </div>
+
+    <!--holds code to print event information-->
+    <div class="container">
+      <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#YourEvents">Your Events</a></li>
+        <li><a data-toggle="tab" href="#OtherEvents">Manage Users</a></li>
+        <li><a data-toggle="tab" href="#OtherEvents">Other Events</a></li>
+      </ul>
+
+      <div class="tab-content">
+        <div id="YourEvents" class="tab-pane fade in active">
+          <h3>Your Events</h3>
+          <p>Events listed below are either those which you have created or those that list you as an additional administrator.</p>
+          <a href="/createEvent/" role="button" class="btn btn-primary">Create New Event</a>
+          <br>
+          <div class="col-sm-1">
+          </div>
+          <div class="col-sm-10">
+            {% for e in events %}
+              <h3>{{e.eventName}}</h3>
+              <table class ="table table-condensed table-bordered">
+                <thead class="thead">
+                  <tr>
+                    <th>Activity Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for a in activities %}
+                <tr class="accordion-toggle" data-toggle="collapse" data-target>
+                  <td>{{a.activityName}}</td>
+                  <td>{{a.description}}</td>
+      <!--             <td><input type="button" onClick="location.href='/activityPage/{{a.activityID}}/';" VALUE="Begin"></td> -->
+                  <td>
+                    <ul class="list-inline"><!--can't get them inline-->
+                      <li><button type="button" class="btn btn-success">View</button>&nbsp;<button type="button" class="btn btn-warning">Edit</button>&nbsp;<button type="button" class="btn btn-danger">Archive</button></li>
+                    </ul>
+                  </td>
+                </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <button type="button" class="btn btn-primary">Create New Activity</button>
+              <br><br>
+            {%endfor%}
+          </div> 
+        </div> <!--ends "Your Events" tab-->
+
+        <div id="ManageUsers" class="tab-pane fade">
+          <h3>Manage Users</h3>
+          <p>Users registered to your events will be listed here. Functionality currently under construction.</p>
+        </div>
+
+        <div id="OtherEvents" class="tab-pane fade">
+          <h3>Other Events</h3>
+          <p>Events below are those that you have participated in previously. Functionality currently under construction.</p>
+        </div>
+
+      </div><!--ends tab-content div -->
+    </div> <!--ends container div -->
 {% endblock %}

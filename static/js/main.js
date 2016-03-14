@@ -73,14 +73,14 @@ $(function(){
 /*  On scroll fade/bounce fffect
 /* ========================================================================= */
 
-    $("#testimonial").owlCarousel({
-        pagination : true, // Show bullet pagination
-        slideSpeed : 300,
-        paginationSpeed : 400,
-        singleItem:true
-    });
+//     $("#testimonial").owlCarousel({
+//         pagination : true, // Show bullet pagination
+//         slideSpeed : 300,
+//         paginationSpeed : 400,
+//         singleItem:true
+//     });
 
-});
+// });
 
 /* ========================================================================= */
 /*  On scroll fade/bounce fffect

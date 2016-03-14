@@ -155,7 +155,7 @@ def newEventForm(request):
 		context = {
 			"saved Event information"
 		}
-		return HttpResponseRedirect("/activityDashboard/") #add event url here when created. home for now
+		return HttpResponseRedirect("/adminDashboard/")
 
 	context = {
 		"title" : title,

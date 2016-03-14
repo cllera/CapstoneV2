@@ -13,7 +13,7 @@
 				{%csrf_token%}
 				{{form.as_p}}
 				<br>
-				<input type="submit" value="Submit">
+				<input type="submit" value="Submit" onclick="window.location='/adminDashboard/';" />
 				
 				<!-- {% for field in form %}
 					<div class="form-group{{field.errors|yesno:' has-error,'}}">
