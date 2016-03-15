@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-  
-    {% load staticfiles %}
-    <link rel="stylesheet" href='{% static "css/adminDashboard.css" %}'>
+
 
     <div class="container">
         <h1>Welcome, {{user}}.</h1>
@@ -25,12 +23,20 @@
           <p>Events listed below are either those which you have created or those that list you as an additional administrator.</p>
           <a href="/createEvent/" role="button" class="btn btn-primary">Create New Event</a>
           <br>
+          <br>
           <div class="col-sm-1">
           </div>
           <div class="col-sm-10">
             {% for e in events %}
+            <div id="{{e.eventID}}" class="eventIDDiv"> <!--div connects to activityExistCheck.js-->
               <h3>{{e.eventName}}</h3>
-              <table class ="table table-condensed table-bordered">
+              <button type="button" class="btn btn-warning">Edit Event</button>
+              <button type="button" class="btn btn-danger">Archive Event</button>
+              <br><br>
+              <table class ="table table-condensed table-bordered" width="100%">
+                <col style="width:20%">
+                <col style="width:57%">
+                <col style="width:23%">
                 <thead class="thead">
                   <tr>
                     <th>Activity Name</th>
@@ -40,21 +46,29 @@
                 </thead>
                 <tbody>
                 {% for a in activities %}
-                <tr class="accordion-toggle" data-toggle="collapse" data-target>
-                  <td>{{a.activityName}}</td>
-                  <td>{{a.description}}</td>
-      <!--             <td><input type="button" onClick="location.href='/activityPage/{{a.activityID}}/';" VALUE="Begin"></td> -->
-                  <td>
-                    <ul class="list-inline"><!--can't get them inline-->
-                      <li><button type="button" class="btn btn-success">View</button>&nbsp;<button type="button" class="btn btn-warning">Edit</button>&nbsp;<button type="button" class="btn btn-danger">Archive</button></li>
-                    </ul>
-                  </td>
-                </tr>
-                  {% endfor %}
+                  <div id="{{a.eventID_id}}" class="actEventIDDiv">
+                  {% if e.eventID == a.eventID_id %}
+                  <tr class="accordion-toggle" data-toggle="collapse" data-target>
+                    <td>{{a.activityName}}</td>
+                    <td>{{a.description}}</td>
+        <!--             <td><input type="button" onClick="location.href='/activityPage/{{a.activityID}}/';" VALUE="Begin"></td> -->
+                    <td>
+                      <button type="button" class="btn btn-success">View</button>
+                      <button type="button" class="btn btn-warning">Edit</button>
+                      <button type="button" class="btn btn-danger">Archive</button>
+                    </td>
+                  </tr>
+                  {% else %}
+                  </div> <!--div for eventIDs-->
+                  {% endif %}
+                {% endfor %}
                 </tbody>
               </table>
-              <button type="button" class="btn btn-primary">Create New Activity</button>
-              <br><br>
+              <a href="/createActivity/{{e.eventID}}/" role="button" class="btn btn-primary">Create New Activity</a>
+              <br>
+              <hr>
+              <br>
+            </div>
             {%endfor%}
           </div> 
         </div> <!--ends "Your Events" tab-->
@@ -71,4 +85,5 @@
 
       </div><!--ends tab-content div -->
     </div> <!--ends container div -->
+
 {% endblock %}

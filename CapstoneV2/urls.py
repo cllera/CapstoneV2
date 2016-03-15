@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
-from chfapp.views import home, userLogin, newUserLogin, activityDashboard, activityPage, newEventForm
+from chfapp.views import home, userLogin, newUserLogin, activityDashboard, activityPage, newEventForm, newActivityForm
 
 #where URLS are created; none have been created for userdashboard yet
 urlpatterns = [
@@ -31,7 +31,8 @@ urlpatterns = [
     url(r'^activityPage/(\d+)/$', 'chfapp.views.activityPage',name='activityPage'),
     url(r'^activityPage/(\d+)/(\d+)/$', 'chfapp.views.activityPage',name='activityPage2'),
     url(r'^createEvent/$', 'chfapp.views.newEventForm', name='createEvent'),
-    url(r'^adminDashboard/$', 'chfapp.views.adminDashboard', name='adminDashboard')
+    url(r'^adminDashboard/$', 'chfapp.views.adminDashboard', name='adminDashboard'),
+    url(r'^createActivity/(\d+)/$', 'chfapp.views.newActivityForm', name='createActivity')
 
 ] + static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
 

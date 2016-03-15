@@ -165,6 +165,42 @@ def newEventForm(request):
 	}
 	return render(request, "createEvent.html", context)
 
+#Adding new activity
+def newActivityForm(request, id):
+	title = "Create New Activity"
+
+	#hardcoding this as admin 1 until user authentication is complete
+	admin = amod.objects.get(adminID=1)
+	event = get_object_or_404(emod, eventID=id) #id here is the activityID
+
+	formtitle = "Create New Activity for " + event.eventName
+	instruction = "Enter the activity name and description, followed by the optional fields below: second administrator, user limit and ability to replay the activity."
+
+	form = NewActivityForm(request.POST or None)
+
+	if form.is_valid():
+		activity = act()
+		activity.adminID_id = admin.adminID
+		activity.eventID_id = event.eventID
+		activity.activityName = form.cleaned_data['activityName']
+		activity.description = form.cleaned_data['description']
+		activity.superUser = form.cleaned_data['superUser']
+		activity.userLimit = form.cleaned_data['userLimit']
+		activity.allowReplayActivity = form.cleaned_data['allowReplayActivity']
+		activity.save()
+
+		context = {
+			"saved Activity information"
+		}
+		return HttpResponseRedirect("/adminDashboard/") #add activity url here when created.
+
+	context = {
+		"title": title,
+		"formtitle": formtitle,
+		"instruction": instruction,
+		"form": form,
+	}
+	return render(request,"createActivity.html",context)
 
 #View for admin splash page
 def adminDashboard(request):
@@ -211,23 +247,7 @@ def newAdminLogin(request):
 	}
 	return render(request,"",context) #figure out how to add to userloginAccountform
 
-#Adding new activity -- Will be used by admin; right now just need to create for table.
-#*******************Haven't tested this as of (2/13/16)********************
-def newActivityForm(request):
-	form = NewActivityForm(request.POST or None)
 
-	if form.is_valid():
-		instance = form.save(commit=False)
-		instance.save()
-		context = {
-			"saved Activity information"
-		}
-		return HttpResponseRedirect("") #add activity url here when created.
-
-	context = {
-		"form": form,
-	}
-	return render(request,"",context)
 
 #Adding new scene -- Will be used by admin; right now just need to create for table.
 #*******************Haven't tested this as of (2/13/16)********************

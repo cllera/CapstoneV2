@@ -52,6 +52,14 @@ class NewEventForm(forms.ModelForm):
 	def clean_event(self):
 		return eventName, joincode, enforceUser
 
+class NewActivityForm(forms.ModelForm):
+	class Meta:
+		model = Activity
+		fields = ['activityName','description','superUser','userLimit','allowReplayActivity']
+
+	def clean_activity(self):
+		return activityName, description
+
 
 # Not using these yet
 
@@ -64,15 +72,6 @@ class NewAdminForm(forms.ModelForm):
 		organization = self.cleaned_data.get('organization')
 		return organization
 
-
-
-class NewActivityForm(forms.ModelForm):
-	class Meta:
-		model = Activity
-		fields = ['activityName','description','superUser','userLimit','allowReplayActivity']
-
-	def clean_activity(self):
-		return activityName, description
 
 class NewSceneForm(forms.ModelForm):
 	class Meta:
