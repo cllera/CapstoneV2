@@ -47,6 +47,9 @@ def home(request):
 
 	return render(request,"home.html", context)
 
+
+#=================================User-related Functions===================================#
+
 def userLogin(request):
 	form = UserLoginForm(request.POST)
 	#video 14/42 has alternate validation methods
@@ -85,7 +88,76 @@ def newUserLogin(request):
 	return render(request,"newUserLogin.html", context)
 
 
-#View for activity splash page
+
+#=================================Admin-related Functions===================================#
+
+#View for admin splash page
+def adminDashboard(request):
+	title = "Admin Dashboard"
+
+	events = emod.objects.all().filter(adminID_id = 1)
+
+	activities = act.objects.all().filter(adminID_id = 1)
+	# activityID = act.objects.get(filter)
+
+	context = {
+		'title': title,
+		'events': events,
+		'activities': activities,
+	}
+	return render(request,"adminDashboard.html", context)
+
+
+
+#=================================Event-related Functions===================================#
+
+#Adding new events -- Will be used by admin
+@requires_csrf_token
+def newEventForm(request):
+	title = "Create New Event"
+	formtitle = "Create New Event"
+	instruction = "Enter the event title, desired joincode, and your preference as to whether or not a user limit is to be enforced."
+	form = NewEventForm(request.POST or None)
+
+	#User/Admin values strictly for testing purposes right now
+	user = umod.objects.get(userID=2)
+	admin = amod.objects.get(adminID=1)
+
+	if form.is_valid():
+		event = emod()
+		event.userID_id = user.userID
+		event.adminID_id = admin.adminID
+		event.eventName = form.cleaned_data['eventName']
+		event.joincode = form.cleaned_data['joincode']
+		event.enforceUser = form.cleaned_data['enforceUser']
+		event.save()
+		context = {
+			"saved Event information"
+		}
+		return HttpResponseRedirect("/adminDashboard/")
+
+	context = {
+		"title" : title,
+		"formtitle": formtitle,
+		"instruction": instruction,
+		"form": form,
+	}
+	return render(request, "createEvent.html", context)
+
+def deleteEvent(request, id):
+	#Delete Function
+	activity = act.objects.filter(eventID_id=id).delete()
+	print("Passed activity portion")
+	event = emod.objects.filter(eventID=id).delete() #id here is the eventID
+
+	return HttpResponseRedirect('/adminDashboard/')
+
+
+
+
+#=================================Activity-related Functions===================================#
+
+#View for activity dashboard
 def activityDashboard(request):
 	title = "Dashboard"
 
@@ -132,38 +204,6 @@ def activityPage(request, id, *sc):
 	}
 	return render(request,"activityPage.html", context)
 
-#Adding new events -- Will be used by admin
-@requires_csrf_token
-def newEventForm(request):
-	title = "Create New Event"
-	formtitle = "Create New Event"
-	instruction = "Enter the event title, desired joincode, and your preference as to whether or not a user limit is to be enforced."
-	form = NewEventForm(request.POST or None)
-
-	#User/Admin values strictly for testing purposes right now
-	user = umod.objects.get(userID=2)
-	admin = amod.objects.get(adminID=1)
-
-	if form.is_valid():
-		event = emod()
-		event.userID_id = user.userID
-		event.adminID_id = admin.adminID
-		event.eventName = form.cleaned_data['eventName']
-		event.joincode = form.cleaned_data['joincode']
-		event.enforceUser = form.cleaned_data['enforceUser']
-		event.save()
-		context = {
-			"saved Event information"
-		}
-		return HttpResponseRedirect("/adminDashboard/")
-
-	context = {
-		"title" : title,
-		"formtitle": formtitle,
-		"instruction": instruction,
-		"form": form,
-	}
-	return render(request, "createEvent.html", context)
 
 #Adding new activity
 def newActivityForm(request, id):
@@ -201,23 +241,6 @@ def newActivityForm(request, id):
 		"form": form,
 	}
 	return render(request,"createActivity.html",context)
-
-#View for admin splash page
-def adminDashboard(request):
-	title = "Admin Dashboard"
-
-	events = emod.objects.all().filter(adminID_id = 1)
-
-	activities = act.objects.all().filter(adminID_id = 1)
-	# activityID = act.objects.get(filter)
-
-	context = {
-		'title': title,
-		'events': events,
-		'activities': activities,
-	}
-	return render(request,"adminDashboard.html", context)
-
 
 
 
