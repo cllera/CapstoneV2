@@ -135,7 +135,7 @@
         ==================================== -->
         <div class="container">
         <!-- Modal Become a member -->
-<!--         <form action="#" method="POST" id="createAccForm"> -->
+        <form action="#" method="post" id="newmember" >
         <div class="modal fade" id="becomeamember" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -144,14 +144,6 @@
                 <h4 class="modal-title" id="myModalLabel">Become a member</h4>
               </div>
               <div class="modal-body form-inline">
-                <div class="form-group has-feedback" id="">
-<!--                     {% csrf_token %}
-                    {{form.userName}}
-                    {{form.password}}
-                    {{form.firstName}}
-                    {{form.lastName}}
-                    {{form.email}} -->
-                </div>
                 <div class="form-group has-feedback">
                     <label class="control-label" for="firstnamelabel">* First name</label>
                     <input type="text" class="form-control" id="firstnameinput" aria-describedby="firstnameinput" required="">
@@ -213,44 +205,30 @@
             </div>
           </div>
         </div><!-- end become a member modal -->
-<!--         </form>  --><!-- end Form -->
+        </form> <!-- end Form -->
         
         <!-- Modal Login -->
-<!--         <form id="userLogin" action="/activityDashboard/" method="POST"> -->
-
-<div id="LOGIN" class="container">
-    <div class="row">
-    <form method="POST" action="" class="form" id="userLogin">
-        <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel-login" aria-hidden="true">
-
+        <form id="logingform" action="/" method="POST" class="form">
+        <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel-login">Login</h4>
+                <h4 class="modal-title" id="myModalLabel">Login</h4>
               </div>
               <div class="modal-body">
-                    {% csrf_token %}
-                    {% for field in form %}
-                    <div class="form-group{{field.errors|yesno:' has-error,'}}">
-                      <label class="col-sm-3 control-label">
-                        {{ field.label }}
-                      </label>
-                      <div class="col-sm-9">
-                        {{ field }}
-                        <div class="field-error-text">
-                        {% for error in field.errors %}
-                          {{ error }}
-                        {% endfor %}
-                        </div>
-                      </div>
-                    </div>
-                    {% endfor %}
-                <p> Testing to see if this works. </p>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="form-group has-feedback">
+                  <label class="control-label">Email Address</label>
+                  <input type="email" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Email">
+                  <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                </div>
                 
+                <div class="form-group has-feedback">
+                  <label class="control-label">Password</label>
+                  <input type="password" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Password">
+                  <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                </div>
                 <button type="button" class="btn btn-primary">Login</button>
-
                 <input type="checkbox" value="rememberme" id="rememberme">Remember me <br/><br/>
                 
                 <a href="#">Forgot your password?</a>
@@ -267,11 +245,7 @@
             </div>
           </div>
         </div><!-- end become a member modal -->
-    </form>
-</div>
-    </div>
-
-<!--         </form>  --><!-- end login form -->
+        </form> <!-- end login form -->
         </div>
 
 
@@ -297,7 +271,9 @@
         <script src='{% static "js/wow.min.js" %}'></script>
         <!-- theme custom scripts -->
         <script src='{% static "js/main.js" %}'></script>
-        <script src='{% static "js/userLogin.js" %}'></script>
+        <!-- User login scripts -->
+        <script src='{% static "js/login.js" %}'></script>
+
 
         <!-- <script src='{% static "js/bootstrap.js" %}'></script> -->
 
