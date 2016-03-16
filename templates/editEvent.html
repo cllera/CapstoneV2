@@ -1,0 +1,22 @@
+
+{% extends 'base.html' %}
+{% block content%}
+	<div class="container">
+		<div class="col-sm-3">
+		</div>
+		<div class="col-sm-9">
+			<h1>{{formtitle}}</h1>
+		<br><br>
+			<p>{{instruction}}</p>
+		<br>
+			<form method="POST" action="" id='editEventForm'>
+				{%csrf_token%}
+				{{form.as_p}}
+				<br>
+				<input type="submit" value="Submit" onclick="window.location='/adminDashboard/';" />
+				
+			</form>
+		</div>
+	</div>
+
+{% endblock %}
