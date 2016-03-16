@@ -132,7 +132,7 @@ def newEventForm(request):
 		event.enforceUser = form.cleaned_data['enforceUser']
 		event.save()
 		context = {
-			"saved Event information"
+			"saved Event information after creation"
 		}
 		return HttpResponseRedirect("/adminDashboard/")
 
@@ -144,11 +144,36 @@ def newEventForm(request):
 	}
 	return render(request, "createEvent.html", context)
 
+def editEvent(request, id):
+	#Edit Function
+	title = "Edit Existing Event"
+	formtitle = "Edit Existing Event"
+	instruction = "Alter the event title, desired joincode, and your preference as to whether or not a user limit is to be enforced."
+	event = emod.objects.get(eventID=id)
+	form = NewEventForm(initial={'eventName': event.eventName, 'joincode': event.joincode, 'enforceUser': event.enforceUser})
+
+	print("gets before if loop")
+	if request == 'POST':
+		print("got into POST & Valid if loop")
+		event.update()
+		print ("savedEvent")
+		context = {
+			"saved Event information after update"
+		}
+		return HttpResponseRedirect("/adminDashboard/")
+
+	context = {
+	"title" : title,
+	"formtitle": formtitle,
+	"instruction": instruction,
+	"form": form,
+	}
+	return render(request, "editEvent.html", context)
+
 def deleteEvent(request, id):
 	#Delete Function
-	activity = act.objects.filter(eventID_id=id).delete()
-	print("Passed activity portion")
-	event = emod.objects.filter(eventID=id).delete() #id here is the eventID
+	deleteEvent = emod.objects.filter(eventID=id)
+	deleteEvent.delete()
 
 	return HttpResponseRedirect('/adminDashboard/')
 
