@@ -19,7 +19,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from chfapp.views import home, userLogin, newUserLogin, activityDashboard, activityPage
-from chfapp.views import newEventForm, newActivityForm, deleteEvent, editEvent
+from chfapp.views import newEventForm, newActivityForm, deleteEvent, editEvent, deleteActivity
+from chfapp.views import editActivity, newSceneSetForm, newSceneOptionSetForm, newNextSceneSetForm 
 
 #where URLS are created; none have been created for userdashboard yet
 urlpatterns = [
@@ -35,7 +36,12 @@ urlpatterns = [
     url(r'^adminDashboard/$', 'chfapp.views.adminDashboard', name='adminDashboard'),
     url(r'^createActivity/(\d+)/$', 'chfapp.views.newActivityForm', name='createActivity'),
     url(r'^deleteEvent/(\d+)/$', 'chfapp.views.deleteEvent', name='deleteEvent'),
-    url(r'^editEvent/(\d+)/$', 'chfapp.views.editEvent', name='editEvent')
+    url(r'^editEvent/(\d+)/$', 'chfapp.views.editEvent', name='editEvent'),
+    url(r'^editActivity/(\d+)/$', 'chfapp.views.editActivity', name='editActivity'),
+    url(r'^deleteActivity/(\d+)/$', 'chfapp.views.deleteActivity', name='deleteActivity'),
+    url(r'^createSceneSet/(\d+)/$', 'chfapp.views.newSceneSetForm', name='createSceneSet'),
+    url(r'^newSceneOptionSet/(\d+)/$', 'chfapp.views.newSceneOptionSetForm', name='newSceneOptionSet'),
+    url(r'^newNextSceneSet/(\d+)/$', 'chfapp.views.newNextSceneSetForm', name='newNextSceneSet')
 
 ] + static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
 

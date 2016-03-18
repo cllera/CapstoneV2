@@ -42,11 +42,42 @@ class NewActivityForm(forms.ModelForm):
 	def clean_activity(self):
 		return activityName, description
 
+class NewSceneForm(forms.ModelForm):
+	class Meta:
+		model = Scene
+		fields = ['instructionText','sceneType', 'allowReplayScene']
+
+	def clean_scene(self):
+		return instructionText, sceneType, allowReplayScene
+
+class NewSceneOptionForm(forms.ModelForm):
+	class Meta:
+		model = SceneOptions
+		fields = ['sceneID','sceneText']
+
+	def clean_sceneOption(self):
+		return sceneID, sceneText
+
+class NextSceneForm(forms.ModelForm):
+	class Meta:
+		model = NextScene
+		fields = ['sceneOptionID', 'sceneID', 'nextSceneNumber']
+
+	def clean_sceneOption(self):
+		return sceneOptionID, sceneID, nextSceneNumber
+
+
+
+		
+
+
+
+
+
 
 
 
 # Not using these yet
-
 class NewAdminForm(forms.ModelForm):
 	class Meta:
 		model = Admin
@@ -57,29 +88,7 @@ class NewAdminForm(forms.ModelForm):
 		return organization
 
 
-class NewSceneForm(forms.ModelForm):
-	class Meta:
-		model = Scene
-		fields = ['instructionText','allowReplayScene']
 
-	def clean_scene(self):
-		return instructionText, allowReplayScene
-
-class NewSceneOptionForm(forms.ModelForm):
-	class Meta:
-		model = SceneOptions
-		fields = ['sceneText']
-
-	def clean_sceneOption(self):
-		return sceneText
-
-class NextSceneForm(forms.ModelForm):
-	class Meta:
-		model = NextScene
-		fields = ['sceneID']
-
-	def clean_sceneOption(self):
-		return sceneID
 
 
 

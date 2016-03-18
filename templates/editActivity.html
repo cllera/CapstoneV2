@@ -1,5 +1,5 @@
 <!--Created by: CJ
-	Purpose: Interface for admin to create new event
+	Purpose: Interface for admin to make changes to selected activity
 	Date: 3/17/16
 -->
 {% extends 'base.html' %}
@@ -12,7 +12,7 @@
 		<br><br>
 			<p>{{instruction}}</p>
 		<br>
-			<form method="POST" action="" id='EventCreationForm'>
+			<form method="POST" action="" id='ActivityEditForm'>
 				{%csrf_token%}
 				{{form.as_p}}
 				<br>
@@ -24,4 +24,3 @@
 	</div>
 
 {% endblock %}
-

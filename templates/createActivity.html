@@ -1,4 +1,7 @@
-
+<!--Created by: CJ
+	Purpose: Interface for admin to create a new activity for selected event
+	Date: 3/17/16
+-->
 {% extends 'base.html' %}
 {% block content%}
 	<div class="container">
@@ -13,6 +16,7 @@
 				{%csrf_token%}
 				{{form.as_p}}
 				<br>
+				<input type="button" value="Back" onclick="window.location='/adminDashboard/';"/>
 				<input type="submit" value="Submit" onclick="window.location='/adminDashboard/';" />
 				
 			</form>

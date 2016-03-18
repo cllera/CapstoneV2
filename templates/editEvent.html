@@ -1,4 +1,7 @@
-
+<!--Created by: CJ
+	Purpose: Interface for admin to make changes to selected event
+	Date: 3/17/16
+-->
 {% extends 'base.html' %}
 {% block content%}
 	<div class="container">
@@ -9,12 +12,12 @@
 		<br><br>
 			<p>{{instruction}}</p>
 		<br>
-			<form method="POST" action="" id='editEventForm'>
+			<form class = "form-horizontal" role="form" method="POST" action="">
 				{%csrf_token%}
 				{{form.as_p}}
 				<br>
+				<input type="button" value="Back" onclick="window.location='/adminDashboard/';"/>
 				<input type="submit" value="Submit" onclick="window.location='/adminDashboard/';" />
-				
 			</form>
 		</div>
 	</div>

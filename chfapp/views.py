@@ -1,11 +1,11 @@
 
     # Created by: CJ
     # Date: 2/9/2016
-    # Purpose: All views for the project are created in this page
+    # Purpose: All views for the project are created in this page, separated by functional segment
 
 from django.shortcuts import render, get_object_or_404
 from .forms import UserLoginForm, NewUserAccountForm, NewAdminForm
-from .forms import NewEventForm, NewActivityForm, NewSceneForm, NewSceneOptionForm
+from .forms import NewEventForm, NewActivityForm, NewSceneForm, NewSceneOptionForm, NextSceneForm
 from .models import Users as umod
 from .models import Admin as amod
 from .models import Event as emod
@@ -22,7 +22,7 @@ from array import array
 
 
 
-# Create your views here.
+# View for home/splash page
 def home(request):
 	# title = "Welcome"
 	# if request.user.is_authenticated():
@@ -124,6 +124,7 @@ def newEventForm(request):
 	admin = amod.objects.get(adminID=1)
 
 	if form.is_valid():
+		print('gets inside form validation if')
 		event = emod()
 		event.userID_id = user.userID
 		event.adminID_id = admin.adminID
@@ -131,6 +132,7 @@ def newEventForm(request):
 		event.joincode = form.cleaned_data['joincode']
 		event.enforceUser = form.cleaned_data['enforceUser']
 		event.save()
+		print('gets past event creation .save command')
 		context = {
 			"saved Event information after creation"
 		}
@@ -149,16 +151,20 @@ def editEvent(request, id):
 	title = "Edit Existing Event"
 	formtitle = "Edit Existing Event"
 	instruction = "Alter the event title, desired joincode, and your preference as to whether or not a user limit is to be enforced."
-	event = emod.objects.get(eventID=id)
-	form = NewEventForm(initial={'eventName': event.eventName, 'joincode': event.joincode, 'enforceUser': event.enforceUser})
 
-	print("gets before if loop")
-	if request == 'POST':
-		print("got into POST & Valid if loop")
-		event.update()
-		print ("savedEvent")
+	event = emod.objects.get(eventID=id)
+	data={'eventName': event.eventName, 'joincode': event.joincode, 'enforceUser': event.enforceUser}
+
+	form = NewEventForm(request.POST or None, 
+		initial=data)
+
+	if form.is_valid():
+		event.eventName = form.cleaned_data['eventName']
+		event.joincode = form.cleaned_data['joincode']
+		event.enforceUser = form.cleaned_data['enforceUser']
+		event.save()
 		context = {
-			"saved Event information after update"
+			"saved Event information after creation"
 		}
 		return HttpResponseRedirect("/adminDashboard/")
 
@@ -170,10 +176,21 @@ def editEvent(request, id):
 	}
 	return render(request, "editEvent.html", context)
 
+#Function to delete selected event - no html page
+#id is eventID from event
 def deleteEvent(request, id):
-	#Delete Function
-	deleteEvent = emod.objects.filter(eventID=id)
-	deleteEvent.delete()
+	activityCount = act.objects.filter(eventID_id=id).count()
+
+	#if activities exist for the event to be deleted, remove activities, then the event
+	if activityCount > 0:
+		activity = act.objects.filter(eventID_id=id)
+		deleteActivity = activity
+		deleteActivity.delete()
+		deleteEvent = emod.objects.filter(eventID=id)
+		deleteEvent.delete()
+	else:
+		deleteEvent = emod.objects.filter(eventID=id)
+		deleteEvent.delete()
 
 	return HttpResponseRedirect('/adminDashboard/')
 
@@ -268,6 +285,147 @@ def newActivityForm(request, id):
 	return render(request,"createActivity.html",context)
 
 
+#View to edit selected activity
+def editActivity(request, id): #id parameter is the activity ID passed by page
+	title = "Edit Existing Activity"
+	formtitle = "Edit Existing Activity"
+	instruction = "Alter the activity-related data below. Click 'Submit' to save changes."
+
+	activity = act.objects.get(activityID=id)
+	data={'activityName': activity.activityName, 'description': activity.description, 'superUser': activity.superUser,
+		'userLimit': activity.userLimit, 'allowReplayActivity': activity.allowReplayActivity}
+
+	form = NewActivityForm(request.POST or None, 
+		initial=data)
+
+	if form.is_valid():
+		activity.activityName = form.cleaned_data['activityName']
+		activity.description = form.cleaned_data['description']
+		activity.superUser = form.cleaned_data['superUser']
+		activity.userLimit = form.cleaned_data['userLimit']
+		activity.allowReplayActivity = form.cleaned_data['allowReplayActivity']
+		activity.save()
+		context = {
+			"saved Activity information after update"
+		}
+		return HttpResponseRedirect("/adminDashboard/")
+
+	context = {
+	"title" : title,
+	"formtitle": formtitle,
+	"instruction": instruction,
+	"form": form,
+	}
+	return render(request, "editActivity.html", context)
+
+
+#Function to delete activity - no html page
+def deleteActivity(request, id): #id is activityID from event
+	#Delete Function
+
+	deleteActivity = act.objects.filter(activityID=id)
+	deleteActivity.delete()
+
+	return HttpResponseRedirect('/adminDashboard/')
+
+
+
+#=================================Scene-related Functions===================================#
+#This includes scenes, scene options, and next scenes for an activity.
+
+def newSceneSetForm(request, id):
+	activity = act.objects.get(activityID=id) #id here is the activityID for which the scenes will be made
+	title = "Add Scenes to Activity"
+
+	formtitle = "Create Scene Set for " + activity.activityName
+	instruction = "[Insert instructions for scene here.]"
+
+	sceneForm = NewSceneForm(request.POST or None)
+
+	if sceneForm.is_valid():
+		
+		#sceneForm items
+		scene = scn()
+		scene.activityID = id #referring to the activity ID at the beginning of the function
+		scene.instructionText = form.cleaned_data['instructionText']
+		scene.sceneType = form.cleaned_data['sceneType']
+		scene.allowReplayScene = form.cleaned_data['allowReplayScene']
+		scene.save()
+
+		context = {
+			"saved Scene information"
+		}
+		return HttpResponseRedirect("//") #add sceneOption url here when created.
+
+	context = {
+		"title": title,
+		"formtitle": formtitle,
+		"instruction": instruction,
+		"sceneForm": sceneForm,
+	}
+	return render(request,"createSceneSet.html",context)
+
+
+def newSceneOptionSetForm(request, id):
+	title = "Add Scene Options"
+
+	formtitle = "Create Scene Options"
+	instruction = "[Insert instructions for sceneoption.]"
+
+	sceneOptionForm = NewSceneOptionForm(request.POST or None)
+
+	if sceneOptionForm.is_valid():
+		#sceneOptionForm items
+		sceneOptions = scnopt()
+		sceneOptions.sceneID = form.cleaned_data['sceneID']
+		sceneOptions.sceneText = form.cleaned_data['sceneText']
+		sceneOptions.save()
+
+		context = {
+			"saved scene option information"
+		}
+		return HttpResponseRedirect("//") #add activity url here when created.
+
+	context = {
+		"title": title,
+		"formtitle": formtitle,
+		"instruction": instruction,
+		"sceneOptionForm": sceneOptionForm,
+	}
+	return render(request,"",context)
+
+
+def newNextSceneSetForm(request, id):
+	title = "Add Scenes to Activity"
+
+	formtitle = "Map Scenes and Scene Options"
+	instruction = "[Insert instructions for nextscene creation here.]"
+
+	nextSceneForm = NextSceneForm(request.POST or None)
+
+	if nextSceneForm.is_valid():
+
+		nextScene = nxtscn()
+		nextScene.sceneOptionID = form.cleaned_data['sceneOptionID']
+		nextScene.sceneID = form.cleaned_data['sceneID']
+		nextScene.nextSceneNumber = form.cleaned_data['nextSceneNumber']
+		nextScene.save()
+
+		context = {
+			"saved nextScene information"
+		}
+		return HttpResponseRedirect("//") #add activity url here when created.
+
+	context = {
+		"title": title,
+		"formtitle": formtitle,
+		"instruction": instruction,
+		"nextSceneForm": nextSceneForm,
+	}
+	return render(request,"",context)
+
+
+
 
 
 
@@ -294,44 +452,6 @@ def newAdminLogin(request):
 		"form": form,
 	}
 	return render(request,"",context) #figure out how to add to userloginAccountform
-
-
-
-#Adding new scene -- Will be used by admin; right now just need to create for table.
-#*******************Haven't tested this as of (2/13/16)********************
-def newSceneForm(request):
-	form = NewSceneForm(request.POST or None)
-
-	if form.is_valid():
-		instance = form.save(commit=False)
-		instance.save()
-		context = {
-			"saved Scene information"
-		}
-		return HttpResponseRedirect("") #add scene url here when created
-
-	context = {
-		"form": form,
-	}
-	return render(request,"",context)
-
-#Adding new sceneoption -- Will be used by admin; right now just need to create for table.
-#*******************Haven't tested this as of (2/13/16)********************
-def newSceneOptionForm(request):
-	form = NewSceneOptionForm(request.POST or None)
-
-	if form.is_valid():
-		instance = form.save(commit=False)
-		instance.save()
-		context = {
-			"saved Scene Option information"
-		}
-		return HttpResponseRedirect("") #add scene option url when created
-
-	context = {
-		"form": form,
-	}
-	return render(request,"",context)
 
 
 #********************test form from tutorials; email sending doesn't work yet******************
