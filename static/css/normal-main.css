@@ -17,9 +17,9 @@ ol, ul {
     list-style: none;
 }
 
-li {
+/*li {
   display: inline;
-}
+}*/
 
 figure, p {
     margin: 0;
@@ -1023,7 +1023,7 @@ figcaption.mask span {
 }
 
 .modal-backdrop {
-  z-index: -1;
+  z-index: -2;
 }
 
 
