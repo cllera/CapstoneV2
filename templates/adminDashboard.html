@@ -1,118 +1,125 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load staticfiles %}
+  <script src='{% static "js/sceneNumberCheck.js" %}'></script>
 
 
-    <div class="container">
-        <h1>Welcome, {{user}}.</h1>
-        <p>Below is a list of events belonging to you.</p>
-        <br>
-      </div>
+<!--contains user greeting and general information about page-->
+<div class="container">
+    <h1>Welcome, {{user}}.</h1>
+    <p>Below is a list of events belonging to you.</p>
+    <br>
+  </div>
+</div>
+
+<!--holds code to print event information-->
+<div class="container">
+
+  <!--navigational tabs for admin functions-->
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#YourEvents">Your Events</a></li>
+    <li><a data-toggle="tab" href="#OtherEvents">Manage Users</a></li>
+    <li><a data-toggle="tab" href="#OtherEvents">Other Events</a></li>
+  </ul>
+
+  <!--Holds all tab content-->
+  <div class="tab-content">
+
+    <!--Admin-created Events-->
+    <div id="YourEvents" class="tab-pane fade in active">
+      <h3>Your Events</h3>
+      <p>Events listed below are either those which you have created or those that list you as an additional administrator.</p>
+      <a href="/createEvent/" role="button" class="btn btn-primary">Create New Event</a>
+      <br><br>
+      <div class="col-sm-1"></div>
+      <div class="col-sm-10">
+
+        {% for e in events %}
+        <div id="{{e.eventID}}" class="eventIDDiv"> 
+          <h3>{{e.eventName}}</h3>
+          <p>Joincode: {{e.joincode}}</p>
+          <p>Enforcing user? (Private): {{e.enforceUser}}</p>
+          <a href="/createActivity/{{e.eventID}}/" role="button" class="btn btn-primary">Create New Activity</a>
+          <br><br>
+          <table class ="table table-condensed table-bordered" width="100%">
+            <col style="width:20%">
+            <col style="width:57%">
+            <col style="width:23%">
+            <thead class="thead">
+              <tr>
+                <th>Activity Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            {% for a in activities %}
+              <div id="{{a.eventID_id}}" class="actEventIDDiv">
+
+              {% if e.eventID == a.eventID_id %}
+              <tr class="accordion-toggle" data-toggle="collapse" data-target>
+                <td>{{a.activityName}}</td>
+                <td>{{a.description}}</td>
+                <td>
+                  <button type="button" class="btn btn-success" onclick="window.location.href='/activity/{{a.activityID}}';">View</button>
+                  <button type="button" class="btn btn-warning" onclick="window.location.href='/editActivity/{{a.activityID}}';">Edit</button>
+                  <button type="button" class="btn btn-danger" onclick="window.location.href='/deleteActivity/{{a.activityID}}';">Delete</button>
+                </td>
+              </tr>
+              {% else %}
+              {% endif %}
+
+              </div> <!--div for eventIDs-->
+            {% endfor %} <!--end for loop: activities -->
+
+            </tbody>
+          </table>
+          <a href="/editEvent/{{e.eventID}}/" role="button" class="btn btn-warning">Edit Event</a>
+          <a data-toggle="modal" data-id="{{e.eventID}}" title="Delete Entire Event" class="openDelete btn btn-danger" href="#Delete{{e.eventID}}">Delete Entire Event</a>
+          <br>
+          <hr>
+          <br>
+        </div>
+
+        <!-- Delete Event Modal -->
+          <div class="modal fade" id="Delete{{e.eventID}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title" id="myModalLabel">Delete Catalog Item</h4>
+                </div>
+
+                <div class="modal-body">
+                  <h4>Are you sure you want to delete {{e.eventName}}?</h4> 
+                  <br/>
+                  You will not be able to undo this action.
+                </div>
+                <div class="modal-footer">
+                  <a href="/deleteEvent/{{e.eventID}}/" class='btn btn-danger'>Delete</a>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div><!-- /.modal-content-->
+            </div><!-- /.modal-dialog -->
+          </div><!-- /.modal -->
+        {%endfor%} <!--end for loop: events --> 
+
+      </div> 
+    </div> <!--ends "Your Events" tab-->
+
+    <div id="ManageUsers" class="tab-pane fade">
+      <h3>Manage Users</h3>
+      <p>Users registered to your events will be listed here. Functionality currently under construction.</p>
     </div>
 
-    <!--holds code to print event information-->
-    <div class="container">
-      <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#YourEvents">Your Events</a></li>
-        <li><a data-toggle="tab" href="#OtherEvents">Manage Users</a></li>
-        <li><a data-toggle="tab" href="#OtherEvents">Other Events</a></li>
-      </ul>
+    <div id="OtherEvents" class="tab-pane fade">
+      <h3>Other Events</h3>
+      <p>Events below are those that you have participated in previously. Functionality currently under construction.</p>
+    </div>
 
-      <div class="tab-content">
-        <div id="YourEvents" class="tab-pane fade in active">
-          <h3>Your Events</h3>
-          <p>Events listed below are either those which you have created or those that list you as an additional administrator.</p>
-          <a href="/createEvent/" role="button" class="btn btn-primary">Create New Event</a>
-          <br>
-          <br>
-          <div class="col-sm-1">
-          </div>
-          <div class="col-sm-10">
-            {% for e in events %}
-            <div id="{{e.eventID}}" class="eventIDDiv"> <!--div connects to activityExistCheck.js-->
-              <h3>{{e.eventName}}</h3>
-              <p>Joincode: {{e.joincode}}</p>
-              <p>Enforcing user? (Private): {{e.enforceUser}}</p>
-              <a href="/createActivity/{{e.eventID}}/" role="button" class="btn btn-primary">Create New Activity</a>
-<!--               <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#Delete">Delete Event</button> -->
-              
-              <br><br>
-              <table class ="table table-condensed table-bordered" width="100%">
-                <col style="width:20%">
-                <col style="width:57%">
-                <col style="width:23%">
-                <thead class="thead">
-                  <tr>
-                    <th>Activity Name</th>
-                    <th>Description</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for a in activities %}
-                    <div id="{{a.eventID_id}}" class="actEventIDDiv">
-                    {% if e.eventID == a.eventID_id %}
-                    <tr class="accordion-toggle" data-toggle="collapse" data-target>
-                      <td>{{a.activityName}}</td>
-                      <td>{{a.description}}</td>
-                      <td>
-                        <button type="button" class="btn btn-success">View</button>
-                        <button type="button" class="btn btn-warning" onclick="window.location.href='/editActivity/{{a.activityID}}';">Edit</button>
-                        <button type="button" class="btn btn-danger" onclick="window.location.href='/deleteActivity/{{a.activityID}}';">Delete</button>
-                      </td>
-                    </tr>
-                    {% else %}
-                    {% endif %}
-                    </div> <!--div for eventIDs-->
-                  {% endfor %}
-                </tbody>
-              </table>
-              <a href="/editEvent/{{e.eventID}}/" role="button" class="btn btn-warning">Edit Event</a>
-              <a href="/deleteEvent/{{e.eventID}}/" role="button" class="btn btn-danger">Delete Event</a>
-              <br>
-              <hr>
-              <br>
-            </div>
-            <!-- Modal -->
-<!--               <div class="modal fade" id="Delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                      <h4 class="modal-title" id="myModalLabel">Delete Catalog Item</h4>
-                    </div>
-
-                    <div class="modal-body">
-                      <h4>Are you sure you want to delete this item?</h4>  
-                      <br/>
-                      You will not be able to undo this action.
-                    </div>
-
-                    <div class="modal-footer">
-                      <a href='/deleteEvent/{{e.eventID}}/' class='btn btn-danger'>Delete</a>
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                  </div>
-                  <!-- /.modal-content -->
-<!--                 </div> -->
-                <!-- /.modal-dialog -->
-<!--               </div> --> 
-              <!-- /.modal -->
-            {%endfor%} <!--endfor events --> 
-          </div> 
-        </div> <!--ends "Your Events" tab-->
-
-        <div id="ManageUsers" class="tab-pane fade">
-          <h3>Manage Users</h3>
-          <p>Users registered to your events will be listed here. Functionality currently under construction.</p>
-        </div>
-
-        <div id="OtherEvents" class="tab-pane fade">
-          <h3>Other Events</h3>
-          <p>Events below are those that you have participated in previously. Functionality currently under construction.</p>
-        </div>
-
-      </div><!--ends tab-content div -->
-    </div> <!--ends container div -->
+  </div><!--ends tab-content div -->
+</div> <!--ends container div -->
 
 {% endblock %}

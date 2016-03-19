@@ -11,19 +11,13 @@
 			<br><br>
 			<p>{{instruction}}</p>
 		<br>
-			<form>
-				<p>Enter the number of scenes you wish to include for this activity.<p>
-				<input type="text" id="sceneAmount" name="sceneAmount"><br>
-				<input type="button" value="Add Scenes" id="addScenesBtn"/>
-				<!--have this go to new form to hold the value from the thing.-->
-			</form>
 
 			<form method="POST" action="" id='SceneCreationForm'>
 				{%csrf_token%}
 				{{form.as_p}}
 				<br>
-				<input type="button" value="Back" onclick="window.location='/adminDashboard/';"/>
-				<input type="submit" value="Submit" onclick="window.location='//';" />
+				<input type="button" value="Back" onclick="window.location='/activity/{{activity.activityID}}/';"/>
+				<input type="submit" value="Submit" onclick="window.location='/activity/';" />
 				
 			</form>
 		</div>

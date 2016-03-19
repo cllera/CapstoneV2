@@ -1,7 +1,5 @@
 $(function() {
-	var numScenes;
-	$('#addScenesBtn').click(function()
-		numScenes = $('#sceneAmount').val();
-	)};
-	return numScenes;
+	$('tr').click(function() {
+		$('#hideRow').toggle();
+	});
 });
