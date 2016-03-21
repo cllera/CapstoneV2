@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% block content%}
     <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div>
+      {{user}}
+      {% if user.is_anonymous%}
+      <a href="/userLogin/">Login</a>
+      {% endif %}
+    </div>
 
       <div class="container">
         <h1>Welcome, {{user}}.</h1>

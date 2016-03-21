@@ -59,7 +59,7 @@
                     <nav class="collapse navigation navbar-collapse navbar-right" role="navigation">
                         <ul id="nav" class="nav navbar-nav">
                             <li class="current"><a href="">Home</a></li>
-                            <li><a data-toggle="modal" href="#login">Login</a></li>
+                            <li><a data-toggle="modal" data-target="#userLogin" href="#userLogin">Login</a></li>
                             <li><a href="quickstart.html">Quick Start</a></li>
                         </ul>
                     </nav>
@@ -208,8 +208,8 @@
         </form> <!-- end Form -->
         
         <!-- Modal Login -->
-        <form id="logingform" action="/" method="POST" class="form">
-        <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <!-- <div class="overlay"</div> -->
+        <div class="modal fade" id="userLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -217,22 +217,26 @@
                 <h4 class="modal-title" id="myModalLabel">Login</h4>
               </div>
               <div class="modal-body">
-                <div class="form-group has-feedback">
-                  <label class="control-label">Email Address</label>
-                  <input type="email" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Email">
+                  <form id="userLogin" action="/" method="POST" class="form">
+                  {%csrf_token%}
+                <!-- <div class="form-group has-feedback">
+                  <label class="control-label">Username</label>
+                  <input type="Username" class="form-control" id="username" aria-describedby="inputSuccess2Status" placeholder="Username">
                   <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
                 </div>
                 
                 <div class="form-group has-feedback">
                   <label class="control-label">Password</label>
-                  <input type="password" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Password">
+                  <input type="password" class="form-control" id="password" aria-describedby="inputSuccess2Status" placeholder="Password">
                   <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-                </div>
-                <button type="button" class="btn btn-primary">Login</button>
-                <input type="checkbox" value="rememberme" id="rememberme">Remember me <br/><br/>
+                </div> -->
+                <!-- <button type="submit" class="btn btn-primary">Login</button> -->
+                <!-- <input type="checkbox" value="rememberme" id="rememberme">Remember me <br/><br/>
                 
-                <a href="#">Forgot your password?</a>
-                
+                <a href="#">Forgot your password?</a> -->
+                    {{form.as_p}}
+                    <button type="submit" class="btn btn-primary">Login</button>
+                  </form>
               </div>
               
               <div class="modal-footer">
@@ -245,7 +249,6 @@
             </div>
           </div>
         </div><!-- end become a member modal -->
-        </form> <!-- end login form -->
         </div>
 
 

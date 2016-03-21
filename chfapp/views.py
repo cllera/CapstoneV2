@@ -3,7 +3,7 @@
     # Date: 2/9/2016
     # Purpose: All views for the project are created in this page, separated by functional segment
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, render_to_response
 from .forms import UserLoginForm, NewUserAccountForm, NewAdminForm
 from .forms import NewEventForm, NewActivityForm, NewSceneForm, NewSceneOptionForm, NextSceneForm
 from .models import Users as umod
@@ -18,6 +18,8 @@ from django.core.mail import send_mail
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import requires_csrf_token
+from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth import authenticate, login
 from array import array
 
 
@@ -27,48 +29,58 @@ def home(request):
 	# title = "Welcome"
 	# if request.user.is_authenticated():
 	title = "Welcome, %s" % (request.user)
-	form = UserLoginForm(request.POST)
-	#video 14/42 has alternate validation methods
-
-	if form.is_valid():
-		# print (request.POST['username'])
-		instance = form.save(commit=False)
-		instance.save()
+	form = UserLoginForm(request.POST or None)
+	if request.method=='Post':
+		form = UserLoginForm(request.POST)
+		print("you are the man!")
+		if form.is_valid():
+			user = authenticate(username=form.cleaned_data['username'], 
+			password=form.cleaned_data['password'])
+			print("You go this far at least")
+		if user is not None:
+			login(request,user)
+			print("maybe just maybe.....")
 		return HttpResponseRedirect("/activityDashboard/")
-	else:
-		form = UserLoginForm()
-	print("HELOOOOOOOOOOOOOO")
-	print(form)
 
+	#video 14/42 has alternate validation methods
 	context = {
-		"title": title,
 		"form": form,
+		"title": title,
 	}
+
 
 	return render(request,"home.html", context)
 
 
 #=================================User-related Functions===================================#
-
 def userLogin(request):
-	form = UserLoginForm(request.POST)
+	
 	#video 14/42 has alternate validation methods
+	state = "Please log in below..."
+	username = ''
+	if request.POST:
+		username = request.POST.get('username')
+		password = request.POST.get('password')
 
-	if form.is_valid():
-		# print (request.POST['username'])
-		instance = form.save(commit=False)
-		instance.save()
-		return HttpResponseRedirect("/activityDashboard/")
-	else:
-		form = UserLoginForm()
-	print("HELOOOOOOOOOOOOOO")
-	print(form)
-	#parens create instance
+		user = authenticate(username=username, password=password)
+
+		if user is not None:
+			if user.is_active:
+				login(request, user)
+				print("You're login")
+				state = "Youre in"
+				return HttpResponseRedirect("/activityDashboard/")
+			else:
+				print("Your account is broken")
+		else:
+			print("Your username and password were incorrect")
+
 	context = {
-		"form": form,
+	'state': state,
+	'username':username,
 	}
 
-	return render(request,"userLogin.html", context) #redirecting to actDash for now
+	return render(request, "userLogin.html", context)
 
 
 def newUserLogin(request):
@@ -524,4 +536,6 @@ def contact(request):
 	}
 	
 	return render(request, "forms.html", context)
+
+
 

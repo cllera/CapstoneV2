@@ -44,6 +44,7 @@ class Users(models.Model):
 	def __str__(self):
 		return self.userName, self.password, self.firstName, self.lastName, self.email
 
+
 #Admin Table
 class Admin(models.Model):
 	adminID = models.IntegerField(primary_key=True)
