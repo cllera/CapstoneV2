@@ -21,7 +21,7 @@ from django.views.decorators.csrf import requires_csrf_token
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import authenticate, login
 from array import array
-
+from django.contrib.auth.models import User
 
 
 # View for home/splash page
@@ -88,8 +88,11 @@ def newUserLogin(request):
 	form = NewUserAccountForm(request.POST or None)
 
 	if form.is_valid():
-		instance = form.save(commit=False)
+		instance = User.objects.create_user(username = form.cleaned_data['username'], password = form.cleaned_data['password'], first_name = form.cleaned_data['first_name'], last_name = form.cleaned_data['last_name'], email = form.cleaned_data['email'])
 		instance.save()
+		# u = User.objects.get(instance.username)
+		# u.set_password(instance.password)
+		# u.save()
 		return HttpResponseRedirect("/activityDashboard/")
 	else:
 		form = NewUserAccountForm()

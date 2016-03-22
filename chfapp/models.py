@@ -1,6 +1,8 @@
 #The forms in forms.py will refer to models made here
 
 from django.db import models
+from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractBaseUser
 
 # Create your models here. 
 # Structuring forms, mapping fields, storing in database table.
@@ -34,7 +36,7 @@ class AdminForm(models.Model):
 
 #Users Table
 class Users(models.Model):
-	userID = models.IntegerField(primary_key=True)
+	userID = models.AutoField(primary_key=True)
 	userName = models.CharField(max_length=20)
 	password = models.CharField(max_length=20)
 	firstName = models.CharField(max_length=30)
@@ -42,7 +44,7 @@ class Users(models.Model):
 	email = models.EmailField(max_length=40)
 
 	def __str__(self):
-		return self.userName, self.password, self.firstName, self.lastName, self.email
+		return self.userName, self.firstName, self.lastName, self.email
 
 
 #Admin Table

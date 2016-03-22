@@ -3,6 +3,7 @@ from django import forms
 from django.forms import ModelForm
 from .models import UserForm, Users, Admin, Event, Activity, Scene, SceneOptions, NextScene
 from django.conf import settings
+from django.contrib.auth.models import User
 
 #Form appears when you choose to add user in the .../admin/createaccount page
 class UserLoginForm(forms.ModelForm):
@@ -19,9 +20,11 @@ class UserLoginForm(forms.ModelForm):
 #New User Form
 class NewUserAccountForm(forms.ModelForm):
 	class Meta:
-		model = Users
-		fields = ['userName','password','firstName','lastName','email']
-
+		model = User
+		fields = ['username','password','first_name','last_name','email']
+		widgets = {
+		'password': forms.PasswordInput(),
+		}
 	# def clean_all(self):
 	# 	userName = self.cleaned_data.get('userName')
 	# 	return userName
