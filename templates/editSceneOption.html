@@ -1,0 +1,26 @@
+<!--Created by: CJ
+	Purpose: Interface for admin to edit a scene option for selected scene
+	Date: 3/28/16
+-->
+{% extends 'base.html' %}
+{% block content%}
+	<div class="container">
+		<div class="col-sm-3">
+		</div>
+		<div class="col-sm-9">
+			<h1>Edit Scene Option</h1>
+		<br><br>
+			<p>Edit the following scene data, then click "Submit" to save changes.</p>
+		<br>
+			<form method="POST" action="">
+				{%csrf_token%}
+				{{form.as_p}}
+				<br>
+				<input type="button" class="btn btn-default" value="< Back" onclick="window.location='/activity/{{activity.activityID}}';"/>
+				<input type="submit" class="btn btn-success" value="Submit" onclick="window.location='/activity/';" />
+				
+			</form>
+		</div>
+	</div>
+
+{% endblock %}

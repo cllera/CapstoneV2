@@ -4,15 +4,11 @@ $(function() {
 	var rowArr = $('.hideRow').toArray();
 
 	//array of main rows
-	var mainArr = $('.mainRow').toArray();
+	var mainArr = $('.mainSORow').toArray();
 
-	$('.mainRow').each(function(i) {
+	$('.mainSORow').each(function(i) {
 		$('td:first', this).html(i+1);
-
-		var displayedID = this.id;
 	});
-
-
 
 	$('tr').click(function() {
 		//if the .mainRow id is the same as the .hideRow id, show that row

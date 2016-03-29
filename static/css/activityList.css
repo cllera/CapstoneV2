@@ -1,4 +1,17 @@
-.ul_inline
-{
-	display:inline;
+.rowHeader {
+	background-color: #6bc0ce;
+	/*hover transparent*/
+}
+
+.mainRow {
+	background-color: #bbe6e7;
+	z-index: -1;
+}
+
+.sceneOptRow{
+	text-indent:0px;
+}
+
+.btn-primary {
+	
 }

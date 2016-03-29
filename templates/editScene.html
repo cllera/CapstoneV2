@@ -1,0 +1,26 @@
+<!--Created by: CJ
+	Purpose: Interface for admin to edit a scene for selected event
+	Date: 3/23/16
+-->
+{% extends 'base.html' %}
+{% block content%}
+	<div class="container">
+		<div class="col-sm-3">
+		</div>
+		<div class="col-sm-9">
+			<h1>Edit Scene</h1>
+		<br><br>
+			<p>Edit the following scene data, then click "Submit" to save changes.</p>
+		<br>
+			<form method="POST" action="">
+				{%csrf_token%}
+				{{form.as_p}}
+				<br>
+				<input type="button" class="btn btn-default" value="Back" onclick="window.location='/activity/';"/>
+				<input type="submit" class="btn btn-success" value="Submit" onclick="window.location='/activity/';" />
+				
+			</form>
+		</div>
+	</div>
+
+{% endblock %}

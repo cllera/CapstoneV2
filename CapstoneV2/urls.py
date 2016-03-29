@@ -20,7 +20,8 @@ from django.conf.urls.static import static
 
 from chfapp.views import home, userLogin, newUserLogin, activityDashboard, activityPage, activity
 from chfapp.views import newEventForm, newActivityForm, deleteEvent, editEvent, deleteActivity
-from chfapp.views import editActivity, newSceneSetForm, newSceneOptionSetForm, newNextSceneSetForm 
+from chfapp.views import editActivity, newSceneSetForm, newSceneOptionSetForm
+from chfapp.views import eventDashboard, editScene
 
 #where URLS are created; none have been created for userdashboard yet
 urlpatterns = [
@@ -33,6 +34,7 @@ urlpatterns = [
     url(r'^activityDashboard/$', 'chfapp.views.activityDashboard', name='activityDashboard'),
     url(r'^activityPage/(\d+)/$', 'chfapp.views.activityPage',name='activityPage'),
     url(r'^activityPage/(\d+)/(\d+)/$', 'chfapp.views.activityPage',name='activityPage2'),
+    url(r'^eventDashboard/$', 'chfapp.views.eventDashboard', name='eventDashboard'),    
     url(r'^createEvent/$', 'chfapp.views.newEventForm', name='createEvent'),
     url(r'^adminDashboard/$', 'chfapp.views.adminDashboard', name='adminDashboard'),
     url(r'^createActivity/(\d+)/$', 'chfapp.views.newActivityForm', name='createActivity'),
@@ -41,8 +43,11 @@ urlpatterns = [
     url(r'^editActivity/(\d+)/$', 'chfapp.views.editActivity', name='editActivity'),
     url(r'^deleteActivity/(\d+)/$', 'chfapp.views.deleteActivity', name='deleteActivity'),
     url(r'^createSceneSet/(\d+)/$', 'chfapp.views.newSceneSetForm', name='createSceneSet'),
-    url(r'^newSceneOptionSet/(\d+)/$', 'chfapp.views.newSceneOptionSetForm', name='newSceneOptionSet'),
-    url(r'^newNextSceneSet/(\d+)/$', 'chfapp.views.newNextSceneSetForm', name='newNextSceneSet')
+    url(r'^activity/(\d+)/$', 'chfapp.views.newSceneOptionSetForm', name='newSceneOptionSet'),
+    url(r'^newNextSceneSet/(\d+)/$', 'chfapp.views.newNextSceneSetForm', name='newNextSceneSet'),
+    url(r'^editScene/(\d+)/$', 'chfapp.views.editScene', name='editScene'),
+    url(r'^deleteScene/(\d+)/$', 'chfapp.views.deleteScene', name='deleteScene'),
+    # url(r'^createScenePath/(\d+)/$', 'chfapp.views.sceneOptionsPage', name='createScenePath')
 
 ] + static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
 

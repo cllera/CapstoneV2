@@ -1,6 +1,7 @@
-
-
-
+<!--Created by: CJ
+	Purpose: Interface for admin to view/edit/delete activity and scene information
+	Date: 3/17/16
+-->
 {% extends 'base.html' %}
 {% block content%}
 {% load staticfiles %}
@@ -10,102 +11,103 @@
 		<div class="col-sm-1"></div>
 		<div class="col-sm-10">
 			<h1>Activity Information</h1>
-			<br><br>
-			<p>This page lists the scenes etc. for your activity.</p>
 
-			<br>
+			<p>The table below lists the scenes created for the activity entitled "{{activities.activityName}}". Click on a scene to view its associated options and the number of the subsequent scene.</p>
+
 			<button type="button" class="btn btn-primary" onclick="window.location.href='/createSceneSet/{{activities.activityID}}';">Add New Scene</button>
 			<br><br><br>
 			<table class="table table-condensed table-bordered table-hover" width="100%">
-	            <col style="width:55%">
-	            <col style="width:15%">
-	            <col style="width:20%">
-	            <col style="width:10%">
-				<tr>
-					<td>Scene Text</td>
-					<td>Action</td>
-					<td>Scene Options</td>
-					<td>Next Scene</td>
+				<col style="width:5%">
+				<col style="width:75%">
+				<col style="width:20%">
+				<tr class="rowHeader">
+					<td><b>#</b></td>
+					<td><b>Scene Text</b></td>
+					<td><b>Actions</b></td>
 				</tr>
-			{%for s in scenes%}
-				{%if s.activityID_id == activities.activityID %}
-				<tr>
-					<td>{{s.instructionText}}</td>
-					<td>
-						<a data-toggle="modal" data-target="#EditScene{{s.sceneID}}" class="btn btn-warning" href="#EditScene{{s.sceneID}}">Edit</a>
-					</td>
-					<td>
-						<a data-toggle="modal" data-target="#Add{{s.sceneID}}" class="btn btn-primary" href="#Add{{s.sceneID}}">Add</a>
-						<!-- <a class="btn btn-primary" href="//">Add</a> -->
-					</td>
-					<td>Placeholder</td>
 
-					<!-- Edit Scene Modal -->
-					<div class="modal fade" id="EditScene{{s.sceneID}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-									<h4 class="modal-title" id="myModalLabel">Edit Scene</h4>
-								</div>
+				{% for s in scenes %}
+					{%if s.activityID_id == activities.activityID %}
+					<tr id='{{s.sceneID}}' class='mainRow'> <!--connect this to the jquery-->
+						<td></td>
+						<td>{{s.instructionText}}</td>
+						<td>
+							<a class="btn btn-warning" href="/editScene/{{s.sceneID}}">Edit</a>
+							<a data-toggle="modal" data-id="{{s.sceneID}}" title="Delete Scene" class="btn btn-danger" href="#Delete{{s.sceneID}}">Delete</a>
+						</td>
+						<!-- Delete Event Modal -->
+						<div class="modal fade" id="Delete{{s.sceneID}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+										<h4 class="modal-title" id="myModalLabel">Delete Scene</h4>
+									</div>
 
-								<div class="modal-body">
-									<h4>Edit Scene</h4> 
-									<br/>
-									Using the form below, make changes to your current scene.<br/>
-									<p> Form will go here </p>
-								</div>
-								<div class="modal-footer">
-									<a href="" class='btn btn-success'>Save</a>
-									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-								</div>
-							</div><!-- /.modal-content-->
-						</div><!-- /.modal-dialog -->
-					</div><!-- /.modal -->
+									<div class="modal-body">
+										<h4>Are you sure you want to delete the following scene: "{{s.instructionText}}"?</h4> 
+										<br/>
+										You will not be able to undo this action.
+									</div>
 
+									<div class="modal-footer">
+										<a href="/deleteScene/{{s.sceneID}}/" class='btn btn-danger'>Delete</a>
+										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									</div>
+								</div><!-- /.modal-content-->
+							</div><!-- /.modal-dialog -->
+						</div><!-- /.modal -->
 
-					<!-- Add Scene Options Modal -->
-					<div class="modal fade" id="Add{{s.sceneID}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-									<h4 class="modal-title" id="myModalLabel">Add Options to Scene</h4>
-								</div>
+					</tr>
+					<tr onClick="toggle();" id="{{s.sceneID}}" class="hideRow" style="display:none;">
+						<td colspan="3">
+							<table id="optionsTable" class="table table-condensed" width="100%">
+								<col style = "width:5%">
+								<col style = "width:60%">
+								<col style = "width:10%">
+								<col style = "width:25%">
+								<tr>
+									<td></td>
+									<td><b>Option Text</b></td>
+									<td><b>Next Scene</b></td>
+									<td><b>Actions</b></td>
+								</tr>
+								{% for so in scnOptions %}
+									{% if so.sceneID_id == s.sceneID%}
+										<tr class='sceneOptRow'>
+											<td></td>
+											<td>{{so.sceneText}}</td>
+											{% for n in nxtScene %}
+												{%if so.soID == n.sceneOptionID_id %}
+													<td>{{n.nextSceneNumber}}</td>
+												{%endif%}
+											{% endfor %}
+											<td>
+												<a href="/editSceneOption/{{s.soID}}/" class='btn btn-warning'>Edit</a>
+												<button type="button" class="btn btn-danger">Delete</button>
+											</td>
+										</tr>
+									{% endif %}
+								{% endfor %}
+							</table>
+<!-- 							<a href="/createScenePath/{{s.sceneID}}" type="button" class="add-option-row btn btn-primary">Add Scene Option</a> -->
 
-								<div class="modal-body">
-									<h4>Add Scene Options</h4> 
-									<br/>
-									For the following scene, please enter the options to be selected by users.<br/>
-
-									<b>Scene:</b> {{s.sceneText}}
-
-									<p> Form will go here </p>
-								</div>
-								<div class="modal-footer">
-									<a href="" class='btn btn-success'>Save</a>
-									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</tr>
-				<tr onClick="toggle();" id="hideRow" style="display:none;">
-					<td> this will be hidden </td>
-				</tr>
-				{%endif%}
-			{%endfor%}
-
-				<!--add for loop to run through scenes, sceneOptions, and nextScene (make sure activity view collects all table/scene items related to each other)-->
+						</td>
+					</tr>
+					{%endif%}
+				{%endfor%}
 			</table>
 
-			<form method="POST" action="" id='SceneCreationForm'>
-				{%csrf_token%}
-				{{form.as_p}}
-				<br>
-				<input type="button" class="btn btn-default" value="< Back" onclick="window.location='/adminDashboard/';"/>
-				<br><br><br>
-			</form>
+				<form method="POST" action="">
+
+					{%csrf_token%}
+					{{form.as_p}}
+					<br>
+
+					<input type="submit" value="Submit" onclick="window.location='/activity/{{activities.activityID}}/';" />
+				</form>
+
+
 		</div>
 	</div>
 

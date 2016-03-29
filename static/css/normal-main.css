@@ -1,13 +1,13 @@
 
 /* =================================== */
-/*	Basic Style 
+/*  Basic Style 
 /* =================================== */
 
 body {
     background-color: rgba(15,116,143,0.8);
     font-family: 'Open Sans', sans-serif;
     line-height: 1;
-	  font-size: 14px;
+    font-size: 14px;
     color: #e3e3e3;
 }
 
@@ -49,8 +49,8 @@ a:focus, a:hover {
 h1, h2, h3,
 h4, h5, h6 {
     font-family: 'Open Sans', sans-serif;
-	font-weight: normal;
-	margin: 0;
+  font-weight: normal;
+  margin: 0;
 }
 
 .clear:before,

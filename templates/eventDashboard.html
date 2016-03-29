@@ -1,0 +1,32 @@
+<!--Created by: CJ
+  Purpose: Interface for users to view events and sign up for new ones.
+  Date: March 2016
+-->
+
+{% extends 'base.html' %}
+{% block content%}
+
+      <div class="container">
+        <h1>Welcome, {{user}}.</h1>
+        <br>
+        <p>Browse events from the general list below or enter a joincode to choose a specific event.</p>
+        <br>
+        <hr>
+        <br>
+      </div>
+
+
+    <div class="container">
+      <!-- Example row of columns -->
+      {%for e in events%}
+      <div>
+        <p><h3>{{e.eventName}}</h3></p>
+        <br>
+        <p>{{e.joincode}}</p>
+        <br>
+        <input type="button" onClick="location.href='/activityDashboard/{{e.eventID}}/';" class="btn btn-primary" VALUE="Join Event">
+        <br><br>
+      </div>
+      {%endfor%}
+      <hr>
+{% endblock %}

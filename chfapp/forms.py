@@ -1,7 +1,7 @@
 #must have models created in order to import into here
 from django import forms
 from django.forms import ModelForm
-from .models import UserForm, Users, Admin, Event, Activity, Scene, SceneOptions, NextScene
+from .models import UserForm, User, Admin, Event, Activity, Scene, SceneOptions, NextScene
 from django.conf import settings
 from django.contrib.auth.models import User
 
@@ -53,12 +53,12 @@ class NewSceneForm(forms.ModelForm):
 	def clean_scene(self):
 		return instructionText, sceneType, allowReplayScene
 
-class NewSceneOptionForm(forms.ModelForm):
+class NewSOptForm(forms.ModelForm):
 	class Meta:
 		model = SceneOptions
-		fields = ['sceneID','sceneText']
+		fields = ['sceneID', 'sceneText']
 
-	def clean_sceneOption(self):
+	def clean_sOption(self):
 		return sceneID, sceneText
 
 class NextSceneForm(forms.ModelForm):
@@ -66,7 +66,7 @@ class NextSceneForm(forms.ModelForm):
 		model = NextScene
 		fields = ['sceneOptionID', 'sceneID', 'nextSceneNumber']
 
-	def clean_sceneOption(self):
+	def clean_nextScene(self):
 		return sceneOptionID, sceneID, nextSceneNumber
 
 
