@@ -53,10 +53,10 @@ class NewSceneForm(forms.ModelForm):
 	def clean_scene(self):
 		return instructionText, sceneType, allowReplayScene
 
-class NewSOptForm(forms.ModelForm):
+class NewSceneOptForm(forms.ModelForm):
 	class Meta:
 		model = SceneOptions
-		fields = ['sceneID', 'sceneText']
+		fields = ['sceneID','sceneText']
 
 	def clean_sOption(self):
 		return sceneID, sceneText
@@ -64,10 +64,10 @@ class NewSOptForm(forms.ModelForm):
 class NextSceneForm(forms.ModelForm):
 	class Meta:
 		model = NextScene
-		fields = ['sceneOptionID', 'sceneID', 'nextSceneNumber']
+		fields = ['nextSceneNumber']
 
 	def clean_nextScene(self):
-		return sceneOptionID, sceneID, nextSceneNumber
+		return nextSceneNumber
 
 
 

@@ -47,7 +47,7 @@ urlpatterns = [
     url(r'^newNextSceneSet/(\d+)/$', 'chfapp.views.newNextSceneSetForm', name='newNextSceneSet'),
     url(r'^editScene/(\d+)/$', 'chfapp.views.editScene', name='editScene'),
     url(r'^deleteScene/(\d+)/$', 'chfapp.views.deleteScene', name='deleteScene'),
-    # url(r'^createScenePath/(\d+)/$', 'chfapp.views.sceneOptionsPage', name='createScenePath')
+    url(r'^createScenePath/(\d+)/$', 'chfapp.views.newSceneOptionSetForm', name='createScenePath')
 
 ] + static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
 

@@ -33,17 +33,6 @@ class AdminForm(models.Model):
 	def __str__(self): #python3 uses __str__
 		return self.email
 
-# #Users Table
-# class User(AbstractUser):
-# 	# userName = models.CharField(max_length=20)
-# 	# password = models.CharField(max_length=20)
-# 	# firstName = models.CharField(max_length=30)
-# 	# lastName = models.CharField(max_length=30)
-# 	# email = models.EmailField(max_length=40)
-
-# 	def __str__(self):
-# 		return self.username, self.first_name, self.last_name, self.email
-
 
 #Admin Table
 class Admin(models.Model):
@@ -53,6 +42,7 @@ class Admin(models.Model):
 
 	def __str__(self):
 		return self.organization
+
 
 #Events Table
 class Event(models.Model):
@@ -65,6 +55,7 @@ class Event(models.Model):
 
 	def __str__(self):
 		return self.eventName
+
 
 class Activity(models.Model):
 	activityID = models.AutoField(primary_key=True)
@@ -92,7 +83,7 @@ class ActivitySession(models.Model):
 		unique_together = (('user', 'activityID', 'startTime'),)
 
 	def __str__(self):
-		return self.startTime
+		return self.startTime.strftime("%Y-%M-%d %H:%m") if self.startTime else ''
 
 class Scene(models.Model):
 	sceneID = models.AutoField(primary_key=True)
@@ -102,7 +93,8 @@ class Scene(models.Model):
 	allowReplayScene = models.NullBooleanField(null=True)
 
 	def __str__(self):
-		return self.instructionText, self.sceneType
+		# return '{}: {}'.format(self.sceneType, self.instructionText)
+		return self.instructionText
 
 class SceneOptions(models.Model):
 	soID = models.AutoField(primary_key=True)
@@ -120,4 +112,4 @@ class NextScene(models.Model):
 	weight = models.DecimalField(max_digits = 3, decimal_places=2)
 
 	def __str__(self):
-		return self.weight
+		return str(self.nextSceneNumber)

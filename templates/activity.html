@@ -14,8 +14,6 @@
 
 			<p>The table below lists the scenes created for the activity entitled "{{activities.activityName}}". Click on a scene to view its associated options and the number of the subsequent scene.</p>
 
-			<button type="button" class="btn btn-primary" onclick="window.location.href='/createSceneSet/{{activities.activityID}}';">Add New Scene</button>
-			<br><br><br>
 			<table class="table table-condensed table-bordered table-hover" width="100%">
 				<col style="width:5%">
 				<col style="width:75%">
@@ -90,24 +88,52 @@
 									{% endif %}
 								{% endfor %}
 							</table>
-<!-- 							<a href="/createScenePath/{{s.sceneID}}" type="button" class="add-option-row btn btn-primary">Add Scene Option</a> -->
-
 						</td>
 					</tr>
 					{%endif%}
 				{%endfor%}
 			</table>
 
-				<form method="POST" action="">
+			<button type="button" class="btn btn-primary" onclick="window.location.href='/createSceneSet/{{activities.activityID}}';">Add New Scene</button>
+			<br><br>
+			<br>
+			<h3>Add Scene Option</h3>
 
-					{%csrf_token%}
-					{{form.as_p}}
-					<br>
+			<form method="POST" action="">
+				<p>Scene options enable users to move from scene to scene. To add a scene option, refer to the table of existing scenes. Enter the source scene number, choice text that the user will see, and the destination scene number. <i>Hover over each box's label for additional instructions.</i>
 
-					<input type="submit" value="Submit" onclick="window.location='/activity/{{activities.activityID}}/';" />
-				</form>
+				{%csrf_token%}
+				<table class="table borderless" width="100%">
+					<col style = "width:10%">
+					<col style = "width:80%">
+					<col style = "width:10%">
+					<form method="POST" action="">
+					<tr>
+						<td>
+							<label for="sceneNum" href="#" data-toggle="tooltipFrom" data-placement="left" title="Type the number of the source scene # in the 'From' box.">From: </label>
+							<input type="text" id="sceneNum" class="form-control">{{field.sceneID}}</input>
+						</td>
+						<td>
+							<label for="sceneText" href="#" data-toggle="tooltipOpt" data-placement="right" title="Type the text that the user will see and select in the 'Option Text' box.">Option Text: </label>
+							<input type="text" id="sceneText" class="form-control">{{field.sceneText}}</input>
+						</td>
+					</tr>
+					</form>
+					<form2 method="POST" action"">
+						<td>
+							<label for="nxtSceneNum" href="#" data-toggle="tooltipTo" data-placement="right" title="Type the number of the next scene in the 'To' box.">To: </label>
+							<input type="text" id="nxtSceneNum" class="form-control">{{field.nextSceneNumber}}</input>
+						</td>
+					</form2>
+				</table>
+				<div>
+					<a href="/createScenePath/{{activities.activityID}}/" type="button" class="add-option-row btn btn-primary">Add Scene Option</a>
+				</div>
+			</form>
 
-
+			<br><br>
+			<button type="button" class="btn btn-default">Return to Activities</button>
+			<br><br>
 		</div>
 	</div>
 

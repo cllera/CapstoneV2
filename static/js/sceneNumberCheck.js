@@ -24,3 +24,15 @@ $(function() {
 		};
 	});
 });
+
+$(function(){
+	$('[data-toggle="tooltipFrom"]').tooltip(); 
+});
+
+$(function(){
+	$('[data-toggle="tooltipOpt"]').tooltip(); 
+});
+
+$(function(){
+	$('[data-toggle="tooltipTo"]').tooltip(); 
+});

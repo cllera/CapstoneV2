@@ -5,7 +5,7 @@
 
 from django.shortcuts import render, get_object_or_404, render_to_response
 from .forms import UserLoginForm, NewUserAccountForm, NewAdminForm
-from .forms import NewEventForm, NewActivityForm, NewSceneForm, NewSOptForm, NextSceneForm
+from .forms import NewEventForm, NewActivityForm, NewSceneForm, NewSceneOptForm, NextSceneForm
 from .models import Admin as amod
 from .models import Event as emod
 from .models import Activity as act
@@ -86,10 +86,12 @@ def newUserLogin(request):
 	# if request.method == 'POST':
 	form = NewUserAccountForm(request.POST or None)
 
-	user = request.user
+	user = request.User
 
 	if form.is_valid():
-		instance = User.objects.create_user(username = form.cleaned_data['username'], password = form.cleaned_data['password'], first_name = form.cleaned_data['first_name'], last_name = form.cleaned_data['last_name'], email = form.cleaned_data['email'])
+		instance = User.objects.create_user(username = form.cleaned_data['username'], 
+			password = form.cleaned_data['password'], first_name = form.cleaned_data['first_name'], 
+			last_name = form.cleaned_data['last_name'], email = form.cleaned_data['email'])
 		instance.save()
 		# u = User.objects.get(instance.username)
 		# u.set_password(instance.password)
@@ -230,15 +232,18 @@ def deleteEvent(request, id):
 #=================================Activity-related Functions===================================#
 
 #View for activity dashboard
-def activityDashboard(request, id):
+def activityDashboard(request):
 	title = "Dashboard"
-	event = emod.objects.get(eventID=id)
-	activities = act.objects.all().filter(eventID_id=id)
+	currentuser = request.user
+	# event = emod.objects.get(eventID=id)
+	# activities = act.objects.all().filter(eventID_id=id)
+	activities = act.objects.all()
 	# activityID = act.objects.get(filter)
 
 	context = {
 		'title': title,
 		'activities': activities,
+		'currentuser': currentuser,
 	}
 	return render(request,"activityDashboard.html", context)
 
@@ -268,6 +273,44 @@ def activity(request, id):
 	scnOptions = scnopt.objects.all().filter(sceneID_id__in=sceneList)
 	scnOptionsList = scnOptions.values_list('soID', flat=True).distinct()
 
+	#need sceneoption and nextscene instances
+	form = NewSceneOptForm(request.POST or None)
+	form2 = NextSceneForm(request.POST or None)
+
+	if form.is_valid() and form2.is_valid():
+
+		print("//////////////////////////////Scene Option Part////////////////////////////////")
+		sceneoption = scnopt()
+		nextscene.save()
+		print("*************************SCENE OPTION IDs HERE***********************")
+		print(sceneoption.soID)
+		soID_id = str(sceneoption.soID)
+		print(soID_id)
+		sceneoption.sceneID_id = form.cleaned_data['sceneID']
+		soSceneID_id = str(sceneoption.sceneID_id)
+		print("*************************SCENE OPTION IDs HERE FROM FORM***********************")
+		print("object:" + sceneoption.sceneID_id)
+		print(soSceneID_id)
+
+		sceneoption.sceneText = form.cleaned_data['sceneText']
+		soText = str(sceneoption.sceneText)
+		print("*************************SCENE OPTION TEXT HERE FROM FORM***********************")
+		print(sceneoption.sceneText)
+		print(soText)
+		sceneoption.save()
+		nextscene.save(commit=False)
+
+		print("//////////////////////////////Next Scene Part////////////////////////////////")
+		nextscene = nxtscn()
+		nextscene = sceneoption.soID
+		nextscene.sceneID_id = soSceneID_id
+		nextscene.nextSceneNumber = form.cleaned_data['nextSceneNumber']
+		nextscene.save()
+
+		context = {
+			"saved scene option information"
+		}
+		return HttpResponseRedirect("/activity/" + actID + '/') #add activity url here when created.
 
 	context = {
 		'title': title,
@@ -276,6 +319,8 @@ def activity(request, id):
 		'scnOptions': scnOptions,
 		'nxtSceneList': nxtSceneList,
 		'nxtScene': nxtScene,
+		'form': form,
+		'form2': form2,
 
 	}
 	return render(request, "activity.html", context)
@@ -504,15 +549,16 @@ def deleteScene(request, id): #id is activityID from event
 # 	return render(request,"createScenePath.html",context)
 
 
-def newSceneOptionSetForm(request, id):
+def newSceneOptionSetForm(request, id): #activity ID here
 
-	sceneopt = scnopt.objects.get(soID = id);
-	scnID = str(sceneopt.sceneID_id)
-	scene = scn.objects.get(sceneID=scnID)
-	actID = str(scene.activityID_id)
+	activity = act.objects.get(activityID=id)
+
+	#QuerySet and List of scenes associated with activity
+	scene = scn.objects.all().filter(activityID_id=id).order_by('sceneID')
+	sceneList = scene.values_list('sceneID', flat=True).distinct()
 
 	#need sceneoption and nextscene instances
-	form = NewSOptionForm(request.POST)
+	form = NewSceneOptForm(request.POST or None)
 
 	if form.is_valid():
 
@@ -527,7 +573,10 @@ def newSceneOptionSetForm(request, id):
 		return HttpResponseRedirect("/activity/" + actID + '/') #add activity url here when created.
 
 	context = {
-	"form": form,
+
+		"activity": activity,
+		"scene": scene,
+		"form": form,
 	}
 	return render(request, "activity.html", context)
 
@@ -613,38 +662,6 @@ def editSceneOption(request, id):
 # 	return render(request,"",context)
 
 
-#=================================Scene-related Functions===================================#
-#This includes next scene information for a scene.
-
-# def newNextSceneSetForm(request, id):
-# 	title = "Add Scenes to Activity"
-
-# 	formtitle = "Map Scenes and Scene Options"
-# 	instruction = "[Insert instructions for nextscene creation here.]"
-
-# 	nextSceneForm = NextSceneForm(request.POST or None)
-
-# 	if nextSceneForm.is_valid():
-
-# 		nextScene = nxtscn()
-# 		nextScene.sceneOptionID = nextSceneForm.cleaned_data['sceneOptionID']
-# 		nextScene.sceneID = nextSceneForm.cleaned_data['sceneID']
-# 		nextScene.nextSceneNumber = nextSceneForm.cleaned_data['nextSceneNumber']
-# 		nextScene.save()
-
-# 		context = {
-# 			"saved nextScene information"
-# 		}
-# 		return HttpResponseRedirect("//") #add activity url here when created.
-
-# 	context = {
-# 		"title": title,
-# 		"formtitle": formtitle,
-# 		"instruction": instruction,
-# 		"form": nextSceneForm,
-# 	}
-# 	return render(request,"newNextSceneSetForm.html",context)
-
 
 
 
@@ -674,40 +691,4 @@ def newAdminLogin(request):
 	}
 	return render(request,"",context) #figure out how to add to userloginAccountform
 
-
-#********************test form from tutorials; email sending doesn't work yet******************
-#Not actually using this now but don't delete it yet.
-def contact(request):
-	form = ContactForm(request.POST or None)
-	if form.is_valid():
-		# for key in form.cleaned_data:
-		# 	print (key)
-		# 	print (form.cleaned_data.get(key))
-		form_email = form.cleaned_data.get("email")
-		form_message = form.cleaned_data.get("message")
-		form_first_name = form.cleaned_data.get("first_name")
-		print (form_email)
-		
-		subject = 'Site contact form'
-		from_email = settings.EMAIL_HOST_USER
-		to_email = [from_email, 'courtney.llera@ymail.com']
-		contact_message = "%s: %s via %s"%(
-			form_first_name, 
-			form_message, 
-			form_email
-			)
-		send_mail (
-			subject, 
-			contact_message, 
-			from_email, 
-			to_email, 
-			fail_silently=False
-			)
-		#have fail silently if you're doing it in prod
-
-	context = {
-		"form":form,
-	}
-	
-	return render(request, "forms.html", context)
 
