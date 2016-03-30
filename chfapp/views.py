@@ -275,8 +275,9 @@ def activity(request, id):
 
 	#need sceneoption and nextscene instances
 	form = NewSceneOptForm(request.POST or None)
+	print(request.POST)
 	form2 = NextSceneForm(request.POST or None)
-
+	print(request.POST)
 	if form.is_valid() and form2.is_valid():
 
 		print("//////////////////////////////Scene Option Part////////////////////////////////")
@@ -324,6 +325,7 @@ def activity(request, id):
 
 	}
 	return render(request, "activity.html", context)
+
 
 
 #View for activity pages

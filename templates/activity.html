@@ -107,32 +107,30 @@
 					<col style = "width:10%">
 					<col style = "width:80%">
 					<col style = "width:10%">
-					<form method="POST" action="">
 					<tr>
 						<td>
 							<label for="sceneNum" href="#" data-toggle="tooltipFrom" data-placement="left" title="Type the number of the source scene # in the 'From' box.">From: </label>
-							<input type="text" id="sceneNum" class="form-control">{{field.sceneID}}</input>
+							<input type="text" id="sceneNum" class="form-control">{{form.field.sceneID}}</input>
 						</td>
 						<td>
 							<label for="sceneText" href="#" data-toggle="tooltipOpt" data-placement="right" title="Type the text that the user will see and select in the 'Option Text' box.">Option Text: </label>
-							<input type="text" id="sceneText" class="form-control">{{field.sceneText}}</input>
+							<input type="text" id="sceneText" class="form-control">{{form.field.sceneText}}</input>
 						</td>
-					</tr>
-					</form>
-					<form2 method="POST" action"">
 						<td>
 							<label for="nxtSceneNum" href="#" data-toggle="tooltipTo" data-placement="right" title="Type the number of the next scene in the 'To' box.">To: </label>
-							<input type="text" id="nxtSceneNum" class="form-control">{{field.nextSceneNumber}}</input>
+							<input type="text" id="nxtSceneNum" class="form-control">{{form2.field.nextSceneNumber}}</input>
 						</td>
-					</form2>
+					</tr>
 				</table>
 				<div>
-					<a href="/createScenePath/{{activities.activityID}}/" type="button" class="add-option-row btn btn-primary">Add Scene Option</a>
+<!-- 					<a href="/activity/{{activities.activityID}}/" type="button" class="add-option-row btn btn-primary">Add Scene Option</a> -->
+					<input type="submit" value="Add Scene Option" class="btn btn-primary" onclick="window.location='/activity/{{activities.activityID}}';" />
 				</div>
 			</form>
 
 			<br><br>
 			<button type="button" class="btn btn-default">Return to Activities</button>
+
 			<br><br>
 		</div>
 	</div>
