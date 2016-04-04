@@ -98,7 +98,7 @@ def newUserLogin(request):
 		# u = User.objects.get(instance.username)
 		# u.set_password(instance.password)
 		# u.save()
-		return HttpResponseRedirect("/activityDashboard/")
+		return HttpResponseRedirect("/userLogin/")
 	else:
 		form = NewUserAccountForm()
 
@@ -753,3 +753,10 @@ def newAdminLogin(request):
 	return render(request,"",context) #figure out how to add to userloginAccountform
 
 
+#This is for quickstart users
+def quickStart(request):
+
+
+
+
+	return render(request)
