@@ -37,10 +37,7 @@ $(function() {
 		console.log("LabelID: " + labelID);
 		for (e in extArr) {
 			if (extArr[e].id == labelID) {
-				$('#' + labelID + '.extraInformation').toggle();
-			// }
-			// else if (extArr[e].id !== labelID) {
-			// 	$('#' + extArr[e].id + '.extraInformation').hide();				
+				$('#' + labelID + '.extraInformation').toggle();			
 			};
 		};
 	});

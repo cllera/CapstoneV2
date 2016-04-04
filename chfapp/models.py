@@ -59,7 +59,7 @@ class Event(models.Model):
 
 class Activity(models.Model):
 	activityID = models.AutoField(primary_key=True)
-	adminID = models.ForeignKey(Admin,related_name='adminOwner')
+	adminID = models.ForeignKey(Admin)
 	eventID = models.ForeignKey(Event)
 	activityName = models.CharField(max_length=100)
 	description = models.CharField(max_length=255)

@@ -4,7 +4,7 @@
     # Purpose: All views for the project are created in this page, separated by functional segment
 
 from django.shortcuts import render, get_object_or_404, render_to_response
-from .forms import UserLoginForm, NewUserAccountForm, NewAdminForm, selectedEvent
+from .forms import UserLoginForm, NewUserAccountForm, NewAdminForm, joinForm
 from .forms import NewEventForm, NewActivityForm, NewSceneForm, NewSceneOptForm
 from .models import Admin as amod
 from .models import Event as emod
@@ -111,45 +111,28 @@ def newUserLogin(request):
 
 #=================================Admin-related Functions===================================#
 
-#View for admin splash page
+#View for admin's event and activity management
 def adminDashboard(request):
 	title = "Admin Dashboard"
 
 	user = request.user
 	userID = user.id
-	username = user.username
-	print("//////////////////////////////////User and admin ID/////////////////////////////")
-	print("UserID: " + str(userID))
 	adminID = amod.objects.get(user_id=userID)
-	print("AdminID: " + str(adminID))
+
+	# Queryset and list of events
 	events = emod.objects.all().filter(adminID_id = adminID).order_by('eventID')
-	print(events)
 	eventsList = events.values_list('eventID', flat=True).distinct()
-	print(eventsList)
 
+	# Queryset and list of activities
 	activities = act.objects.all().filter(adminID_id = adminID).order_by('eventID_id')
-	print(activities)
 	activitiesList = activities.values_list('eventID_id', flat=True)
-	print(activitiesList)
 
-	# create list of sessions
-	
-	# for a in activities:
-	# 	session=actssn.objects.all().filter(activityID=a.activityID)
-	# 	print("LOOK HERE for ACTIVITYIDs")
-	# 	print(a.activityID)
-	# 	context = {
-	# 		'session': session,
-	# 	}
-
+	# Queryset of users that will return usernames to the Manage Users tab
 	allUsers = User.objects.all()
 	ses = actssn.objects.all()
-	print("////here for ses")
-	print(ses)
 
 	context = {
 		'title': title,
-		'username': username,
 		'events': events,
 		'ses': ses,
 		'activities': activities,
@@ -169,13 +152,14 @@ def adminDashboard(request):
 def eventDashboard(request):
 	title = "Events"
 
-	events = emod.objects.all().filter(enforceUser=0) #Gathering all general events (no user account required)
+	events = emod.objects.all() #Gathering all general events (no user account required)
 
 	context = {
 		'title': title,
 		'events': events,
+		# 'event': event,
 	}
-	return render(request,"eventDashboard.html", context)
+	return render(request, "eventDashboard.html", context)
 
 #Adding new events -- Will be used by admin
 @requires_csrf_token
@@ -188,14 +172,9 @@ def newEventForm(request):
 	#Admin values strictly for testing purposes right now
 	user = request.user
 	userID = user.id
-	print("////////////////////////////////////")
-	print(str(userID))
 	admin = amod.objects.get(adminID=1)
 
 	if form.is_valid():
-		print('gets inside form validation if')
-		print(str(userID))
-		print(request.user.id)
 		event = emod()
 		event.user_id = userID
 		event.adminID_id = admin.adminID
@@ -203,7 +182,7 @@ def newEventForm(request):
 		event.joincode = form.cleaned_data['joincode']
 		event.enforceUser = form.cleaned_data['enforceUser']
 		event.save()
-		print('gets past event creation .save command')
+
 		context = {
 			"saved Event information after creation"
 		}
@@ -266,6 +245,40 @@ def deleteEvent(request, id):
 	return HttpResponseRedirect('/adminDashboard/')
 
 
+#Function allowing users to enter a private event via joincode
+def joinEvent(request,id): #id here is eventID
+	events = emod.objects.all()
+	event = emod.objects.get(eventID=id)
+
+	if request.method =='POST':
+		form = joinForm(request.POST)
+
+		print("GETS HERE")
+		print(event.joincode)
+		print("******")
+
+		if form.is_valid():
+			jcode = form.cleaned_data['jcode']
+			print(jcode)
+			if jcode == event.joincode:
+
+				print("it gets here")
+				print (form.cleaned_data)
+				print(jcode)
+				return HttpResponseRedirect('/activityDashboard/' + id + "/")
+
+			else:
+				print("IF IT IS NOT")
+				print(jcode + "  " + event.joincode)
+				return HttpResponseRedirect('/eventDashboard/')
+
+	context = {
+		'events': events,
+		'event': event,
+	}
+	return render(request, "eventDashboard.html", context)
+
+
 
 
 
@@ -305,16 +318,13 @@ def activity(request, id):
 	for s in sceneCountList:
 		sceneCountList[s] = sceneCountList[s] + 1
 
-
 	#QuerySet and List of nextScenes associated with scene and sceneOptions
 	nxtScene = nxtscn.objects.all().filter(sceneID_id__in=sceneList)
 	nxtSceneList = nxtScene.values_list('nextSceneNumber', flat=True)
 
-
 	#QuerySet and List of sceneOptions associated with scenes
 	scnOptions = scnopt.objects.all().filter(sceneID_id__in=sceneList)
 	scnOptionsList = scnOptions.values_list('soID', flat=True).distinct()
-
 
 	#need sceneoption and nextscene instances
 	form = NewSceneOptForm(request.POST or None)
@@ -325,16 +335,14 @@ def activity(request, id):
 		Option = form.cleaned_data['Option']
 		To = form.cleaned_data['To']
 
-		# print("Index value in sceneList array")
+		# source is the scene number (1, 2, etc.) the user enters as the starting scene for a scene option
+		# retrieves the index position where the entered source value matches the sceneCountList
 		source = sceneCountList.index(From)
-		# print(source)
-		# print("Above should be three.")
 
+		#realSource is the translated source value; retrieves the value at the index position of source
 		realSource = sceneList[source]
-		# print("Actual Scene's Number")
-		# print(realSource)
-		# print("Above should be twelve.")
 
+		# creates instance of scene option and saves relevant data
 		sceneoption = scnopt()
 		sceneoption.sceneID_id = realSource
 		sceneoption.sceneText = Option
@@ -342,9 +350,13 @@ def activity(request, id):
 
 		soID_id = int(sceneoption.soID)
 
+		# destination is the scene number (1, 2, etc.) the user enters as the endpoint scene for a scene option
 		destination = sceneCountList.index(To)
+
+		#realDestination is the translated destination value; retrieves the value at the index position of destination
 		realDestination = sceneList[destination]
 
+		# creates instance of next scene and saves relevant data
 		nextscene = nxtscn()
 		nextscene.sceneID_id = realSource
 		nextscene.sceneOptionID_id = soID_id
@@ -358,7 +370,7 @@ def activity(request, id):
 		context = {
 			"saved scene option information"
 		}
-		return HttpResponseRedirect("/activity/" + id + '/') #add activity url here when created.
+		return HttpResponseRedirect("/activity/" + id + '/')
 
 	context = {
 		'title': title,
@@ -513,8 +525,8 @@ def newSceneSetForm(request, id):
 	activityNum = str(id) #converts id to string for user in HttpResponseRedirect
 	title = "Add Scenes to Activity"
 
-	formtitle = "Create Scene Set for " + activity.activityName
-	instruction = "[Insert instructions for scene here.]"
+	formtitle = "Create Scene for: " + activity.activityName
+	instruction = "Use the form below to create a new scene. Hover over each label for additional information."
 
 	sceneForm = NewSceneForm(request.POST or None)
 
@@ -727,6 +739,42 @@ def deleteSceneOption(request, id): #id is sceneOptionID passed in from activity
 	sceneoption.delete()
 
 	return HttpResponseRedirect('/activity/' + actID + '/')
+
+#=================================Miscellaneous Functions===================================#
+
+# Function for users to end session automatically when returning to activityDashboard
+def endSession(request, id): #id here is the activityID
+
+	# gets currently logged-in user's userID
+	user = request.user
+	userID = user.id
+
+	# finds session object that matches activityID and userID in activitySession table
+	ses = actssn.objects.all().filter(activityID_id=id, user_id=userID)
+
+	for s in ses:
+		s.inactive = True
+		s.save()
+
+	return HttpResponseRedirect('/activityDashboard/' + id + '/')
+
+
+def deleteInactiveSessions(request,id): #id here is the activityID
+
+	# gets currently logged-in user's userID; not sure if we need this now, but perhaps later
+	user = request.user
+	userID = user.id
+
+	# retrieves activity matching passed-in id
+	activity = act.objects.get(activityID=id)
+
+	# finds session objects matching activity id and that are marked inactive by user
+	ses = actssn.objects.all().filter(activityID_id=id, inactive=True)
+
+	for s in ses:
+		s.delete()
+
+	return HttpResponseRedirect('/adminDashboard/')
 
 
 
