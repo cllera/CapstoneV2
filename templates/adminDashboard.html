@@ -1,8 +1,8 @@
 <!--Created by: CJ
   Purpose: Interface for admin to view, make changes to, or deleted selected events/activities
+          Includes two tabs: Your Events (CRUD activities) and Manage Users (Delete inactive sessions)
   Date: March 2016
 -->
-
 
 {% extends 'base.html' %}
 {% block content %}
@@ -142,57 +142,50 @@
       </div>
       </br>
 
-
-      <div id='hiddenActivity'>
       <div class="row">
       <div class="col-sm-1"></div>
-      <div class="col-sm-9">
+        <div class="col-sm-9">
           {% for a in activities %}
-          <div id="{{a.eventID_id}}" class="actEvtDiv">
-            <h4>{{a.activityName}}</h4>
-            <p>{{a.description}}<p>
-            <table class ="table table-condensed table-bordered" width="100%">
-              <col style="width:30%">
-              <col style="width:30%">
-              <col style="width:20%">
-              <col style="width:20%">
-              <thead class="thead rowHeader">
-                <tr>
-                  <th>Username</th>
-                  <th>Start Time</th>
-                  <th>Inactive?</th>
-                  <th>Completed?</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for ssn in ses %}
-                  {% if a.activityID == ssn.activityID_id %}
+            <div id="{{a.eventID_id}}" class="actEvtDiv">
+              <h4>{{a.activityName}}</h4>
+              <p>{{a.description}}<p>
+              <table class ="table table-condensed table-bordered" width="100%">
+                <col style="width:30%">
+                <col style="width:30%">
+                <col style="width:20%">
+                <col style="width:20%">
+                <thead class="thead rowHeader">
                   <tr>
-                    <!--if the user's id matches the session for user return username-->
-                    {% for au in allUsers %}
-                      {% if au.id == ssn.user_id %}
-                        <td>{{au.username}}</td>
-                      {% endif %}
-                    {% endfor %}
-                    <td>{{ssn.startTime}}</td>
-                    <td>{{ssn.inactive}}</td>
-                    <td>{{ssn.activityCompleted}}</td>
+                    <th>Username</th>
+                    <th>Start Time</th>
+                    <th>Inactive?</th>
+                    <th>Completed?</th>
                   </tr>
-                  {% endif %}
-                {% endfor %}
-              </tbody>
-            </table>
-          </div> <!--end in actEvtDiv-->
-          <br>
+                </thead>
+                <tbody>
+                  {% for ssn in ses %}
+                    {% if a.activityID == ssn.activityID_id %}
+                    <tr>
+                      <!--if the user's id matches the session for user return username-->
+                      {% for au in allUsers %}
+                        {% if au.id == ssn.user_id %}
+                          <td>{{au.username}}</td>
+                        {% endif %}
+                      {% endfor %}
+                      <td>{{ssn.startTime}}</td>
+                      <td>{{ssn.inactive}}</td>
+                      <td>{{ssn.activityCompleted}}</td>
+                    </tr>
+                    {% endif %}
+                  {% endfor %}
+                </tbody>
+              </table>
+              <a class="btn btn-danger" type="button" href="/deleteInactiveSessions/{{a.activityID}}/">Delete Inactive Sessions</a>
+            </div> <!--end in actEvtDiv-->
+            <br>
           {% endfor %} <!--endfor activity-->
-          
-      </div> <!--close col-sm-9-->
+        </div> <!--close col-sm-9-->
       </div> <!--ends row-->
-      </div> <!--close hidden activity div-->
-
-
-
-
     </div>
 
 <!--     <div id="OtherEvents" class="tab-pane fade">

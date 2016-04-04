@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block content%}
-<!--{% load staticfiles %}
-	<script src='{% static "js/sceneNumberCheck.js" %}'></script>-->
+
 
 	<div class="container">
 		<div class="col-sm-3">
@@ -13,7 +12,7 @@
 		<br>
 
 			<form method="POST" action="" id='SceneCreationForm'>
-				{%csrf_token%}
+				{% csrf_token %}
 				{{form.as_p}}
 				<br>
 				<input type="button" value="Back" onclick="window.location='/activity/{{activity.activityID}}/';"/>

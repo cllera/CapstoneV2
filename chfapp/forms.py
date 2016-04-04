@@ -5,6 +5,7 @@ from .models import UserForm, User, Admin, Event, Activity, Scene, SceneOptions,
 from django.conf import settings
 from django.contrib.auth.models import User
 
+
 #Form appears when you choose to add user in the .../admin/createaccount page
 class UserLoginForm(forms.ModelForm):
 	class Meta:
@@ -43,9 +44,27 @@ class NewActivityForm(forms.ModelForm):
 		return activityName, description
 
 class NewSceneForm(forms.ModelForm):
+	# instructionText = forms.CharField(label='Instructions')
+	# sceneType = forms.NullBooleanField(
+	# 	label="Scene Type",
+	# 	required=False,
+	# 	widget=Select(choices=[(None, "Start"),
+	# 							(False, "Normal"),
+	# 							(True, "Ending")]),
+	# 	help_text="Choose scene type",
+	# 	)
+	# allowReplayScene = forms.NullBooleanField(
+	# 	label="Replayable scene?",
+	# 	required=False,
+	# 	widget=Select(choices=[(None, ""),
+	# 							(False, "No"),
+	# 							(True, "Yes")]),
+	# 	help_text="Will scene be replayable?",
+	# 	)
 	class Meta:
 		model = Scene
 		fields = ['instructionText','sceneType', 'allowReplayScene']
+		# fields=[instructionText,sceneType,allowReplayScene]
 
 	def clean_scene(self):
 		return instructionText, sceneType, allowReplayScene
@@ -56,8 +75,10 @@ class NewSceneOptForm(forms.Form):
 	To = forms.IntegerField()
 
 
-class selectedEvent(forms.Form):
-	Event = forms.ChoiceField()
+class joinForm(forms.Form):
+	jcode = forms.CharField(widget=forms.Textarea)
+
+
 
 		
 

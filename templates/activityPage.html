@@ -40,10 +40,8 @@ Predecessor: activityDashboard.html
     <div>
       <br>
       <br>
-      <input type="button" onClick="history.go(0)" VALUE="Restart Mission">
-      
-      <!--may need to update activityDashboard url to include event-->
-      <input type="button" onClick="location.href='/activityDashboard/';" VALUE="Exit to Activity Page">
+      <input type="button" class="btn btn-default" onClick="history.go(0)" VALUE="Restart Mission">
+      <a type="button" class="btn btn-default" href="/endSession/{{activity.activityID}}/">Exit to Activity Page</a>
     </div>
 </div>
 
