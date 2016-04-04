@@ -4,11 +4,12 @@
     # Purpose: All views for the project are created in this page, separated by functional segment
 
 from django.shortcuts import render, get_object_or_404, render_to_response
-from .forms import UserLoginForm, NewUserAccountForm, NewAdminForm
-from .forms import NewEventForm, NewActivityForm, NewSceneForm, NewSceneOptForm, NextSceneForm
+from .forms import UserLoginForm, NewUserAccountForm, NewAdminForm, selectedEvent
+from .forms import NewEventForm, NewActivityForm, NewSceneForm, NewSceneOptForm
 from .models import Admin as amod
 from .models import Event as emod
 from .models import Activity as act
+from .models import ActivitySession as actssn
 from .models import Scene as scn
 from .models import SceneOptions as scnopt
 from .models import NextScene as nxtscn
@@ -20,6 +21,7 @@ from django.views.decorators.csrf import requires_csrf_token
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import authenticate, login
 from array import array
+from datetime import datetime
 from django.contrib.auth.models import User
 
 
@@ -86,7 +88,7 @@ def newUserLogin(request):
 	# if request.method == 'POST':
 	form = NewUserAccountForm(request.POST or None)
 
-	user = request.User
+	# user = request.User
 
 	if form.is_valid():
 		instance = User.objects.create_user(username = form.cleaned_data['username'], 
@@ -113,17 +115,50 @@ def newUserLogin(request):
 def adminDashboard(request):
 	title = "Admin Dashboard"
 
-	events = emod.objects.all().filter(adminID_id = 1)
+	user = request.user
+	userID = user.id
+	username = user.username
+	print("//////////////////////////////////User and admin ID/////////////////////////////")
+	print("UserID: " + str(userID))
+	adminID = amod.objects.get(user_id=userID)
+	print("AdminID: " + str(adminID))
+	events = emod.objects.all().filter(adminID_id = adminID).order_by('eventID')
+	print(events)
+	eventsList = events.values_list('eventID', flat=True).distinct()
+	print(eventsList)
 
-	activities = act.objects.all().filter(adminID_id = 1)
-	# activityID = act.objects.get(filter)
+	activities = act.objects.all().filter(adminID_id = adminID).order_by('eventID_id')
+	print(activities)
+	activitiesList = activities.values_list('eventID_id', flat=True)
+	print(activitiesList)
+
+	# create list of sessions
+	
+	# for a in activities:
+	# 	session=actssn.objects.all().filter(activityID=a.activityID)
+	# 	print("LOOK HERE for ACTIVITYIDs")
+	# 	print(a.activityID)
+	# 	context = {
+	# 		'session': session,
+	# 	}
+
+	allUsers = User.objects.all()
+	ses = actssn.objects.all()
+	print("////here for ses")
+	print(ses)
 
 	context = {
 		'title': title,
+		'username': username,
 		'events': events,
+		'ses': ses,
 		'activities': activities,
+		'activitiesList': activitiesList,
+		'allUsers': allUsers,
 	}
 	return render(request,"adminDashboard.html", context)
+
+
 
 
 
@@ -150,14 +185,19 @@ def newEventForm(request):
 	instruction = "Enter the event title, desired joincode, and your preference as to whether or not a user limit is to be enforced."
 	form = NewEventForm(request.POST or None)
 
-	#User/Admin values strictly for testing purposes right now
-	user = umod.objects.get(userID=2)
+	#Admin values strictly for testing purposes right now
+	user = request.user
+	userID = user.id
+	print("////////////////////////////////////")
+	print(str(userID))
 	admin = amod.objects.get(adminID=1)
 
 	if form.is_valid():
 		print('gets inside form validation if')
+		print(str(userID))
+		print(request.user.id)
 		event = emod()
-		event.userID_id = user.userID
+		event.user_id = userID
 		event.adminID_id = admin.adminID
 		event.eventName = form.cleaned_data['eventName']
 		event.joincode = form.cleaned_data['joincode']
@@ -232,13 +272,14 @@ def deleteEvent(request, id):
 #=================================Activity-related Functions===================================#
 
 #View for activity dashboard
-def activityDashboard(request):
+def activityDashboard(request, id):
 	title = "Dashboard"
 	currentuser = request.user
 	# event = emod.objects.get(eventID=id)
-	# activities = act.objects.all().filter(eventID_id=id)
-	activities = act.objects.all()
-	# activityID = act.objects.get(filter)
+
+	#gets only activities related to that event
+	activities = act.objects.all().filter(eventID_id=id)
+
 
 	context = {
 		'title': title,
@@ -248,7 +289,7 @@ def activityDashboard(request):
 	return render(request,"activityDashboard.html", context)
 
 
-#View for activity dashboard
+#Admin view for activity tasks; also includes some scene option and next scene functionality
 def activity(request, id):
 	title = "Activity Information"
 
@@ -264,6 +305,7 @@ def activity(request, id):
 	for s in sceneCountList:
 		sceneCountList[s] = sceneCountList[s] + 1
 
+
 	#QuerySet and List of nextScenes associated with scene and sceneOptions
 	nxtScene = nxtscn.objects.all().filter(sceneID_id__in=sceneList)
 	nxtSceneList = nxtScene.values_list('nextSceneNumber', flat=True)
@@ -273,45 +315,50 @@ def activity(request, id):
 	scnOptions = scnopt.objects.all().filter(sceneID_id__in=sceneList)
 	scnOptionsList = scnOptions.values_list('soID', flat=True).distinct()
 
+
 	#need sceneoption and nextscene instances
 	form = NewSceneOptForm(request.POST or None)
-	print(request.POST)
-	form2 = NextSceneForm(request.POST or None)
-	print(request.POST)
-	if form.is_valid() and form2.is_valid():
 
-		print("//////////////////////////////Scene Option Part////////////////////////////////")
+	if form.is_valid():
+
+		From = form.cleaned_data['From']
+		Option = form.cleaned_data['Option']
+		To = form.cleaned_data['To']
+
+		# print("Index value in sceneList array")
+		source = sceneCountList.index(From)
+		# print(source)
+		# print("Above should be three.")
+
+		realSource = sceneList[source]
+		# print("Actual Scene's Number")
+		# print(realSource)
+		# print("Above should be twelve.")
+
 		sceneoption = scnopt()
-		nextscene.save()
-		print("*************************SCENE OPTION IDs HERE***********************")
-		print(sceneoption.soID)
-		soID_id = str(sceneoption.soID)
-		print(soID_id)
-		sceneoption.sceneID_id = form.cleaned_data['sceneID']
-		soSceneID_id = str(sceneoption.sceneID_id)
-		print("*************************SCENE OPTION IDs HERE FROM FORM***********************")
-		print("object:" + sceneoption.sceneID_id)
-		print(soSceneID_id)
-
-		sceneoption.sceneText = form.cleaned_data['sceneText']
-		soText = str(sceneoption.sceneText)
-		print("*************************SCENE OPTION TEXT HERE FROM FORM***********************")
-		print(sceneoption.sceneText)
-		print(soText)
+		sceneoption.sceneID_id = realSource
+		sceneoption.sceneText = Option
 		sceneoption.save()
-		nextscene.save(commit=False)
 
-		print("//////////////////////////////Next Scene Part////////////////////////////////")
+		soID_id = int(sceneoption.soID)
+
+		destination = sceneCountList.index(To)
+		realDestination = sceneList[destination]
+
 		nextscene = nxtscn()
-		nextscene = sceneoption.soID
-		nextscene.sceneID_id = soSceneID_id
-		nextscene.nextSceneNumber = form.cleaned_data['nextSceneNumber']
+		nextscene.sceneID_id = realSource
+		nextscene.sceneOptionID_id = soID_id
+		nextscene.nextSceneNumber = realDestination
+		nextscene.weight = 1.00 #hardcoded weight for now
 		nextscene.save()
+
+		#Check to ensure correct items are coming through
+		print(From, soID_id, To)
 
 		context = {
 			"saved scene option information"
 		}
-		return HttpResponseRedirect("/activity/" + actID + '/') #add activity url here when created.
+		return HttpResponseRedirect("/activity/" + id + '/') #add activity url here when created.
 
 	context = {
 		'title': title,
@@ -321,14 +368,12 @@ def activity(request, id):
 		'nxtSceneList': nxtSceneList,
 		'nxtScene': nxtScene,
 		'form': form,
-		'form2': form2,
-
 	}
 	return render(request, "activity.html", context)
 
 
 
-#View for activity pages
+#View for activity pages and creating an activity session.
 def activityPage(request, id, *sc):
 	title = "Activity"
 
@@ -350,6 +395,19 @@ def activityPage(request, id, *sc):
 	nxtScene = nxtscn.objects.all().filter(sceneID_id__in=sceneList)
 	nxtSceneList = nxtScene.values_list('nextSceneNumber', flat=True)
 
+	user = request.user
+	username = user.username
+
+	#Creates an activity session
+	session = actssn()
+	session.user_id = user.id
+	session.startTime = datetime.now()
+	session.inactive = False
+	session.activityCompleted = False
+	session.activityID_id = id
+	session.save()
+
+
 	context = {
 		'title': title,
 		'scene': scene,
@@ -358,6 +416,7 @@ def activityPage(request, id, *sc):
 		'scnType': scnType,
 		'scnOptions': scnOptions,
 		'nxtScene': nxtScene,
+		'session': session,
 	}
 	return render(request,"activityPage.html", context)
 
@@ -517,8 +576,22 @@ def editScene(request, id):
 
 
 #Function to delete scene - no html page
-def deleteScene(request, id): #id is activityID from event
+def deleteScene(request, id): #id is sceneID from event
 	#Delete Function
+
+	#delete the next scene first - those going to the deleted scene and those coming from the deleted scene
+	nextscene = nxtscn.objects.all().filter(nextSceneNumber = id) # going to scene to be deleted
+	nextsceneID = nxtscn.objects.all().filter(sceneID_id = id) # coming from scene to be deleted
+	nextscene.delete()
+	nextsceneID.delete()
+
+	#delete the scene options second - those coming from the scene to be deleted
+	sceneoptionID = scnopt.objects.all().filter(sceneID_id = id)
+
+	# print(sceneoption.soID)
+	sceneoption.delete()
+
+	#delete the scene to be deleted
 	deleteScene = scn.objects.get(sceneID=id)
 	actID = str(deleteScene.activityID_id) #related activityID for given scene
 	deleteScene.delete()
@@ -530,44 +603,91 @@ def deleteScene(request, id): #id is activityID from event
 #=================================Scene Option-related Functions===================================#
 #This includes scene options (NOT next scenes) for a scene.
 
-# def sceneOptionsPage(request, id): #this will be the sceneID
-# 	title = "Add Scene Options"
-# 	formtitle = "Create Scene Options"
-# 	instruction = "[Insert instructions for sceneoption.]"
 
-# 	scene = scn.objects.get(sceneID = id)
-# 	actID = str(scene.activityID_id)
+#View to edit selected scene option (and related next scene mapping)
+def editSceneOption(request, id): #importing sceneoptionID from sceneoption
+	title = "Edit Existing Scene Option"
+	formtitle = "Edit Existing Scene Option"
+	instruction = "Alter the scene option-related data below. Click 'Submit' to save changes."
+
+	#Used for the form and some page elements
+	nextscene = nxtscn.objects.get(sceneOptionID_id = id)
+	sceneoption = scnopt.objects.get(soID = id)
+	scnID = str(sceneoption.sceneID_id)
+	scene = scn.objects.get(sceneID=scnID)
+	actID = str(scene.activityID_id)
+
+	#Used to pull in scenes related to this activity
+	scenes = scn.objects.all().filter(activityID_id = actID)
+	orderedScenes = scn.objects.all().filter(activityID_id = actID).order_by('sceneID')
+	sceneQS = orderedScenes.values_list('sceneID', flat=True).distinct()
+
+	#Conversion of number of scenes to list, then array to be compared against sceneList
+	sceneList = list(sceneQS)
+	sceneCount = len(sceneQS)
+	sceneCountList = list(range(sceneCount))
+	for s in sceneCountList:
+		sceneCountList[s] = sceneCountList[s] + 1
+
+	############################## Converting the scene values ##############################
 	
-# 	sceneset = scn.objects.all().filter(activityID_id=actID).order_by('sceneID')
+	#Getting the sceneID before conversion
+	preConvertedSceneID = sceneoption.sceneID_id
+	# print(str(preConvertedSceneID))
 
-# 	context = {
-# 		'title': title,
-# 		'formtitle': formtitle,
-# 		'instruction': instruction,
-# 		'scene': scene,
-# 		'activity': activity,
-# 		'sceneset': sceneset,
-# 	}
-# 	return render(request,"createScenePath.html",context)
+	#take scenevalue from database and see what index it belongs to in sceneList
+	preConvertedSceneIndex = sceneList.index(preConvertedSceneID)
 
+	#take the index of the scene's value in the sceneCount list and return
+	convertedSceneID = sceneCountList[preConvertedSceneIndex]
 
-def newSceneOptionSetForm(request, id): #activity ID here
+	#Converting the next scene values
+	preConvertedNextSceneNum = nextscene.nextSceneNumber
 
-	activity = act.objects.get(activityID=id)
+	#take scenevalue from database and see what index it belongs to in sceneList
+	preConvertedNextSceneIndex = sceneList.index(preConvertedNextSceneNum)
 
-	#QuerySet and List of scenes associated with activity
-	scene = scn.objects.all().filter(activityID_id=id).order_by('sceneID')
-	sceneList = scene.values_list('sceneID', flat=True).distinct()
+	#take the index of the scene's value in the sceneCount list and return
+	convertedNextSceneNum = sceneCountList[preConvertedNextSceneIndex]
 
-	#need sceneoption and nextscene instances
+	#Form for scene options and next scene input
 	form = NewSceneOptForm(request.POST or None)
 
 	if form.is_valid():
 
-		sceneoption = scnopt()
-		sceneoption.sceneID_id = form.cleaned_data['sceneID']
-		sceneoption.sceneText = form.cleaned_data['sceneText']
+		From = form.cleaned_data['From']
+		Option = form.cleaned_data['Option']
+		To = form.cleaned_data['To']
+
+		# source is the scene number (1, 2, etc.) the user enters as the starting scene for a scene option
+		# retrieves the index position where the entered source value matches the sceneCountList
+		source = sceneCountList.index(From)
+
+		#realSource is the translated source value; retrieves the value at the index position of source
+		realSource = sceneList[source]
+
+		#saves values to the database's scene option table
+		sceneoption.sceneID_id = realSource
+		sceneoption.sceneText = Option
 		sceneoption.save()
+
+		soID_id = int(sceneoption.soID)
+
+		# destination is the scene number (1, 2, etc.) the user enters as the endpoint scene for a scene option
+		destination = sceneCountList.index(To)
+
+		#realDestination is the translated destination value; retrieves the value at the index position of destination
+		realDestination = sceneList[destination]
+
+		#saves values to the database's next scene table
+		nextscene.sceneID_id = realSource
+		nextscene.sceneOptionID_id = soID_id
+		nextscene.nextSceneNumber = realDestination
+		nextscene.weight = 1.00 #hardcoded weight for now
+		nextscene.save()
+
+		#Check to ensure correct items are coming through
+		print(From, soID_id, To)
 
 		context = {
 			"saved scene option information"
@@ -575,99 +695,38 @@ def newSceneOptionSetForm(request, id): #activity ID here
 		return HttpResponseRedirect("/activity/" + actID + '/') #add activity url here when created.
 
 	context = {
-
-		"activity": activity,
-		"scene": scene,
-		"form": form,
-	}
-	return render(request, "activity.html", context)
-
-
-#View to edit selected scene option
-def editSceneOption(request, id):
-	title = "Edit Existing Scene Option"
-	formtitle = "Edit Existing Scene Option"
-	instruction = "Alter the scene option-related data below. Click 'Submit' to save changes."
-
-	sceneOpt = scnopt.objects.get(soID=id) #id parameter is the scene option ID passed by page
-	scnID = str(sceneOpt.sceneID_id) # related sceneID for given scene option
-	scene = scn.objects.get(sceneID = scnID)
-	actID = str(scene.activityID_id) #related activityID for given scene
-	
-	#UPDATE STARTING HERE!!!!!!!!!!!!!!!!!!!
-	data = {'instructionText': scene.instructionText, 'sceneType': scene.sceneType, 'allowReplayScene': scene.allowReplayScene}
-
-	form = NewSceneForm(request.POST or None, 
-		initial=data)
-
-	if form.is_valid():
-		scene.instructionText = form.cleaned_data['instructionText']
-		scene.sceneType = form.cleaned_data['sceneType']
-		scene.allowReplayScene = form.cleaned_data['allowReplayScene']
-		scene.save()
-		context = {
-			"saved Scene information after update"
-		}
-		return HttpResponseRedirect("/activity/" + actID + "/")
-
-	context = {
 	"title" : title,
 	"formtitle": formtitle,
 	"instruction": instruction,
 	"form": form,
+	"sceneoption": sceneoption,
+	"scene": scene,
+	"actID": actID,
+	"scenes": scenes,
+	"convertedSceneID": convertedSceneID,
+	"convertedNextSceneNum": convertedNextSceneNum,
 	}
 	return render(request, "editSceneOption.html", context)
 
 
-# def newNextSceneSetForm(request):
+#Function to delete scene - no html page
+def deleteSceneOption(request, id): #id is sceneOptionID passed in from activity.html
+	#Delete Function
 
-# 	#need sceneoption and nextscene instances
-# 	form2 = NextSceneForm(request.POST or None)
+	# Used to capture the next scene related
+	nextscene = nxtscn.objects.get(sceneOptionID_id = id)
+	sceneoption = scnopt.objects.get(soID = id)
+	scnID = str(sceneoption.sceneID_id)
+	scene = scn.objects.get(sceneID=scnID)
+	actID = str(scene.activityID_id)
 
-# 	if form.is_valid() and form2.is_valid():
+	# Delete the nextscene record related
+	nextscene.delete()
 
-# 		sceneoption = scnopt()
-# 		sceneoption.sceneID_id = form.cleaned_data['sceneID']
-# 		sceneoption.sceneText = form.cleaned_data['sceneText']
-# 		sceneoption.save()
+	# Delete the sceneoption record itself
+	sceneoption.delete()
 
-# 		nextscene = nxtscn()
-# 		print("******************sceneOption in nextScene*********************")
-# 		print(sceneoption.soID)
-# 		nextscene.sceneOptionID_id = sceneoption.soID
-# 		print("Assigned sceneoptionID to nextScene")
-# 		nextscene.sceneID_id = form.cleaned_data['sceneID']
-# 		print("Assigned form data to nextScene")
-# 		nextscene.nextSceneNumber = form2.cleaned_data['nextSceneNumber']
-# 		nextscene.weight = 1.00
-
-# 		scnID = str(sceneoption.sceneID_id)
-# 		print("********************sceneID from sceneoption*******************")
-# 		print(scnID)
-# 		scene = scn.objects.get(sceneID=scnID)
-# 		actID = str(scene.activityID_id)
-# 		print("********************actID from scene*******************")
-# 		print(actID)
-
-# 		nextscene.save()
-
-# 		context = {
-# 			"saved scene option information"
-# 		}
-# 		return HttpResponseRedirect("/activity/" + actID + '/') #add activity url here when created.
-
-# 	context = {
-
-# 		"form2": form,
-
-# 	}
-# 	return render(request,"",context)
-
-
-
-
-
-
+	return HttpResponseRedirect('/activity/' + actID + '/')
 
 
 

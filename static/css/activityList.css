@@ -8,6 +8,11 @@
 	z-index: -1;
 }
 
+.clearRow {
+	background-color: #FFF;
+	z-index: -1;
+}
+
 .sceneOptRow{
 	text-indent:0px;
 }

@@ -8,7 +8,7 @@
 {% block content %}
 {% load staticfiles %}
   <script src='{% static "js/sceneNumberCheck.js" %}'></script>
-
+  <script src='{% static "js/toggleActivityTables.js" %}'></script>
 
 <!--contains user greeting and general information about page-->
 <div class="container">
@@ -24,8 +24,8 @@
   <!--navigational tabs for admin functions-->
   <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#YourEvents">Your Events</a></li>
-    <li><a data-toggle="tab" href="#OtherEvents">Manage Users</a></li>
-    <li><a data-toggle="tab" href="#OtherEvents">Other Events</a></li>
+    <li><a data-toggle="tab" href="#ManageUsers">Manage Users</a></li>
+<!--     <li><a data-toggle="tab" href="#OtherEvents">Other Events</a></li> -->
   </ul>
 
   <!--Holds all tab content-->
@@ -33,25 +33,27 @@
 
     <!--Admin-created Events-->
     <div id="YourEvents" class="tab-pane fade in active">
-      <h3>Your Events</h3>
-      <p>Events listed below are either those which you have created or those that list you as an additional administrator.</p>
+      <h2>Your Events</h2>
+      <p>Events listed below are either those which you have created. To view additional details about a given event, click on the event's title.</p>
       <a href="/createEvent/" role="button" class="btn btn-primary">Create New Event</a>
       <br><br>
       <div class="col-sm-1"></div>
       <div class="col-sm-10">
 
         {% for e in events %}
-        <div id="{{e.eventID}}" class="eventIDDiv"> 
-          <h3>{{e.eventName}}</h3>
-          <p>Joincode: {{e.joincode}}</p>
-          <p>Enforcing user? (Private): {{e.enforceUser}}</p>
+        <div id="{{e.eventID}}" class="eventIDDiv">
+            <h3 id="{{e.eventID}}">{{e.eventName}}</h3>
+          <div id="{{e.eventID}}" class="extraInformation">
+            <p>Joincode: {{e.joincode}}</p>
+            <p>Enforcing user? (Private): {{e.enforceUser}}</p>
+          </div>
           <a href="/createActivity/{{e.eventID}}/" role="button" class="btn btn-primary">Create New Activity</a>
           <br><br>
           <table class ="table table-condensed table-bordered" width="100%">
             <col style="width:20%">
             <col style="width:57%">
             <col style="width:23%">
-            <thead class="thead">
+            <thead class="thead rowHeader">
               <tr>
                 <th>Activity Name</th>
                 <th>Description</th>
@@ -64,7 +66,7 @@
               <div id="{{a.eventID_id}}" class="actEventIDDiv">
 
               {% if e.eventID == a.eventID_id %}
-              <tr class="accordion-toggle" data-toggle="collapse" data-target>
+              <tr class="accordion-toggle" data-toggle="collapse">
                 <td>{{a.activityName}}</td>
                 <td>{{a.description}}</td>
                 <td>
@@ -116,14 +118,87 @@
     </div> <!--ends "Your Events" tab-->
 
     <div id="ManageUsers" class="tab-pane fade">
-      <h3>Manage Users</h3>
-      <p>Users registered to your events will be listed here. Functionality currently under construction.</p>
+      <h2>Manage Users</h2>
+      <p>From this tab, you will be able to delete user sessions for each activity in an event. To begin, select an activity name from the dropdown and the activities will appear.</p>
+      <br>
+      <div id="eventSelect">
+        <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-9">
+          <div class="form">
+            <div class="form-group">
+              <select class="form-control" id="selEvent">
+                <option>Select an event</option>
+                {% for e in events %}
+                  <option for="eventNum" value="{{e.eventID}}" name="selectedEvent">{{e.eventName}}</option>
+                {% endfor %}
+              </select>
+              <br>
+            </div> <!--end form-group-->
+          </div> <!--end form classdiv-->
+        </div> <!--close col-sm-9-->
+        <div class="col-xm-2"></div>
+        </div><!--ending the row-->
+      </div>
+      </br>
+
+
+      <div id='hiddenActivity'>
+      <div class="row">
+      <div class="col-sm-1"></div>
+      <div class="col-sm-9">
+          {% for a in activities %}
+          <div id="{{a.eventID_id}}" class="actEvtDiv">
+            <h4>{{a.activityName}}</h4>
+            <p>{{a.description}}<p>
+            <table class ="table table-condensed table-bordered" width="100%">
+              <col style="width:30%">
+              <col style="width:30%">
+              <col style="width:20%">
+              <col style="width:20%">
+              <thead class="thead rowHeader">
+                <tr>
+                  <th>Username</th>
+                  <th>Start Time</th>
+                  <th>Inactive?</th>
+                  <th>Completed?</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for ssn in ses %}
+                  {% if a.activityID == ssn.activityID_id %}
+                  <tr>
+                    <!--if the user's id matches the session for user return username-->
+                    {% for au in allUsers %}
+                      {% if au.id == ssn.user_id %}
+                        <td>{{au.username}}</td>
+                      {% endif %}
+                    {% endfor %}
+                    <td>{{ssn.startTime}}</td>
+                    <td>{{ssn.inactive}}</td>
+                    <td>{{ssn.activityCompleted}}</td>
+                  </tr>
+                  {% endif %}
+                {% endfor %}
+              </tbody>
+            </table>
+          </div> <!--end in actEvtDiv-->
+          <br>
+          {% endfor %} <!--endfor activity-->
+          
+      </div> <!--close col-sm-9-->
+      </div> <!--ends row-->
+      </div> <!--close hidden activity div-->
+
+
+
+
     </div>
 
-    <div id="OtherEvents" class="tab-pane fade">
+<!--     <div id="OtherEvents" class="tab-pane fade">
       <h3>Other Events</h3>
       <p>Events below are those that you have participated in previously. Functionality currently under construction.</p>
-    </div>
+    </div> -->
 
   </div><!--ends tab-content div -->
 </div> <!--ends container div -->

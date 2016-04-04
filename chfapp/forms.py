@@ -25,9 +25,6 @@ class NewUserAccountForm(forms.ModelForm):
 		widgets = {
 		'password': forms.PasswordInput(),
 		}
-	# def clean_all(self):
-	# 	userName = self.cleaned_data.get('userName')
-	# 	return userName
 
 class NewEventForm(forms.ModelForm):
 	class Meta:
@@ -53,23 +50,14 @@ class NewSceneForm(forms.ModelForm):
 	def clean_scene(self):
 		return instructionText, sceneType, allowReplayScene
 
-class NewSceneOptForm(forms.ModelForm):
-	class Meta:
-		model = SceneOptions
-		fields = ['sceneID','sceneText']
-
-	def clean_sOption(self):
-		return sceneID, sceneText
-
-class NextSceneForm(forms.ModelForm):
-	class Meta:
-		model = NextScene
-		fields = ['nextSceneNumber']
-
-	def clean_nextScene(self):
-		return nextSceneNumber
+class NewSceneOptForm(forms.Form):
+	From = forms.IntegerField()
+	Option = forms.CharField(widget=forms.Textarea)
+	To = forms.IntegerField()
 
 
+class selectedEvent(forms.Form):
+	Event = forms.ChoiceField()
 
 		
 

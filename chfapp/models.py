@@ -41,7 +41,7 @@ class Admin(models.Model):
 	organization = models.CharField(max_length=100)
 
 	def __str__(self):
-		return self.organization
+		return str(self.adminID)
 
 
 #Events Table
@@ -70,7 +70,7 @@ class Activity(models.Model):
 	allowReplayActivity = models.NullBooleanField(null=True)
 
 	def __str__(self):
-		return self.activityName, self.description
+		return self.activityName
 
 #Not sure if we even need this as a model but just in case
 class ActivitySession(models.Model):
@@ -82,8 +82,9 @@ class ActivitySession(models.Model):
 	class Meta:
 		unique_together = (('user', 'activityID', 'startTime'),)
 
-	def __str__(self):
-		return self.startTime.strftime("%Y-%M-%d %H:%m") if self.startTime else ''
+	# def __str__(self):
+	# 	return self.startTime.strftime("%Y-%M-%d %H:%m") if self.startTime else ''
+
 
 class Scene(models.Model):
 	sceneID = models.AutoField(primary_key=True)
@@ -107,9 +108,9 @@ class SceneOptions(models.Model):
 class NextScene(models.Model):
 	nextSceneID = models.AutoField(primary_key=True)
 	sceneOptionID = models.ForeignKey(SceneOptions,related_name='sceneOptionNS')
-	sceneID = models.ForeignKey(SceneOptions,related_name='sceneNS')
+	sceneID = models.ForeignKey(Scene,related_name='sceneNS')
 	nextSceneNumber = models.IntegerField()
 	weight = models.DecimalField(max_digits = 3, decimal_places=2)
 
-	def __str__(self):
-		return str(self.nextSceneNumber)
+	# def __str__(self):
+	# 	return str(self.nextSceneNumber)

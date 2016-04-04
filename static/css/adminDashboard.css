@@ -1,3 +1,4 @@
-/*li {
-  display: inline;
-}*/
+.rowHeader {
+	background-color: #6bc0ce;
+	/*hover transparent*/
+}

@@ -4,21 +4,59 @@
 -->
 {% extends 'base.html' %}
 {% block content%}
+{% load staticfiles %}
+	<script src='{% static "js/editSceneOption.js" %}'></script>
+
 	<div class="container">
-		<div class="col-sm-3">
+		<div class="col-sm-1">
 		</div>
-		<div class="col-sm-9">
+		<div class="col-sm-10">
 			<h1>Edit Scene Option</h1>
-		<br><br>
-			<p>Edit the following scene data, then click "Submit" to save changes.</p>
-		<br>
-			<form method="POST" action="">
-				{%csrf_token%}
-				{{form.as_p}}
+			<br>
+			<h4><b>Scene Title:</b> {{scene.instructionText}}</h4>
+			<form method="POST" action="" role="form">
+				<p>To edit a scene option, enter the new source scene number, choice text that the user will see, and the destination scene number. <i>Hover over each box's label for additional instructions.</i></p>
 				<br>
-				<input type="button" class="btn btn-default" value="< Back" onclick="window.location='/activity/{{activity.activityID}}';"/>
-				<input type="submit" class="btn btn-success" value="Submit" onclick="window.location='/activity/';" />
-				
+				<table class="table table-condensed table-bordered" width = "100%">
+					<col style="width:8%">
+					<col style="width:92%">	
+					<tr class="rowHeader">
+						<td><b>Scene #</b></td>
+						<td><b>Scene Text</b></td>
+					</tr>
+						{% for s in scenes %}
+						<tr id='{{s.sceneID}}' class='clearRow'>
+							<td></td>
+							<td>{{s.instructionText}}</td>
+						<tr>
+					{% endfor %}
+
+				</table>
+				<br>
+				{%csrf_token%}
+				<table class="table borderless" width="100%">
+					<col style = "width:10%">
+					<col style = "width:80%">
+					<col style = "width:10%">
+					<tr>
+						<td>
+							<label for="sceneNum" href="#" data-toggle="tooltipFrom" data-placement="top" title="Type the number of the source scene # in the 'From' box.">From: </label>
+							<input type="text" id="sceneNum" class="form-control" name="From" value="{{convertedSceneID}}"></input>
+						</td>
+						<td>
+							<label for="sceneText" href="#" data-toggle="tooltipOpt" data-placement="top" title="Type the text that the user will see and select in the 'Option Text' box.">Option Text: </label>
+							<input type="text" id="sceneText" class="form-control" name="Option" value="{{sceneoption.sceneText}}"></input>
+						</td>
+						<td>
+							<label for="nxtSceneNum" href="#" data-toggle="tooltipTo" data-placement="top" title="Type the number of the next scene in the 'To' box.">To: </label>
+							<input type="text" id="nxtSceneNum" class="form-control" name="To" value="{{convertedNextSceneNum}}"></input>
+						</td>
+					</tr>
+				</table>
+				<div>
+					<a class="btn btn-default" href="/activity/{{actID}}/"><b>Back to Activity</b></a>
+					<input type="submit" value="Save Scene Option" class="btn btn-success" onclick="window.location='/activity/{{actID}}/';" />
+				</div>
 			</form>
 		</div>
 	</div>
