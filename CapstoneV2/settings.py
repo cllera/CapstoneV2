@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'chfapp',
-    'bootstrap3',
+    #'bootstrap3',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -82,7 +82,7 @@ DATABASES = {
         #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'NAME': 'interact_db',
         'USER': 'root',
-        'PASSWORD': 'iihnm',
+        #'PASSWORD': 'iihnm',
         'HOST':'localhost',
     }
 }
@@ -127,7 +127,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-   os.path.join('/Users/CJ/Desktop/CapstoneV2/static'),
+   os.path.join('/Users/wiser/Capstone/CapstoneV2/static'),
    )
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")

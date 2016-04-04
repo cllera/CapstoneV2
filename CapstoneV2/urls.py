@@ -50,7 +50,8 @@ urlpatterns = [
     url(r'^deleteScene/(\d+)/$', 'chfapp.views.deleteScene', name='deleteScene'),
     url(r'^editSceneOption/(\d+)/$', 'chfapp.views.editSceneOption', name='editSceneOption'),
     url(r'^deleteSceneOption/(\d+)/$', 'chfapp.views.deleteSceneOption', name='deleteSceneOption'),
-    url(r'^createScenePath/(\d+)/$', 'chfapp.views.newSceneOptionSetForm', name='createScenePath')
+    url(r'^createScenePath/(\d+)/$', 'chfapp.views.newSceneOptionSetForm', name='createScenePath'),
+    url(r'^quickStart/(\d+)/$', 'chfapp.views.quickStart', name='quickStart'),
 
 ] + static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
 
