@@ -146,6 +146,13 @@ def adminDashboard(request):
 		'activities': activities,
 		'activitiesList': activitiesList,
 		'allUsers': allUsers,
+		# 'adminID': adminID,
+		# 'user': user,
+
+
+		# {% if user.id == adminID.user_id %}
+		# 	<div> Tab name </div>
+		# {% endif %}
 	}
 	return render(request,"adminDashboard.html", context)
 
@@ -794,12 +801,14 @@ def endSession(request, id): #id here is the activityID
 
 	# finds session object that matches activityID and userID in activitySession table
 	ses = actssn.objects.all().filter(activityID_id=id, user_id=userID)
+	activity = act.objects.get(activityID=id)
+	eventID = activity.eventID_id
 
 	for s in ses:
 		s.inactive = True
 		s.save()
 
-	return HttpResponseRedirect('/activityDashboard/' + id + '/')
+	return HttpResponseRedirect('/activityDashboard/' + str(eventID) + '/')
 
 
 def deleteInactiveSessions(request,id): #id here is the activityID

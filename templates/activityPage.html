@@ -6,33 +6,45 @@ Predecessor: activityDashboard.html
 
 {% extends 'base.html' %}
 {% block content%}
+     {% load staticfiles %}
+    <link rel="stylesheet" href='{% static "css/custom.css" %}'>
+    
 <div class="container">
     <!--Activity information-->
     <title>{{title}}</title>
 
     <h1>{{activity.activityName}}</h1>
-    <br><br>
-    <h3>{{activity.description}}</h3>
+    <br>
+    <div class="row">
+      <div class="col-sm-1"></div>
+      <div class="col-sm-9">
+        <h3>{{activity.description}}</h3>
+      </div>
+    </div>
     <br>
 
     <div>
       {% for s in scene %} <!--looping through scene info-->
         <div id="{{s.sceneID}}" class="sceneDiv">
-          <p>{{s.instructionText}}</p>
-          <br>
-          <ul id="ul_inline">
-          {% for o in scnOptions %} <!--looping through scene options related to scene-->
-            {% if s.sceneID == o.sceneID_id %}
-              <li>{{o.sceneText}}
-            {% endif %}
-            {% for n in nxtScene %} <!--looping through next scene designation related to scene option-->
-              {% if s.sceneID == n.sceneID_id and o.soID == n.sceneOptionID_id %}
-
-                <button id = "{{n.nextSceneNumber}}">Submit</button></li>
-              {% endif %}
-            {% endfor %} <!--end nxtScene loop-->
-          {% endfor %} <!--end scnOptions loop-->
-          </ul>
+          <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+              <h4>{{s.instructionText}}</h4>
+              <br>
+              <ul id="ul_inline">
+              {% for o in scnOptions %} <!--looping through scene options related to scene-->
+                {% if s.sceneID == o.sceneID_id %}
+                  <li>{{o.sceneText}}
+                {% endif %}
+                {% for n in nxtScene %} <!--looping through next scene designation related to scene option-->
+                  {% if s.sceneID == n.sceneID_id and o.soID == n.sceneOptionID_id %} &nbsp;&nbsp;
+                    <button class="btn btn-success round" id="{{n.nextSceneNumber}}">Submit</button></li>
+                  {% endif %}
+                {% endfor %} <!--end nxtScene loop-->
+              {% endfor %} <!--end scnOptions loop-->
+              </ul>
+            </div>
+          </div>
         </div>
       {% endfor %} <!--end scene loop-->
     </div>
@@ -40,8 +52,13 @@ Predecessor: activityDashboard.html
     <div>
       <br>
       <br>
-      <input type="button" class="btn btn-default" onClick="history.go(0)" VALUE="Restart Mission">
-      <a type="button" class="btn btn-default" href="/endSession/{{activity.activityID}}/">Exit to Activity Page</a>
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <input type="button" class="btn btn-default" onClick="history.go(0)" VALUE="Restart Mission">
+          <a type="button" class="btn btn-default" href="/endSession/{{activity.activityID}}/">Exit to Activity Page</a>
+        </div>
+      </div>
     </div>
 </div>
 
