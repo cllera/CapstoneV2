@@ -68,11 +68,11 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
 
-            <li class="active"><a href="index.html">HOME</a></li>
+            
             {% if user.is_superuser %}
             <li><a href="/adminDashboard/">Admin</a></li>
             {% endif %}
-            
+
             <li><a href="/eventDashboard/">Events</a></li>
             {% if user.is_anonymous %}
             <li><a href="/userLogin/">Login</a></li>
@@ -118,12 +118,13 @@
         <script src='{% static "js/bootstrap.min.js" %}'></script>
         <!-- jquery.nav -->
         <script src='{% static "js/jquery.nav.js" %}'></script>
+
         <!-- owl carousel -->
         <!-- <script src='{% static "js/owl.carousel.min.js" %}'></script> -->
         <!-- WOW script -->
         <!-- <script src='{% static "js/wow.min.js" %}'></script> -->
         <!-- theme custom scripts -->
-        <script src='{% static "js/normal-main.js" %}'></script>
+        <!-- <script src='{% static "js/normal-main.js" %}'></script> -->
 
 
 </html>
