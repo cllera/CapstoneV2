@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content%}
+
+     {% load staticfiles %}
+ <!--    <link rel="stylesheet" href='{% static "css/custom.css" %}'> -->
+    <script src='{% static "js/sceneNumberCheck.js" %}'></script>
+
+	<div class="container">
+		<div class="col-sm-3">
+		</div>
+		<div class="col-sm-8">
+			<h1>{{title}}</h1>
+		<br>
+			<p>Enter your information below and click Submit to create an account.</p>
+		<br>
+			<form method="POST" action="/newAdmin/" id='ActivityCreationForm'>					
+				{%csrf_token%}
+				<div class="row">
+					<div class="col-sm-4">
+						<label for="username" href="#">Username: </label>
+						<input type="text" id="username" class="form-control" name="username"></input>
+						<br/>
+					</div>
+					<div class="col-sm-4">
+						<label for="password" href="#">Password: </label>
+						<input type="password" id="password" class="form-control" name="password"></input>
+						<br/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4">
+						<label for="first_name" href="#">First Name: </label>
+						<input type="text" id="first_name" class="form-control" name="first_name"></input>
+						<br/>
+					</div>
+					<div class="col-sm-4">
+						<label for="last_name" href="#">Last Name: </label>
+						<input type="text" id="last_name" class="form-control" name="last_name"></input>
+						<br/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-8">
+						<label for="email" href="#">Email:  </label>
+						<input type="text" id="email" class="form-control" name="email"></input>
+						<br/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-8">
+						<label for="organization" href="#" data-toggle="tooltipOrg" data-placement="top" title="Enter the name of your company, organization, or school.">Organization: </label>
+						<input type="text" id="organization" class="form-control" name="organization"></input>
+						<br/>
+					</div>
+				</div>
+				<br>
+				<a href="/" type="button" class="btn btn-default"><b>Back to Homepage</b></a>
+				<input type="submit" id="sbutton" class='btn btn-primary' value="Create Admin Account" onClick="location.href='/newAdmin/';"/>
+			</form>
+		</div>
+	</div>
+
+{% endblock %}

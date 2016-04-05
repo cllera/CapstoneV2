@@ -55,3 +55,7 @@ $(function(){
 $(function(){
 	$('[data-toggle="tooltipTo"]').tooltip(); 
 });
+
+$(function(){
+	$('[data-toggle="tooltipOrg"]').tooltip(); 
+});
