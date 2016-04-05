@@ -54,7 +54,8 @@ urlpatterns = [
     url(r'^endSession/(\d+)/$', 'chfapp.views.endSession', name='endSession'),
     url(r'^deleteInactiveSessions/(\d+)/$', 'chfapp.views.deleteInactiveSessions', name='deleteInactiveSessions'),
     url(r'^joinEvent/(\d+)/$', 'chfapp.views.joinEvent', name='joinEvent'),    
-    url(r'^createScenePath/(\d+)/$', 'chfapp.views.newSceneOptionSetForm', name='createScenePath')
+    url(r'^createScenePath/(\d+)/$', 'chfapp.views.newSceneOptionSetForm', name='createScenePath'),
+     url(r'^quickStart/(\d+)/$', 'chfapp.views.quickStart', name='quickStart'),
 
 ] + static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
 
