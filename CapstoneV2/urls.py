@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 from chfapp.views import home, userLogin, newUserLogin, activityDashboard, activityPage, activity
 from chfapp.views import newEventForm, newActivityForm, deleteEvent, editEvent, deleteActivity
 from chfapp.views import editActivity, newSceneSetForm, endSession, deleteInactiveSessions, joinEvent
-from chfapp.views import eventDashboard, editScene, editSceneOption, deleteSceneOption
+from chfapp.views import eventDashboard, editScene, editSceneOption, deleteSceneOption, quickStart
 
 #where URLS are created; none have been created for userdashboard yet
 urlpatterns = [
@@ -55,7 +55,7 @@ urlpatterns = [
     url(r'^deleteInactiveSessions/(\d+)/$', 'chfapp.views.deleteInactiveSessions', name='deleteInactiveSessions'),
     url(r'^joinEvent/(\d+)/$', 'chfapp.views.joinEvent', name='joinEvent'),    
     url(r'^createScenePath/(\d+)/$', 'chfapp.views.newSceneOptionSetForm', name='createScenePath'),
-     url(r'^quickStart/(\d+)/$', 'chfapp.views.quickStart', name='quickStart'),
+     url(r'^quickStart/$', 'chfapp.views.quickStart', name='quickStart'),
 
 ] + static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
 
