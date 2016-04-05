@@ -15,36 +15,38 @@ body{
 
 
 {% block content %}
-
-
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again</p>
-{% endif %}
-{{ state }}
-<form method="POST" id=userLogin action="/userLogin/">
-<!-- {% csrf_token %} -->
-  {% csrf_token %}
-  {% if next %}
-    <input type="hidden" name="next" value="{{ next }}" />
+<br><br><br><br><br><br><br>
+  <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+    {% if form.errors %}
+    <p>Your username and password didn't match. Please try again</p>
     {% endif %}
-    username: 
-    <input type="text" name="username" value="{{ username}}" /><br />
-    password:
-    <input type="password" name="password" value="" /><br />
+    <b>{{ state }}</b>
+    <br/><br/>
+      <form method="POST" id=userLogin action="/userLogin/">
+      <!-- {% csrf_token %} -->
+        {% csrf_token %}
+        {% if next %}
+          <input type="hidden" name="next" value="{{ next }}" />
+          {% endif %}
+          username: 
+          <input type="text" name="username" value="{{username}}" /><br /><br>
+          password:
+          <input type="password" name="password" value="" /><br /><br>
 
-    <input type="submit" value="Log In" />
-  <!-- <table>
-<tr>
-  <td>{{form.username.label_tag}}</td>
-  <td>{{form.username}}</td>
-</tr>
-<tr>
-  <td>{{form.password.label_tag}}</td>
-  <td>{{form.password}}</td>
-</tr>
-</table>
- -->
-<a href="/newUserLogin/">Register</a>
-</form>
-
+          <input class="btn btn-success" type="submit" value="Log In" />
+        <!-- <table>
+      <tr>
+        <td>{{form.username.label_tag}}</td>
+        <td>{{form.username}}</td>
+      </tr>
+      <tr>
+        <td>{{form.password.label_tag}}</td>
+        <td>{{form.password}}</td>
+      </tr>
+      </table>
+       -->
+      <a href="/newUserLogin/" class="btn btn-default">Register</a>
+    </form>
+  </div>
 {% endblock %}

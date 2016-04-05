@@ -22,6 +22,7 @@ from chfapp.views import home, userLogin, newUserLogin, activityDashboard, activ
 from chfapp.views import newEventForm, newActivityForm, deleteEvent, editEvent, deleteActivity, newAdmin
 from chfapp.views import editActivity, newSceneSetForm, endSession, deleteInactiveSessions, joinEvent
 from chfapp.views import eventDashboard, editScene, editSceneOption, deleteSceneOption, quickStart
+from chfapp.views import userProfile, editProfile
 
 #where URLS are created; none have been created for userdashboard yet
 urlpatterns = [
@@ -57,7 +58,9 @@ urlpatterns = [
     url(r'^joinEvent/(\d+)/$', 'chfapp.views.joinEvent', name='joinEvent'),    
     url(r'^createScenePath/(\d+)/$', 'chfapp.views.newSceneOptionSetForm', name='createScenePath'),
     url(r'^quickStart/$', 'chfapp.views.quickStart', name='quickStart'),
-    url(r'^logout/$', 'chfapp.views.logout', name='logout')
+    url(r'^logout/$', 'chfapp.views.logout', name='logout'),
+    url(r'^userProfile/$', 'chfapp.views.userProfile', name='userProfile'),
+    url(r'^editProfile/$', 'chfapp.views.editProfile', name='editProfile')
 
 ] + static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
 

@@ -89,8 +89,6 @@ def newUserLogin(request):
 	# if request.method == 'POST':
 	form = NewUserAccountForm(request.POST or None)
 
-	# user = request.User
-
 	if form.is_valid():
 		instance = User.objects.create_user(username = form.cleaned_data['username'], 
 			password = form.cleaned_data['password'], first_name = form.cleaned_data['first_name'], 
@@ -110,6 +108,58 @@ def newUserLogin(request):
 		"form": form,
 	}
 	return render(request,"newUserLogin.html", context)
+
+def userProfile(request):
+
+	user = request.user
+	userID = user.id
+	admin = amod.objects.all()
+
+	context={
+		'user': user,
+		'userID': userID,
+		'admin': admin,
+	}
+	return render(request,"userProfile.html", context)
+
+def editProfile(request):
+
+	user = request.user
+	userID = user.id
+	if amod.objects.get(user_id=userID).exists:
+		#Saving to chfapp_admin table
+		ad = amod.objects.get(user_id=userID)
+		data={'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name, 
+			'email': user.email, 'organization': ad.organization}
+	else:
+		data={'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name, 
+			'email': user.email}
+
+
+
+	form = NewUserAccountForm(request.POST or None, 
+		initial=data)
+
+	if form.is_valid():
+		instance = User.objects.get(username = form.cleaned_data['username'], 
+			first_name = form.cleaned_data['first_name'], 
+			last_name = form.cleaned_data['last_name'], email = form.cleaned_data['email'])
+		instance.save()
+
+	if amod.objects.get(user_id=userID).exists:
+		#Saving to chfapp_admin table
+		ad = amod.objects.get(user_id=userID)
+		ad.organization = organization
+		ad.save()
+
+		return HttpResponseRedirect("/userProfile/")
+
+
+	context={
+		'user': user,
+		'userID': userID,
+	}
+	return render(request,"userProfile.html", context)
 
 def logout(request):
 	auth.logout(request)

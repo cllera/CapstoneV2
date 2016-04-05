@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content%}
+	<div class="container">
+		<div class="col-sm-2"></div>
+		<div class="col-sm-8">
+			<h1>View Profile</h1>
+			<br>
+			<h3>Profile Information</h3>
+			<br>
+
+			<table class="table table-borderless table-condensed">
+				<tr>
+					<td><b>Username: </b></td>
+					<td>{{user.username}}</td>
+				</tr>
+				<tr>
+					<td><b>First Name: </b></td>
+					<td>{{user.first_name}}</td>
+				</tr>
+				<tr>
+					<td><b>Last Name: </b></td>
+					<td>{{user.last_name}}
+				</tr>
+				<tr>
+					<td><b>Email: </b></td>
+					<td>{{user.email}}</td>
+				</tr>
+				<tr>
+				{% for a in admin %}
+					{% if userID == a.user_id %}
+						<td><b>Organization: </b></td>
+						<td>{{a.organization}}</td>
+					{% endif %}
+				{% endfor %}
+				</tr>
+			</table>
+			<br>
+			<a href="/editProfile/" class="btn btn-warning">Edit Profile</a>
+			<a href="" class="btn btn-danger">Delete Account</a>
+		</div>
+	</div>
+
+{% endblock %}
