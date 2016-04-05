@@ -126,16 +126,17 @@ def editProfile(request):
 
 	user = request.user
 	userID = user.id
-	if amod.objects.get(user_id=userID).exists:
-		#Saving to chfapp_admin table
-		ad = amod.objects.get(user_id=userID)
+
+	try:
+		admin = amod.objects.get(user_id=userID)
+		print("exists")
 		data={'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name, 
 			'email': user.email, 'organization': ad.organization}
-	else:
+	
+	except amod.DoesNotExist:
+		print("nope")
 		data={'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name, 
 			'email': user.email}
-
-
 
 	form = NewUserAccountForm(request.POST or None, 
 		initial=data)
@@ -146,11 +147,18 @@ def editProfile(request):
 			last_name = form.cleaned_data['last_name'], email = form.cleaned_data['email'])
 		instance.save()
 
-	if amod.objects.get(user_id=userID).exists:
+	try: 
+		ad = amod.objects.get(user_id=userID)
+
 		#Saving to chfapp_admin table
 		ad = amod.objects.get(user_id=userID)
 		ad.organization = organization
 		ad.save()
+
+		return HttpResponseRedirect("/userProfile/")
+
+	except amod.DoesNotExist:
+		print("doesn't exist bottom")
 
 		return HttpResponseRedirect("/userProfile/")
 
