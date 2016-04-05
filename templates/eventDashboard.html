@@ -10,7 +10,11 @@
     <script src='{% static "js/eventDashboard.js" %}'></script>
 
     <div class="container">
-      <h1>Welcome, {{user}}.</h1>
+      {% if user.is_anonymous %}
+      <h1>Welcome, friend.</h1>
+      {% else %}
+      <h1>Welcome, {{user}}</h1>
+      {% endif %}
       <br>
       <p>Browse events from the general list below or enter a joincode to choose a specific event.</p>
       <br>

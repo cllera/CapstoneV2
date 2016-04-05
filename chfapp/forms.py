@@ -79,10 +79,8 @@ class joinForm(forms.Form):
 	jcode = forms.CharField(widget=forms.Textarea)
 
 
-
-		
-
-
+# class adminUserForm(forms.Form):
+	
 
 
 

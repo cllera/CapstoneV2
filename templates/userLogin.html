@@ -1,5 +1,5 @@
-
-{% load staticfiles %}
+{% extends 'base.html' %}
+<!-- {% load staticfiles %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -11,10 +11,11 @@ body{
   font-size: 12px;
 }
 </style>
-</head>
+</head> -->
 
 
 {% block content %}
+
 
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again</p>
