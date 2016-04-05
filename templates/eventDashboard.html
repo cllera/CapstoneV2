@@ -60,9 +60,13 @@
                   <h3>{{e.eventName}}</h3>
                   </ul>
                 </div>
-                <h4>[eventDescription* add to table itself]</h4>
-                <div class="code">
-                  <p>{{e.joincode}}</p>
+<!--                 <h4>[eventDescription* add to table itself]</h4> -->
+                <div class="code"> 
+                  {% if e.enforceUser == True %}
+                    <div><p>&nbsp;</p></div>
+                  {% else %}
+                    <p>{{e.joincode}}</p>
+                  {% endif %}
                 </div>
 
                 {% if e.enforceUser == False %}

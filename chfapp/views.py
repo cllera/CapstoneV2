@@ -222,7 +222,7 @@ def newEventForm(request):
 	#Admin values strictly for testing purposes right now
 	user = request.user
 	userID = user.id
-	admin = amod.objects.get(adminID=1)
+	admin = amod.objects.get(user_id=userID)
 
 	if form.is_valid():
 		event = emod()
@@ -487,8 +487,9 @@ def activityPage(request, id, *sc):
 def newActivityForm(request, id):
 	title = "Create New Activity"
 
-	#hardcoding this as admin 1 until user authentication is complete
-	admin = amod.objects.get(adminID=1)
+	user = request.user
+	userID = user.id
+	admin = amod.objects.get(user_id=userID)
 	event = get_object_or_404(emod, eventID=id) #id here is the activityID
 
 	formtitle = "Create New Activity for " + event.eventName
@@ -752,7 +753,8 @@ def editSceneOption(request, id): #importing sceneoptionID from sceneoption
 		print(From, soID_id, To)
 
 		context = {
-			"saved scene option information"
+			"To" : To,
+
 		}
 		return HttpResponseRedirect("/activity/" + actID + '/') #add activity url here when created.
 
@@ -767,6 +769,7 @@ def editSceneOption(request, id): #importing sceneoptionID from sceneoption
 	"scenes": scenes,
 	"convertedSceneID": convertedSceneID,
 	"convertedNextSceneNum": convertedNextSceneNum,
+	"To": To,
 	}
 	return render(request, "editSceneOption.html", context)
 
@@ -789,6 +792,7 @@ def deleteSceneOption(request, id): #id is sceneOptionID passed in from activity
 	sceneoption.delete()
 
 	return HttpResponseRedirect('/activity/' + actID + '/')
+
 
 #=================================Miscellaneous Functions===================================#
 
