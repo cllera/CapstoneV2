@@ -19,7 +19,7 @@ from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import requires_csrf_token
 from django.views.decorators.csrf import csrf_protect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from array import array
 from datetime import datetime
 from django.contrib.auth.models import User
@@ -70,7 +70,7 @@ def userLogin(request):
 				login(request, user)
 				print("You're login")
 				state = "Youre in"
-				return HttpResponseRedirect("/activityDashboard/")
+				return HttpResponseRedirect("/eventDashboard/")
 			else:
 				print("Your account is broken")
 		else:
@@ -803,31 +803,22 @@ def newAdminLogin(request):
 
 #This is for quickstart users
 def quickStart(request):
+	#Gets all events
 	events = emod.objects.all()
 
 	if request.method =='POST':
 		form = joinForm(request.POST)
 
-		print("GETS HERE")
-		#print(event.joincode)
-		print("******")
-
-
 		if form.is_valid():
 			for e in events:
 				jcode = form.cleaned_data['jcode']
-				print(jcode)
-				if jcode == event.joincode:
-
-					print("it gets here")
-					print (form.cleaned_data)
-					print(jcode)
-				#return HttpResponseRedirect('/activityDashboard/' + id + "/")
-
-				else:
-					print("IF IT IS NOT")
-					print(jcode + "  " + event.joincode)
-					return HttpResponseRedirect('/home/')
+				if jcode == e.joincode:
+					eventID = e.eventID
+					context = {
+						'eventID': eventID,
+					}
+					return HttpResponseRedirect('/activityDashboard/' + str(eventID) + "/")
+			return HttpResponseRedirect('/')
 
 	context = {
 		'events': events,
