@@ -38,7 +38,8 @@ Predecessor: activityDashboard.html
                 {% endif %}
                 {% for n in nxtScene %} <!--looping through next scene designation related to scene option-->
                   {% if s.sceneID == n.sceneID_id and o.soID == n.sceneOptionID_id %} &nbsp;&nbsp;
-                    <button class="btn btn-success round" id="{{n.nextSceneNumber}}">Submit</button></li>
+                    <button class="btn btn-success round btn-xs" id="{{n.nextSceneNumber}}">Submit</button></li>
+                    <br>
                   {% endif %}
                 {% endfor %} <!--end nxtScene loop-->
               {% endfor %} <!--end scnOptions loop-->
