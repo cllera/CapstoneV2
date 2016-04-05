@@ -803,7 +803,38 @@ def newAdminLogin(request):
 
 #This is for quickstart users
 def quickStart(request):
+	events = emod.objects.all()
 
+	if request.method =='POST':
+		form = joinForm(request.POST)
+
+		print("GETS HERE")
+		#print(event.joincode)
+		print("******")
+
+
+		if form.is_valid():
+			for e in events:
+				jcode = form.cleaned_data['jcode']
+				print(jcode)
+				if jcode == event.joincode:
+
+					print("it gets here")
+					print (form.cleaned_data)
+					print(jcode)
+				#return HttpResponseRedirect('/activityDashboard/' + id + "/")
+
+				else:
+					print("IF IT IS NOT")
+					print(jcode + "  " + event.joincode)
+					return HttpResponseRedirect('/home/')
+
+	context = {
+		'events': events,
+		#'event': event,
+	}
+	return render(request, "quickStart.html", context)
+	
 
 
 
