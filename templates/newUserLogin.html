@@ -1,11 +1,18 @@
-{% load staticfiles %}
+{% extends 'base.html' %}
 
-
-<form method="POST" action="/newUserLogin/" id="createAccForm">
-	{% csrf_token %}
-	{{form.as_p}}
-	<button type="submit" class="btn btn-primary">Submit</button>
-</form>
+{% block content %}
+	{% load staticfiles %}
+<br><br><br>
+<div class="col-sm-4"></div>
+    <div class="col-sm-4">
+    <h2>Please register below:</h2>
+    <br>
+		<form method="POST" action="/newUserLogin/" id="createAccForm">
+			{% csrf_token %}
+			{{form.as_p}}
+		<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+	</div>
 <script src='{% static "js/userLogin.js" %}'></script>
 
-</html>
+{% endblock %}
