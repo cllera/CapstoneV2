@@ -67,6 +67,7 @@
                 {% elif e.enforceUser == True %}
                   <a data-toggle="modal" data-id="{{e.eventID}}" title="Join Event" class="btn btn-primary" href="#Join{{e.eventID}}">Join Event</a>
                 {% endif %}
+                
               </div>
             </div> <!--close "sub-event" div-->
           </div>
@@ -87,7 +88,6 @@
                     <form method="POST" action="/joinEvent/{{e.eventID}}/" role="form">
                       {% csrf_token %}
                       <input type="text" id="jcode" class="form-control" name="jcode" placeholder="Join Code"></input>
-
                   </div>
 
                   <div class="modal-footer">
