@@ -79,8 +79,16 @@ class joinForm(forms.Form):
 	jcode = forms.CharField(widget=forms.Textarea)
 
 
-# class adminUserForm(forms.Form):
-	
+class adminUserForm(forms.Form):
+	username = forms.CharField()
+	password = forms.CharField(widget=forms.PasswordInput)
+	first_name = forms.CharField()
+	last_name = forms.CharField()
+	email = forms.CharField()
+	organization = forms.CharField()
+
+
+
 
 
 

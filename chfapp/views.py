@@ -5,7 +5,7 @@
 
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.contrib import auth
-from .forms import UserLoginForm, NewUserAccountForm, NewAdminForm, joinForm
+from .forms import UserLoginForm, NewUserAccountForm, joinForm, adminUserForm
 from .forms import NewEventForm, NewActivityForm, NewSceneForm, NewSceneOptForm
 from .models import Admin as amod
 from .models import Event as emod
@@ -96,10 +96,13 @@ def newUserLogin(request):
 			password = form.cleaned_data['password'], first_name = form.cleaned_data['first_name'], 
 			last_name = form.cleaned_data['last_name'], email = form.cleaned_data['email'])
 		instance.save()
-		# u = User.objects.get(instance.username)
-		# u.set_password(instance.password)
-		# u.save()
-		return HttpResponseRedirect("/userLogin/")
+
+		instance = authenticate(username=form.cleaned_data['username'], 
+			password=form.cleaned_data['password'])
+		login(request, instance)
+
+		return HttpResponseRedirect("/eventDashboard/")
+
 	else:
 		form = NewUserAccountForm()
 
@@ -146,6 +149,41 @@ def adminDashboard(request):
 	}
 	return render(request,"adminDashboard.html", context)
 
+
+def newAdmin(request):
+	title = "Create Administrator Account"
+
+	form = adminUserForm(request.POST or None)
+
+	if form.is_valid():
+
+		instance = User.objects.create_user(username = form.cleaned_data['username'], 
+			password = form.cleaned_data['password'], first_name = form.cleaned_data['first_name'], 
+			last_name = form.cleaned_data['last_name'], email = form.cleaned_data['email'])
+
+		organization = form.cleaned_data['organization']
+
+		#Saving to auth_user table
+		instance.save()
+
+		userID = instance.id
+
+		#Saving to chfapp_admin table
+		admin = amod()
+		admin.user_id = userID
+		admin.organization = organization
+		admin.save()
+
+		instance = authenticate(username=form.cleaned_data['username'], 
+			password=form.cleaned_data['password'])
+		login(request, instance)
+		return HttpResponseRedirect("/adminDashboard/")
+
+	context = {
+		'form': form,
+		'title': title,
+	}
+	return render(request,"newAdmin.html", context)
 
 
 
@@ -780,30 +818,6 @@ def deleteInactiveSessions(request,id): #id here is the activityID
 		s.delete()
 
 	return HttpResponseRedirect('/adminDashboard/')
-
-
-
-
-
-
-#This is going to show up at the bottom when they sign up as a user
-#don't do/test this until user use cases are working
-#*******************Haven't tested this as of (2/13/16)********************
-def newAdminLogin(request):
-	form = NewAdminForm(request.POST or None)
-
-	if form.is_valid():
-		instance = form.save(commit=False)
-		instance.save()
-		context = {
-			"saved Admin organization"
-		}
-		return HttpResponseRedirect("") #add admindashboard here when created
-
-	context = {
-		"form": form,
-	}
-	return render(request,"",context) #figure out how to add to userloginAccountform
 
 
 #This is for quickstart users

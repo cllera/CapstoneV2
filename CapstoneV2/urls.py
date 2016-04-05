@@ -19,7 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from chfapp.views import home, userLogin, newUserLogin, activityDashboard, activityPage, activity
-from chfapp.views import newEventForm, newActivityForm, deleteEvent, editEvent, deleteActivity
+from chfapp.views import newEventForm, newActivityForm, deleteEvent, editEvent, deleteActivity, newAdmin
 from chfapp.views import editActivity, newSceneSetForm, endSession, deleteInactiveSessions, joinEvent
 from chfapp.views import eventDashboard, editScene, editSceneOption, deleteSceneOption, quickStart
 
@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^$', 'chfapp.views.home', name='home'),
     url(r'^userLogin/$', 'chfapp.views.userLogin', name='userLogin'),
     url(r'^contact/$', 'chfapp.views.contact', name='contact'),
+    url(r'^newAdmin/$', 'chfapp.views.newAdmin', name='newAdmin'),
     url(r'^newUserLogin/$', 'chfapp.views.newUserLogin', name='newUserLogin'),
     url(r'^activity/(\d+)/$', 'chfapp.views.activity', name='activity'),
     url(r'^activityDashboard/(\d+)/$', 'chfapp.views.activityDashboard', name='activityDashboard'),
