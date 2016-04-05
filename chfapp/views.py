@@ -4,6 +4,7 @@
     # Purpose: All views for the project are created in this page, separated by functional segment
 
 from django.shortcuts import render, get_object_or_404, render_to_response
+from django.contrib import auth
 from .forms import UserLoginForm, NewUserAccountForm, NewAdminForm, joinForm
 from .forms import NewEventForm, NewActivityForm, NewSceneForm, NewSceneOptForm
 from .models import Admin as amod
@@ -19,7 +20,7 @@ from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import requires_csrf_token
 from django.views.decorators.csrf import csrf_protect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from array import array
 from datetime import datetime
 from django.contrib.auth.models import User
@@ -63,14 +64,14 @@ def userLogin(request):
 		username = request.POST.get('username')
 		password = request.POST.get('password')
 
-		user = authenticate(username=username, password=password)
+		user = auth.authenticate(username=username, password=password)
 
 		if user is not None:
 			if user.is_active:
-				login(request, user)
+				auth.login(request, user)
 				print("You're login")
 				state = "Youre in"
-				return HttpResponseRedirect("/activityDashboard/")
+				return HttpResponseRedirect("/eventDashboard/")
 			else:
 				print("Your account is broken")
 		else:
@@ -107,6 +108,10 @@ def newUserLogin(request):
 	}
 	return render(request,"newUserLogin.html", context)
 
+def logout(request):
+	auth.logout(request)
+
+	return HttpResponseRedirect("/")
 
 
 #=================================Admin-related Functions===================================#
