@@ -169,7 +169,7 @@ def newAdmin(request):
 			last_name = form.cleaned_data['last_name'], email = form.cleaned_data['email'])
 
 		organization = form.cleaned_data['organization']
-		instance.is_superuser = True
+		instance.is_staff = True
 		#Saving to auth_user table
 		instance.save()
 
