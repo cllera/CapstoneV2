@@ -6,7 +6,7 @@
 {% extends 'base.html' %}
 {% block content%}
      {% load staticfiles %}
-    <link rel="stylesheet" href='{% static "css/custom.css" %}'>
+    <link rel="stylesheet" href='{% static "css/custom2.css" %}'>
     <script src='{% static "js/eventDashboard.js" %}'></script>
 
     <div class="container">
@@ -53,8 +53,7 @@
               </div>
               <div class="eventInfo">
                 <div class="info">
-                  <ul>
-                    <li><h3>{{e.eventName}}</h3></li>
+                  <h3>{{e.eventName}}</h3>
                   </ul>
                 </div>
                 <h4>[eventDescription* add to table itself]</h4>
@@ -67,6 +66,7 @@
                 {% elif e.enforceUser == True %}
                   <a data-toggle="modal" data-id="{{e.eventID}}" title="Join Event" class="btn btn-primary" href="#Join{{e.eventID}}">Join Event</a>
                 {% endif %}
+                
               </div>
             </div> <!--close "sub-event" div-->
           </div>
@@ -87,7 +87,6 @@
                     <form method="POST" action="/joinEvent/{{e.eventID}}/" role="form">
                       {% csrf_token %}
                       <input type="text" id="jcode" class="form-control" name="jcode" placeholder="Join Code"></input>
-
                   </div>
 
                   <div class="modal-footer">
