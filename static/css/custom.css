@@ -8,8 +8,18 @@
   background-color: #87ccd7;
 }
 
+.activity {
+  outline: 2px solid #636364;
+  padding: 20px;
+  background-color: #87ccd7;
+}
+
 .banner-bottom-grid-left :hover {
   background-color: #a7fafa;
+}
+
+.round {
+  border-radius: 24px;
 }
 
 

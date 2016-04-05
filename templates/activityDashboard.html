@@ -13,7 +13,7 @@
       <h1>Welcome, {{user}}</h1>
       {% endif %}
       <br>
-      <p>I am Agent 2187 of the Culper Spy Ring. Help us in our cause and choose a mission to undertake from the list below. </p>
+      <p>Select an activity from the list below:</p>
       <br>
       <hr>
       <br>
@@ -21,23 +21,39 @@
 
     <div class="col-sm-1"></div>
     <div class="col-sm-10">
-      <div class="container">
-      <!-- Example row of columns -->
-        {% for a in activities %}
-          <div>
-            <p><h3>{{a.activityName}}</h3></p>
-            <br>
-            <p>{{a.description}}</p>
-            <br>
-            <input type="button" onClick="location.href='/activityPage/{{a.activityID}}/';" class="btn btn-primary" VALUE="Begin">
-            <br><br>
-          </div>
-        {% endfor %} <!--endfor activities-->
-      </div> <!--end container div-->
+      <div class="banner-bottom">
+        <div class="container">
+          <div class="banner-bottom-grids">
+            {% for a in activities %}
+            <div class="col-md-3 banner-bottom-grid-left">
+              <div class="br-bm-gd-lt activity" id="{{a.activityID}}">
+                <div class="overlay">
+                  <div class="arrow-left"></div>
+                  <div class="rectangle"></div>
+                </div>
+                <div class="eventInfo">
+                  <div class="info">
+                    <h3>{{a.activityName}}</h3>
+                    </ul>
+                  </div>
+                  <h4>{{a.description}}</h4>
+                </div>
+                <div>
+                  <input type="button" onClick="location.href='/activityPage/{{a.activityID}}/';" class="btn btn-primary" Value="Begin">
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div> <!--ends banner-bottom-grids-->
+        </div> <!--ends container-->
+      </div> <!--ends banner-bottom-->
+      <br/><br/>
       <a href="/eventDashboard/" class="btn btn-default"><b>Return to Events List</b></a>
     </div> <!--end col-sm-10 div-->
     <hr>
 {% endblock %}
+
+
 
 
 
